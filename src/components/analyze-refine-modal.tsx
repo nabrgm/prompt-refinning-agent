@@ -62,6 +62,7 @@ const REFINABLE_STATE_FIELDS = [
 ];
 
 export function AnalyzeRefineModal({
+    agentId,
     isOpen,
     onClose,
     nodes,
@@ -228,6 +229,7 @@ export function AnalyzeRefineModal({
             }
 
             await createPromptVersion(
+                agentId,
                 versionName,
                 updatedNodes,
                 updatedState,
