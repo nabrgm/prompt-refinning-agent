@@ -259,6 +259,7 @@ export function ChatInterface({
                     </div>
                 )}
                 <GlobalOptimizer
+                    agentId={agentId}
                     chatHistory={messages.map(m => `${m.role}: ${m.content}`).join('\n')}
                     nodes={nodes}
                 />

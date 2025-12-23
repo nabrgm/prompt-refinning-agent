@@ -443,6 +443,7 @@ export function SimulationManager({
                         )}
                         {selectedSimulationId && activeSimulations[selectedSimulationId] && (
                             <GlobalOptimizer
+                                agentId={agentId}
                                 chatHistory={activeSimulations[selectedSimulationId].turns.map(t => `${t.role}: ${t.content}`).join('\n')}
                                 nodes={nodes}
                             />

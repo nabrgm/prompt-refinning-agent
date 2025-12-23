@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
 interface GlobalOptimizerProps {
+    agentId: string;
     chatHistory: string;
     nodes: OverridableNode[];
 }
@@ -23,7 +24,7 @@ interface Suggestion {
     newPrompt: string;
 }
 
-export function GlobalOptimizer({ chatHistory, nodes }: GlobalOptimizerProps) {
+export function GlobalOptimizer({ agentId, chatHistory, nodes }: GlobalOptimizerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -44,7 +45,7 @@ export function GlobalOptimizer({ chatHistory, nodes }: GlobalOptimizerProps) {
 
     const handleApply = async (suggestion: Suggestion, index: number) => {
         try {
-            await saveNodeOverride(suggestion.nodeId, suggestion.type, suggestion.newPrompt);
+            await saveNodeOverride(agentId, suggestion.nodeId, suggestion.type, suggestion.newPrompt);
             setAppliedSuggestions(prev => new Set(prev).add(index));
         } catch (error) {
             console.error("Failed to apply", error);
