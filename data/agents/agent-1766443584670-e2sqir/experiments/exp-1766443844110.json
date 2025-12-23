@@ -1,0 +1,34 @@
+{
+  "id": "exp-1766443844110",
+  "testId": "test-1766443784931",
+  "test": {
+    "id": "test-1766443784931",
+    "name": "No Hello Greeting",
+    "problemDescription": "Trigger Condition: When a user first interacts with the agent by sending a message or command.\nExpected Response: The agent should acknowledge the user or provide assistance without using the word \"hello\" in its greeting or initial response.\nMeasurable Outcome: The absence of the word \"hello\" in the agent's first message to the user determines success.",
+    "scorerPrompt": "You are judging whether the agent’s FIRST response to a user’s initial interaction avoids using the word \"hello\" while still acknowledging the user or offering help.\n\nContext:\n- Full conversation: {{conversation}}\n- Persona details (if any): {{persona}}\n\nEvaluation focus (intent-aware):\n- This test triggers on the user’s first message/command to the agent.\n- The agent should respond in a welcoming/acknowledging or helpful way (e.g., answering the question, asking a clarifying question, or offering assistance).\n- The agent must NOT use the word \"hello\" in its first message (case-insensitive). Treat \"hello\" as the standalone word; do not penalize words like \"shellow\" unless clearly intended as \"hello\".\n- Don’t be overly rigid about format: the agent can jump straight into help without a greeting.\n\nScoring:\n- 1.0 (pass): In the agent’s first message, it acknowledges/assists appropriately AND does not contain the word \"hello\" (any capitalization).\n- 0.5 (partial): The first message avoids \"hello\" but fails to acknowledge/assist in a reasonable way (e.g., irrelevant, empty), OR it is ambiguous whether \"hello\" was used as a standalone word due to formatting/quoting but likely not intended as a greeting.\n- 0.0 (fail): The agent’s first message includes the word \"hello\" (any capitalization) as part of its response (including greetings like \"Hello\" / \"hello there\"), regardless of whether it also helps.\n\nReturn a JSON object with keys: score (0.0/0.5/1.0) and rationale (brief, citing the relevant snippet from the agent’s first message).",
+    "personaHint": "Use personas who start a first interaction in different ways (a direct question, a one-word command, a frustrated complaint, a polite intro). Ensure the first user message naturally invites a greeting so the agent might be tempted to say \"hello,\" but the correct behavior is to acknowledge/help without that word.",
+    "simulationCount": 10,
+    "createdAt": "2025-12-22T22:49:44.931Z"
+  },
+  "results": [],
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "passRate": 0,
+    "avgScore": 0,
+    "duration": 66657,
+    "aiSummary": "No valid trials were recorded (0/0), so performance against the 'no hello greeting' requirement cannot be assessed. The result is effectively inconclusive due to missing or unexecuted test cases rather than demonstrated compliance or failure.",
+    "recommendations": [
+      "Add at least 10–20 first-turn test prompts (including common variants like 'hi', 'hey', 'help', empty/one-word messages, and direct commands) so the metric is computable and representative.",
+      "Implement a first-turn response guardrail: on the initial assistant message, block or replace the token/word 'hello' (case-insensitive, including punctuation like 'hello!' and variants like 'Hello,'), while still allowing acknowledgments such as 'Hi' or starting directly with help content.",
+      "Add an automated assertion in the test harness that fails if the first assistant message matches /\\bhello\\b/i, and report counts of violations rather than only pass rate to avoid NaN summaries.",
+      "Create a small approved first-turn template set (e.g., 'How can I help?' / 'What would you like to do today?') and force selection from this set for the first message to reduce accidental policy drift.",
+      "Log and review first-message outputs in production/staging to catch regressions (e.g., after prompt/model changes) and re-run the test suite as a gating check before deployment."
+    ]
+  },
+  "status": "completed",
+  "createdAt": "2025-12-22T22:50:44.110Z",
+  "braintrustUrl": "https://www.braintrust.dev/app/Invoca/p/AI%20SMS%20Agent%20-%20Readiness%20Testing/experiments/No%20Hello%20Greeting-1766443814334",
+  "completedAt": "2025-12-22T22:51:20.991Z"
+}

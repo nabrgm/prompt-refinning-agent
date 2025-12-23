@@ -1,0 +1,26 @@
+[
+  {
+    "id": "persona-1765787382536-0",
+    "name": "Danielle Reyes",
+    "role": "Owner of a new coffee shop opening next month",
+    "goal": "Get Comcast Business internet set up and schedule a callback with a Business Class sales agent to discuss plans and installation timing.",
+    "context": "She’s signing a lease for a small storefront and needs reliable internet for POS, guest Wi‑Fi, and security cameras. She’s comparing providers and wants a quote and realistic install timeline before committing.",
+    "tone": "Friendly, organized, detail-oriented"
+  },
+  {
+    "id": "persona-1765787382536-1",
+    "name": "Marcus Ellington",
+    "role": "Office manager at a 30-person accounting firm (existing Comcast Business customer)",
+    "goal": "Get routed correctly to handle an internet outage/slow speeds and find the support portal for troubleshooting.",
+    "context": "It’s mid-day during tax season and their connection is unstable, impacting VoIP calls and access to cloud accounting tools. He’s frustrated and wants immediate help, not a sales callback.",
+    "tone": "Frustrated, urgent, direct"
+  },
+  {
+    "id": "persona-1765787382536-2",
+    "name": "Dr. Priya Nandakumar",
+    "role": "Practice administrator for a multi-location medical clinic (existing customer planning expansion)",
+    "goal": "Schedule a sales callback to add a new location and upgrade service for higher bandwidth and additional services.",
+    "context": "They’re opening a second clinic across town and need business internet plus reliable connectivity for EHR systems and video visits. She wants to coordinate dates/times, confirm the process, and keep disruption minimal.",
+    "tone": "Professional, time-constrained, pragmatic"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "id": "sim-1766444794885-persona-1766444770524-0",
+  "personaId": "persona-1766444770524-0",
+  "persona": {
+    "id": "persona-1766444770524-0",
+    "name": "Monica Alvarez",
+    "role": "New patient seeking a primary care appointment",
+    "goal": "Schedule a new-patient appointment with a primary care provider and request an afternoon time slot",
+    "context": "She recently moved to the area and needs to establish care for routine checkups. She’s unsure which clinic location is closest and wants the earliest available appointment next week after 3pm.",
+    "tone": "Friendly, slightly rushed, appreciates clear next steps"
+  },
+  "turns": [],
+  "createdAt": "2025-12-22T23:06:34.885Z",
+  "status": "running"
+}

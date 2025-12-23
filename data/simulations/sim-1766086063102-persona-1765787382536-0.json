@@ -1,0 +1,15 @@
+{
+  "id": "sim-1766086063102-persona-1765787382536-0",
+  "personaId": "persona-1765787382536-0",
+  "persona": {
+    "id": "persona-1765787382536-0",
+    "name": "Danielle Reyes",
+    "role": "Owner of a new coffee shop opening next month",
+    "goal": "Get Comcast Business internet set up and schedule a callback with a Business Class sales agent to discuss plans and installation timing.",
+    "context": "She’s signing a lease for a small storefront and needs reliable internet for POS, guest Wi‑Fi, and security cameras. She’s comparing providers and wants a quote and realistic install timeline before committing.",
+    "tone": "Friendly, organized, detail-oriented"
+  },
+  "turns": [],
+  "createdAt": "2025-12-18T19:27:43.102Z",
+  "status": "running"
+}

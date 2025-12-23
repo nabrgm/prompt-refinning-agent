@@ -1,0 +1,27 @@
+[
+  {
+    "id": "agent-default-iprospect",
+    "name": "iProspect Agent",
+    "apiUrl": "https://polaris.invoca.net/api/v1/prediction/9c6fc0fa-f634-4d05-b7ee-33636e68a97f",
+    "createdAt": "2024-11-01T00:00:00.000Z",
+    "updatedAt": "2024-12-22T00:00:00.000Z",
+    "createdBy": "Nab",
+    "description": "Original iProspect agent - migrated from previous setup"
+  },
+  {
+    "id": "agent-1766441871728-kyghxt",
+    "name": "[Adam] Automotive Sales Agent",
+    "apiUrl": "https://polaris.invocadev.com/api/v1/prediction/20bd5b4e-3470-483a-bc40-8fcfb90fcc49",
+    "createdAt": "2025-12-22T22:17:51.728Z",
+    "updatedAt": "2025-12-22T22:17:51.728Z",
+    "createdBy": "Nab"
+  },
+  {
+    "id": "agent-1766446438424-73nwwl",
+    "name": "[Adam] Healthcare Patient Access Agent Workflow",
+    "apiUrl": "https://polaris.invocadev.com/api/v1/prediction/b2ff82ad-97b6-42d2-aad5-7ff032d178c8",
+    "createdAt": "2025-12-22T23:33:58.424Z",
+    "updatedAt": "2025-12-22T23:33:58.424Z",
+    "createdBy": "Nab"
+  }
+]

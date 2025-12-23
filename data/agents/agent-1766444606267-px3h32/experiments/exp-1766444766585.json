@@ -1,0 +1,2817 @@
+{
+  "id": "exp-1766444766585",
+  "testId": "test-1766444691794",
+  "test": {
+    "id": "test-1766444691794",
+    "name": "Help Clarification",
+    "problemDescription": "Behavior Test Description:\n\nTrigger Condition: The user types the word \"Help\".\n\nExpected Response: The agent should immediately respond by acknowledging that the request is unclear and apologizing for any confusion. It should then proceed to ask at least one specific clarifying question to better understand the user's needs, such as \"Can you please provide more details on what you need help with?\"",
+    "scorerPrompt": "You are an impartial judge evaluating whether the assistant handled a vague user request appropriately.\n\nContext:\n- Review the full interaction in {{conversation}}.\n- The user persona (if any) is provided in {{persona}}.\n\nBehavior to evaluate:\nWhen the user types exactly or effectively \"Help\" (a very unclear request), the assistant should respond promptly in a way that:\n1) Acknowledges that the request is unclear / lacks details (in natural language).\n2) Includes an apology for the confusion or for not understanding yet (e.g., \"Sorry—I'm not sure what you need help with yet\").\n3) Asks at least one specific clarifying question aimed at discovering what the user needs help with (e.g., what topic/task, what goal, what’s going wrong, what they’ve tried).\n\nPragmatic guidance:\n- The assistant can combine acknowledgment, apology, and clarifying question(s) in a single message; that is ideal.\n- The clarifying question must be explicit (a real question), not just generic filler.\n- If the assistant instead guesses the user’s need without asking questions, that does not satisfy the intent.\n- If the user later provides details and the assistant’s subsequent behavior shows it successfully sought clarification and resolved the ambiguity, give partial credit if the initial response was somewhat off but the overall outcome still reflects the intent.\n\nScoring:\n- 1.0 (Pass): The assistant clearly acknowledges the lack of detail, apologizes, and asks one or more concrete clarifying questions to understand what the user needs.\n- 0.5 (Partial): The assistant does only some of the required elements (e.g., asks a clarifying question but no apology/acknowledgment, or apologizes/acknowledges but asks only very vague/non-actionable questions), yet still generally moves toward clarifying the request.\n- 0.0 (Fail): The assistant does not acknowledge ambiguity and/or does not ask any meaningful clarifying question; it guesses, gives irrelevant info, refuses without attempting to clarify, or otherwise fails to progress toward understanding what “Help” means.\n\nReturn a score (0.0, 0.5, or 1.0) and a brief rationale grounded in the conversation.\n",
+    "personaHint": "Use personas who might type a bare \"Help\" with different underlying intents (e.g., frustrated novice with a tech issue, anxious user needing urgent guidance, non-native speaker, child/elderly user, or a busy professional who provides minimal context) to see if the agent apologizes, acknowledges ambiguity, and asks targeted clarifying questions.",
+    "simulationCount": 10,
+    "createdAt": "2025-12-22T23:04:51.794Z"
+  },
+  "results": [
+    {
+      "id": "result-1766444806775-0",
+      "personaId": "persona-1766444748634-0",
+      "persona": {
+        "id": "persona-1766444748634-0",
+        "name": "Angela Ramirez",
+        "role": "New patient trying to book a first-time appointment",
+        "goal": "I will type only the word \"Help\" because I'm overwhelmed and don't know what to ask; I want the agent to apologize for the unclear request and ask what kind of help I need (appointment vs billing vs other).",
+        "context": "First time using a healthcare text system. She has a tech issue (can’t find how to schedule) and is frustrated, so she sends a bare \"Help\" expecting guidance without providing details.",
+        "tone": "frustrated and short"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi. I’m new here and really just need some help getting started."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "undetermined",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "general assistance"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Initial Triage"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Initial Triage",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "I’m trying to schedule a first-time appointment but I honestly couldn’t figure out how, so I just typed “Help.” Can you just tell me how to book, or do it for me?"
+        },
+        {
+          "role": "assistant",
+          "content": "If this is an emergency, call 911. I’m not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If this is an emergency, call 911. I’m not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES"
+        },
+        {
+          "role": "assistant",
+          "content": "Do you need a Primary Care Physician or a Specialist?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Do you need a Primary Care Physician or a Specialist?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Primary care. I’m a new patient and just want to get set up with a regular doctor."
+        },
+        {
+          "role": "assistant",
+          "content": "Which clinic location do you prefer? Options: Downtown, Westside, or Eastside.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Which clinic location do you prefer? Options: Downtown, Westside, or Eastside."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Downtown."
+        },
+        {
+          "role": "assistant",
+          "content": "Great. Please share your first and last name so we can create your profile.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": "Downtown",
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Great. Please share your first and last name so we can create your profile."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The agent responded to the vague “Help” by asking a concrete clarifying question (whether the user wants to schedule an appointment, pay a bill, or something else), which appropriately moves toward disambiguation. However, it did not explicitly acknowledge that the request lacked details nor offer an apology for the confusion/not understanding yet, so it only partially meets the required elements.",
+      "scoredAt": "2025-12-22T23:06:46.775Z"
+    },
+    {
+      "id": "result-1766444815742-1",
+      "personaId": "persona-1766444748634-1",
+      "persona": {
+        "id": "persona-1766444748634-1",
+        "name": "David Kim",
+        "role": "Patient with an urgent-sounding concern seeking quick direction",
+        "goal": "I will message \"Help\" with no context because I’m anxious and want immediate guidance; I’m testing whether the agent acknowledges ambiguity, apologizes, and asks a specific clarifying question about what I need help with and how urgent it is.",
+        "context": "He just received a confusing notification from the clinic and is worried it relates to his care. He panics and sends only \"Help\" expecting the system to triage him to the right service without sharing medical details.",
+        "tone": "anxious and urgent"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi… uh, sorry, but—help. I just need some quick direction right now."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, City Medical Group. Are you looking to schedule an appointment, pay a bill, or something else? If emergency, call 911. Text YES to accept.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "undetermined",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": null
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Initial Triage"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Initial Triage",
+              "messages": [
+                "Hi, City Medical Group. Are you looking to schedule an appointment, pay a bill, or something else? If emergency, call 911. Text YES to accept."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES.  \n\nI just got a confusing notification from the clinic about my care and I’m freaking out a bit—can you help me figure out what it means and if I need to be seen urgently?"
+        },
+        {
+          "role": "assistant",
+          "content": "I’m not a substitute for medical care. If you have severe symptoms like chest pain or trouble breathing, call 911. Otherwise, can you tell me what the notification says?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "clarify notification"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "I’m not a substitute for medical care. If you have severe symptoms like chest pain or trouble breathing, call 911. Otherwise, can you tell me what the notification says?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Yeah, I’m not having chest pain or trouble breathing.  \n\nThe message says: “Your recent results require follow-up. Please contact the clinic to discuss abnormal findings.” That’s it—no details. Does that sound like something urgent or can it wait until tomorrow?"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm not a medical professional. For abnormal results, call our Nurse Line at 555-0123 today to discuss urgency. If symptoms worsen, call 911.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "test results"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "I'm not a medical professional. For abnormal results, call our Nurse Line at 555-0123 today to discuss urgency. If symptoms worsen, call 911."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Okay, I’ll call that nurse line now.  \n\nI’m just really anxious—this was about some bloodwork I did last week; is it common to get a vague “abnormal findings” message like that?"
+        },
+        {
+          "role": "assistant",
+          "content": "Yes, labs sometimes flag values that need review. It isn’t necessarily urgent. Call the Nurse Line (555-0123) for details and next steps.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "test results"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "Yes, labs sometimes flag values that need review. It isn’t necessarily urgent. Call the Nurse Line (555-0123) for details and next steps."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Okay, that helps a little, thanks.  \n\nI’ll call them now—if I can’t get through tonight, is it reasonable to wait until morning as long as I still feel okay?"
+        },
+        {
+          "role": "assistant",
+          "content": "If you feel well, waiting until morning is fine. Call the Nurse Line as soon as you can; they’ll advise next steps. If symptoms develop, call 911.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "test results"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "If you feel well, waiting until morning is fine. Call the Nurse Line as soon as you can; they’ll advise next steps. If symptoms develop, call 911."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The initial user request (“help”) was vague, and the agent did move toward clarification by asking specific routing questions (“schedule an appointment, pay a bill, or something else?”) and included an emergency safety note. However, the agent did not explicitly acknowledge that the request lacked details nor offer an apology for not understanding yet. Because it asked concrete clarifying questions but missed the acknowledgment/apology elements, this is partial credit.",
+      "scoredAt": "2025-12-22T23:06:55.742Z"
+    },
+    {
+      "id": "result-1766444804041-2",
+      "personaId": "persona-1766444748634-2",
+      "persona": {
+        "id": "persona-1766444748634-2",
+        "name": "Hiroko Tanaka",
+        "role": "Non-native English speaker attempting to request support",
+        "goal": "I will type \"Help\" alone because I don’t have the English words to explain; I want the agent to apologize for not understanding and ask at least one simple clarifying question (e.g., appointment, billing, or other).",
+        "context": "Recently moved and is unfamiliar with U.S. healthcare processes. She keeps messages minimal to avoid making mistakes, so she defaults to a single-word request: \"Help.\"",
+        "tone": "polite and hesitant"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi… I’m Hiroko. I just moved here recently and I need some help with health/doctor things, but my English is not so good."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "Hiroko",
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "find provider"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Ah, thank you. I don’t know… maybe appointment, but also I don’t understand the insurance and costs."
+        },
+        {
+          "role": "assistant",
+          "content": "If this is an emergency, call 911. I am not a substitute for professional medical advice. To continue, please text YES to agree to our Terms of Use and Privacy Policy.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "Hiroko",
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If this is an emergency, call 911. I am not a substitute for professional medical advice. To continue, please text YES to agree to our Terms of Use and Privacy Policy."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Yes."
+        },
+        {
+          "role": "assistant",
+          "content": "Hiroko, do you need a Primary Care Physician or a specialist for your appointment?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "Hiroko",
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Hiroko, do you need a Primary Care Physician or a specialist for your appointment?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "I… I’m not sure, sorry. I think maybe first doctor? Someone to check my health and explain insurance and costs."
+        },
+        {
+          "role": "assistant",
+          "content": "Would you prefer a Downtown clinic, Westside location, or another area?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "Hiroko",
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Would you prefer a Downtown clinic, Westside location, or another area?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Maybe Downtown, please. I don’t drive yet, so somewhere easy by bus is good."
+        },
+        {
+          "role": "assistant",
+          "content": "Please share your first and last name so I can set up your profile.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "Hiroko",
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": "Downtown",
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Please share your first and last name so I can set up your profile."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The agent generally handled the user’s uncertainty by asking concrete clarifying questions (appointment vs. billing, PCP vs. specialist, preferred location), which moves toward disambiguating what “help” means. However, it does not explicitly acknowledge that the request is unclear nor offer an apology for not understanding yet (e.g., “Sorry, I’m not sure what you need help with”). Because it meets the clarification requirement but misses the acknowledgment/apology elements, this is partial credit.",
+      "scoredAt": "2025-12-22T23:06:44.041Z"
+    },
+    {
+      "id": "result-1766444805524-3",
+      "personaId": "persona-1766444748634-3",
+      "persona": {
+        "id": "persona-1766444748634-3",
+        "name": "Evelyn Brooks",
+        "role": "Older adult patient needing assistance with scheduling logistics",
+        "goal": "I will send only \"Help\" because I’m not comfortable texting long messages; I’m testing whether the agent apologizes for the unclear request and asks a specific clarifying question about what I need help with (like scheduling or billing).",
+        "context": "72 years old, uses a basic phone and finds automated systems confusing. She expects a human-like response and will not volunteer details unless prompted by a clear question.",
+        "tone": "confused but courteous"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hello… um, I’m not very good with these things. Help."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "undetermined",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": null
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Initial Triage"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Initial Triage",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Oh, thank you dear. I need help scheduling, I get mixed up with all the buttons and texts."
+        },
+        {
+          "role": "assistant",
+          "content": "If this is an emergency, call 911. I’m not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If this is an emergency, call 911. I’m not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Oh… um, I don’t really understand all those terms, dear. Is it safe to just text “YES,” and will that let you help me set up my appointment?"
+        },
+        {
+          "role": "assistant",
+          "content": "Yes, texting YES only confirms you agree to our Terms of Use and Privacy Policy so we can help schedule. Please reply YES to continue. If emergency, call 911.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Yes, texting YES only confirms you agree to our Terms of Use and Privacy Policy so we can help schedule. Please reply YES to continue. If emergency, call 911."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "All right then… YES."
+        },
+        {
+          "role": "assistant",
+          "content": "Great, thank you. Are you looking to see a Primary Care Physician or a Specialist?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Great, thank you. Are you looking to see a Primary Care Physician or a Specialist?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "I’m not sure what I am, dear. I just need my regular checkup with the doctor I usually see once a year. Is that a primary care doctor?"
+        },
+        {
+          "role": "assistant",
+          "content": "Yes, a primary care doctor handles yearly checkups. Which clinic location do you prefer—Downtown or Westside?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Yes, a primary care doctor handles yearly checkups. Which clinic location do you prefer—Downtown or Westside?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The lead’s initial request (“Hello… um… Help.”) is vague, and the agent appropriately responds with a concrete clarifying question by offering specific options (schedule an appointment, pay a bill, or something else), which moves the conversation toward identifying the user’s need. However, the agent does not explicitly acknowledge that the request is unclear/lacking detail and does not apologize for not understanding yet. Because it includes a specific clarifying question but misses the acknowledgment/apology elements, this is partial credit.",
+      "scoredAt": "2025-12-22T23:06:45.524Z"
+    },
+    {
+      "id": "result-1766444806062-4",
+      "personaId": "persona-1766444748634-4",
+      "persona": {
+        "id": "persona-1766444748634-4",
+        "name": "Mason Patel",
+        "role": "Busy parent managing a family member’s healthcare tasks",
+        "goal": "I will text \"Help\" with no other information because I’m multitasking; I want the agent to immediately acknowledge it’s unclear, apologize, and ask a targeted question to narrow down the request (appointment vs billing vs other).",
+        "context": "Coordinating his child’s appointments between meetings. He sends the shortest possible message first and expects the system to ask the next best question rather than requiring a full explanation upfront.",
+        "tone": "efficient and minimal"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hey, I could use a bit of help with some healthcare stuff for my kid. Not sure where to start."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "undetermined",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": null
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Initial Triage"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Initial Triage",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Mostly appointments—I’m trying to sort out my kid’s visits between meetings.  \n\nIt’s for my son; I text “Help” a lot because I’m usually multitasking, so can you just ask me the next thing you need instead of a long explanation?"
+        },
+        {
+          "role": "assistant",
+          "content": "If this is an emergency, call 911. I am not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If this is an emergency, call 911. I am not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES"
+        },
+        {
+          "role": "assistant",
+          "content": "Are you looking for a Primary Care Physician or a specialist for your son?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Are you looking for a Primary Care Physician or a specialist for your son?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Specialist.  \n\nHe has asthma—need to set up a follow-up with whoever you’d normally use for that."
+        },
+        {
+          "role": "assistant",
+          "content": "Which clinic location works best for you—Downtown, Westside, or another area?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": "Specialist",
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Which clinic location works best for you—Downtown, Westside, or another area?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Westside is best.  \n\nIf they’re booked up, Downtown could work as a backup."
+        },
+        {
+          "role": "assistant",
+          "content": "Please provide your son’s first and last name.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Specialist",
+                "locationPreference": "Westside",
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Please provide your son’s first and last name."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The agent responded to the vague “help” intent by immediately asking a concrete clarifying question (“are you looking to schedule an appointment, pay a bill, or do something else?”), which appropriately narrows the request. However, it did not explicitly acknowledge that the user’s message was unclear/lacked details, and it did not include an apology for not understanding yet. Because it meets the clarifying-question requirement but misses acknowledgment + apology, this is partial credit.",
+      "scoredAt": "2025-12-22T23:06:46.062Z"
+    },
+    {
+      "id": "result-1766444817908-5",
+      "personaId": "persona-1766444766584-5",
+      "persona": {
+        "id": "persona-1766444766584-5",
+        "name": "Tanya Williams",
+        "role": "First-time telehealth patient (tech-troubled)",
+        "goal": "I will open with the single word \"Help\" because my video visit link won’t work and I’m too frustrated to explain at first.",
+        "context": "Tried to join a scheduled virtual appointment from her phone and keeps getting an error screen. She’s flustered, believes she’s late, and will initially provide no details beyond \"Help\" to see if the agent apologizes, notes the ambiguity, and asks a clarifying question (e.g., whether this is about an appointment, billing, or something else).",
+        "tone": "frustrated and short"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi… Help. My thing isn’t working and I don’t know what to do."
+        },
+        {
+          "role": "assistant",
+          "content": "If emergency, call 911. Not medical advice. Text YES to accept Terms. Hi, this is City Medical Group. Are you scheduling appointment, paying a bill, or other?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "general assistance"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "If emergency, call 911. Not medical advice. Text YES to accept Terms. Hi, this is City Medical Group. Are you scheduling appointment, paying a bill, or other?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES. I already HAVE an appointment, it’s a video visit, and the link on my phone keeps giving me an error. I think I’m late now and I’m really frustrated—can you just help me get into the visit?"
+        },
+        {
+          "role": "assistant",
+          "content": "I’m sorry you’re having trouble. Please try opening the link from the MyHealth portal or let me send a new video link. Reply YES to receive it.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "other",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "appointment access"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Other Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Other Services",
+              "messages": [
+                "I’m sorry you’re having trouble. Please try opening the link from the MyHealth portal or let me send a new video link. Reply YES to receive it."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES. Please send a new link.  \n\nI tried through MyHealth already and it still showed an error—can you text or email me a fresh link for my video visit?"
+        },
+        {
+          "role": "assistant",
+          "content": "Here’s a new video link: https://citymedical.com/video-visit. If it still won’t open, call our support line at 555‑0199 for assistance. Need anything else?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "video appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Here’s a new video link: https://citymedical.com/video-visit. If it still won’t open, call our support line at 555‑0199 for assistance. Need anything else?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "I’ll try this one now.  \n\nIf it still doesn’t work when I tap it on my phone, can I just switch to a regular phone call with the doctor instead of video?"
+        },
+        {
+          "role": "assistant",
+          "content": "If video still fails, we can have the doctor call you. Please call 555‑0199 to request a phone visit or reply with a convenient number.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "video visit link"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If video still fails, we can have the doctor call you. Please call 555‑0199 to request a phone visit or reply with a convenient number."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Okay, thanks.  \n\nIf this link doesn’t work, please have the doctor call me at this number I’m texting from."
+        },
+        {
+          "role": "assistant",
+          "content": "If the video link still fails, call 555‑0199 and ask the doctor to call you instead. We’ll note your request. Let us know if you need anything else.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": "appointment assistance"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If the video link still fails, call 555‑0199 and ask the doctor to call you instead. We’ll note your request. Let us know if you need anything else."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "On the initial vague \"Help\" message, the agent did ask a concrete clarifying question (\"Are you scheduling appointment, paying a bill, or other?\") which moves toward disambiguating the request. However, it did not explicitly acknowledge that the request lacked details or apologize for not understanding yet (it jumped straight to emergency disclaimer/terms and triage options). This meets the clarifying-question requirement but misses the acknowledgment+apology elements, so partial credit.",
+      "scoredAt": "2025-12-22T23:06:57.908Z"
+    },
+    {
+      "id": "result-1766444810679-6",
+      "personaId": "persona-1766444766584-6",
+      "persona": {
+        "id": "persona-1766444766584-6",
+        "name": "Omar El-Sayed",
+        "role": "Patient with billing anxiety",
+        "goal": "I will type only \"Help\" because I’m panicking about a bill and can’t organize my thoughts enough to describe the issue yet.",
+        "context": "Received a past-due notice and worries coverage didn’t apply. He’s embarrassed and anxious, so he sends a bare \"Help\" first. If asked a clarifying question, he can explain whether he needs payment options, itemized statement, or insurance/billing clarification—testing whether the agent acknowledges the unclear request and asks specifically what kind of help he needs.",
+        "tone": "anxious and hesitant"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi… um, I just need help with a bill situation and I’m kind of freaking out about it."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?\n\nIf this is an emergency, call 911. I’m not a substitute for medical advice. To continue, text YES to agree to our Terms of Use and Privacy Policy.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "billing",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "bill assistance"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Billing Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Billing Services",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?\n\nIf this is an emergency, call 911. I’m not a substitute for medical advice. To continue, text YES to agree to our Terms of Use and Privacy Policy."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES.  \n\nIt’s about a past‑due bill I just got—I’m really worried my insurance didn’t cover something, and I’m not even sure what I actually owe or what my options are."
+        },
+        {
+          "role": "assistant",
+          "content": "I’m sorry you’re worried about this bill. To look up the details, could you share the bill reference number or the date of service? (Please don’t share full insurance or personal IDs.)",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "billing",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "billing inquiry"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Billing Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Billing Services",
+              "messages": [
+                "I’m sorry you’re worried about this bill. To look up the details, could you share the bill reference number or the date of service? (Please don’t share full insurance or personal IDs.)"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Yeah, the reference number is 88427, date of service was 09/14/25, I think.  \n\nI’m mostly scared my insurance didn’t apply right—can you help me understand what this bill is actually for and if there are payment plan options?"
+        },
+        {
+          "role": "assistant",
+          "content": "We’ll check your bill. Call billing at 555‑0199 or log in to MyHealth portal. Payment plans available. Use secure portal: https://citymedical.com/billing",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "billing",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "billing inquiry"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Billing Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Billing Services",
+              "messages": [
+                "We’ll check your bill. Call billing at 555‑0199 or log in to MyHealth portal. Payment plans available. Use secure portal: https://citymedical.com/billing"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Okay… I can try, but talking on the phone really stresses me out.  \n\nIs there any way someone can first explain what this past‑due bill is for—like an itemized breakdown and what my insurance did or didn’t cover—through the portal or message, before I call?"
+        },
+        {
+          "role": "assistant",
+          "content": "You can see an itemized view and insurance details in MyHealth portal under “Bills.” If you need help, reply “Message Billing” and we’ll send a secure message. For payment plans, call 555‑0199.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "billing",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "bill explanation"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Billing Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Billing Services",
+              "messages": [
+                "You can see an itemized view and insurance details in MyHealth portal under “Bills.” If you need help, reply “Message Billing” and we’ll send a secure message. For payment plans, call 555‑0199."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Message Billing.  \n\nAnd um… could you ask them to explain why this bill is marked past‑due and what part my insurance didn’t cover? I just want to be sure I’m not being charged for something by mistake before I try to figure out how to pay it."
+        },
+        {
+          "role": "assistant",
+          "content": "Use the MyHealth portal’s secure messaging to contact Billing. Log in, go to “Messages,” select “New Message,” choose “Billing,” and ask for an itemized explanation of the past‑due charge and insurance coverage. Secure portal: https://citymedical.com/portal\n\nWe’ll respond there.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "billing",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "billing inquiry"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Billing Services"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Billing Services",
+              "messages": [
+                "Use the MyHealth portal’s secure messaging to contact Billing. Log in, go to “Messages,” select “New Message,” choose “Billing,” and ask for an itemized explanation of the past‑due charge and insurance coverage. Secure portal: https://citymedical.com/portal\n\nWe’ll respond there."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The user’s initial request is vague (“help with a bill situation”), and the agent does respond by asking a concrete clarifying question (whether they want to schedule, pay a bill, or something else), which moves toward disambiguating the need. However, the agent does not explicitly acknowledge that the request lacks details or apologize for not understanding yet, which is a required element for a full pass. Subsequent turns include more specific questions (bill reference/date of service), but the initial response still misses the acknowledgment/apology requirement.",
+      "scoredAt": "2025-12-22T23:06:50.679Z"
+    },
+    {
+      "id": "result-1766444804846-7",
+      "personaId": "persona-1766444766584-7",
+      "persona": {
+        "id": "persona-1766444766584-7",
+        "name": "Marisol Vega",
+        "role": "Non-native English speaker seeking clinic navigation",
+        "goal": "I will start by typing \"Help\" alone because I’m not confident in English and want the agent to guide me with a clarifying question.",
+        "context": "Recently moved to the area and is trying to figure out how to book a provider visit but doesn’t know the right terms in English. She will intentionally send only \"Help\" first, then answer simple follow-up questions. This tests whether the agent apologizes for the ambiguity and asks at least one clear, specific question to understand her need.",
+        "tone": "polite, brief, and uncertain"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Help"
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "undetermined",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "false",
+                "intent": null
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Initial Triage"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Initial Triage",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "I want to schedule, yes. I just moved here and I don’t know how to make a visit with a doctor."
+        },
+        {
+          "role": "assistant",
+          "content": "If this is an emergency, call 911. I’m not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "If this is an emergency, call 911. I’m not a substitute for professional medical advice, diagnosis, or treatment. To continue, please text YES to agree to our Terms of Use and Privacy Policy."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES"
+        },
+        {
+          "role": "assistant",
+          "content": "Great, thank you. Are you looking to see a Primary Care Physician or a Specialist?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Great, thank you. Are you looking to see a Primary Care Physician or a Specialist?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "I’m not sure, sorry. I think just a regular doctor to check my health and talk about some problems—maybe that is primary care?"
+        },
+        {
+          "role": "assistant",
+          "content": "Got it. Which clinic location do you prefer—Downtown, Westside, or Eastside?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Got it. Which clinic location do you prefer—Downtown, Westside, or Eastside?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Downtown, please. I live close to there."
+        },
+        {
+          "role": "assistant",
+          "content": "Please provide your first and last name so we can set up the appointment.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Primary Care Physician",
+                "locationPreference": "Downtown",
+                "search_needed": "false",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Please provide your first and last name so we can set up the appointment."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The assistant responded to the vague \"Help\" by asking a clear, specific clarifying question (whether the user wants to schedule, pay a bill, or something else), which appropriately moves toward understanding the need. However, it did not explicitly acknowledge that \"Help\" was unclear or include an apology for not understanding yet, so it only meets part of the required behavior.",
+      "scoredAt": "2025-12-22T23:06:44.846Z"
+    },
+    {
+      "id": "result-1766444807649-8",
+      "personaId": "persona-1766444766584-8",
+      "persona": {
+        "id": "persona-1766444766584-8",
+        "name": "Caleb Nguyen",
+        "role": "Teen patient managing care on their own",
+        "goal": "I will message \"Help\" with no other details because I’m unsure what I’m allowed to ask and want the agent to prompt me with clarifying questions.",
+        "context": "16-year-old trying to schedule a follow-up but doesn’t know whether he needs a referral or how appointment scheduling works. He will send just \"Help\" first to see if the agent acknowledges it’s unclear, apologizes, and asks what he needs help with (appointment vs. billing vs. other) without requesting sensitive medical details.",
+        "tone": "awkward and minimal"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hey, um, hi. I kinda just need some help with something but I’m not really sure what I’m supposed to ask."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else? If emergency, call 911. Text YES to agree to Terms.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "undetermined",
+                "consentGiven": "false",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": null
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Initial Triage"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Initial Triage",
+              "messages": [
+                "Hi, this is City Medical Group. To get you to the right team, are you looking to schedule an appointment, pay a bill, or do something else? If emergency, call 911. Text YES to agree to Terms."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "YES.  \n\nI’m trying to schedule a follow-up appointment, but I’m 16 and I’m not really sure how it works or if I need a referral or something."
+        },
+        {
+          "role": "assistant",
+          "content": "Are you looking to see a Primary Care Physician or a Specialist for your follow‑up?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": null,
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule follow-up"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Are you looking to see a Primary Care Physician or a Specialist for your follow‑up?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Uh, a specialist, I think.  \n\nIt’s supposed to be a follow‑up with the same doctor I saw a couple months ago, but I don’t know if I’m supposed to get a new referral first."
+        },
+        {
+          "role": "assistant",
+          "content": "Which clinic location do you prefer—Downtown, Westside, or another area?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Specialist",
+                "locationPreference": null,
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Which clinic location do you prefer—Downtown, Westside, or another area?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Downtown.  \n\nAlso, do you know if I have to get a new referral first, or can I just book it since I already saw them before?"
+        },
+        {
+          "role": "assistant",
+          "content": "You’ll need a referral from your primary‑care doctor before we can book a specialist follow‑up. What’s your first and last name, please?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Specialist",
+                "locationPreference": "Downtown",
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "You’ll need a referral from your primary‑care doctor before we can book a specialist follow‑up. What’s your first and last name, please?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "It’s Caleb Nguyen.  \n\nDo I need my parent to call about the referral, or can I ask my primary myself since I’m 16?"
+        },
+        {
+          "role": "assistant",
+          "content": "Thanks Caleb. You’ll need a referral from your PCP; a parent can request it for you. What date and time would you like for the Downtown specialist visit?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "Caleb",
+                "lastName": "Nguyen",
+                "serviceCategory": "appointment",
+                "consentGiven": "true",
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "providerType": "Specialist",
+                "locationPreference": "Downtown",
+                "search_needed": "true",
+                "intent": "schedule appointment"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Appointment Scheduling"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Appointment Scheduling",
+              "messages": [
+                "Thanks Caleb. You’ll need a referral from your PCP; a parent can request it for you. What date and time would you like for the Downtown specialist visit?"
+              ],
+              "usedTools": [
+                {
+                  "tool": "post_consumer_profile",
+                  "toolInput": {
+                    "consumer_phone_number": "+15551234567",
+                    "consumer_name": "Caleb Nguyen",
+                    "conversation_id": "unknown",
+                    "tenant_gid": "unknown"
+                  },
+                  "toolOutput": "{\"error\":\"GraphQL request failed. Status: 401, StatusText: Unauthorized. Response: {\\\"errors\\\":[{\\\"message\\\":\\\"X-Tenant-Global-ID: header must be a properly formatted GlobalID string; got \\\\\\\"unknown\\\\\\\"\\\",\\\"extensions\\\":{\\\"code\\\":\\\"UNAUTHORIZED\\\"}}]}\"}"
+                }
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_3"
+            }
+          ]
+        }
+      ],
+      "score": 0.5,
+      "passed": false,
+      "rationale": "The agent responded to the vague opener by asking concrete clarifying questions (appointment vs. billing vs. other), which moves the conversation toward understanding what “help” means. However, it did not explicitly acknowledge the lack of detail or include an apology for the confusion/not understanding yet, so it misses two of the three required elements.",
+      "scoredAt": "2025-12-22T23:06:47.649Z"
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 0,
+    "failed": 9,
+    "passRate": 0,
+    "avgScore": 0.5,
+    "duration": 98085,
+    "aiSummary": "The agent consistently moved in the right direction by asking concrete routing questions after the user said \"Help,\" but it failed every test because it skipped two required elements: explicitly acknowledging the request is unclear and offering a brief apology. This is a systematic template/response-structure issue rather than a misunderstanding of how to clarify.",
+    "recommendations": [
+      "Implement a mandatory 3-part opener for any single-word/vague request (including exact trigger \"Help\"): (1) acknowledge ambiguity, (2) apologize, (3) ask a clarifying question. Example: \"I’m sorry—I’m not sure what you need help with yet. Are you trying to schedule an appointment, get billing help, or something else?\"",
+      "Add a policy/response rule: when user intent confidence is below a threshold (or message length < N words, or matches regex like /^help\\b/i), prepend an explicit unclear+apology sentence before any triage/options text.",
+      "Create a reusable routing menu tailored to the domain and always phrase it as a question (to satisfy “ask at least one specific clarifying question”): \"Which of these do you need help with: scheduling, billing, test results, prescriptions, technical/telehealth, directions/contact info, or something else?\"",
+      "Ensure safety language doesn’t replace the required acknowledgment/apology; order it correctly: unclear+apology → clarifying question → (optional) safety note if symptoms/urgency suspected. Add a check in the generator to prevent emitting emergency disclaimers as the first sentence for a generic \"Help.\"",
+      "Localize for non-native speakers/older adults by keeping the acknowledgment/apology sentence simple and offering one-question + examples: \"Sorry, I didn’t understand yet. Do you need help with an appointment or with a bill?\" (avoid multi-question stacks until the user picks a category).",
+      "Add automated tests/linters on first-turn responses to \"Help\" to verify the presence of (a) an ambiguity acknowledgment phrase (e.g., \"not sure\"/\"unclear\"), (b) an apology token (\"sorry\"/\"apologize\"), and (c) at least one question mark with a concrete option list."
+    ]
+  },
+  "status": "completed",
+  "createdAt": "2025-12-22T23:06:06.586Z",
+  "braintrustUrl": "https://www.braintrust.dev/app/Invoca/p/AI%20SMS%20Agent%20-%20Readiness%20Testing/experiments/Help%20Clarification-1766444732771",
+  "completedAt": "2025-12-22T23:07:10.857Z"
+}

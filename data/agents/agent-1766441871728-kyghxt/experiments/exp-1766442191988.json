@@ -1,0 +1,658 @@
+{
+  "id": "exp-1766442191988",
+  "testId": "test-1766442158639",
+  "test": {
+    "id": "test-1766442158639",
+    "name": "Greeting Engagement",
+    "problemDescription": "Trigger Condition: When the user sends the message \"hi\" to the AI agent.  \nExpected Response: The AI agent should not respond with a simple \"hi\" alone, but should instead provide a more engaging or contextual response such as \"Hello! How can I assist you today?\"",
+    "scorerPrompt": "You are judging whether the AI agent responds appropriately when the user greets with a simple \"hi\".\n\nUsing {{conversation}} (full dialog) and {{persona}} (user context), score the agent’s behavior based on this intent:\n- When the user’s message is just a greeting like \"hi\", the agent should NOT reply with only a bare greeting (e.g., only \"hi\" / \"hello\"), which stalls the conversation.\n- Instead, the agent should respond in an engaging, helpful way that moves the conversation forward (e.g., greeting + an offer of help, a question about what they need, or a persona-relevant prompt).\n- Natural variations are fine (\"Hey there—what can I help you with?\"), and the agent can include additional context if relevant.\n- Be pragmatic: if the agent’s reply is mostly just a greeting with no clear attempt to elicit the user’s needs, that should be scored poorly. If the user already immediately provides their request, don’t penalize the agent for not overdoing the greeting.\n\nScoring:\n- 1.0 (pass): The agent replies to \"hi\" with a greeting PLUS a clear next-step prompt (ask how to help, offer options, ask a relevant question), not just a standalone greeting.\n- 0.5 (partial): The agent is somewhat engaging but still weak (e.g., greeting plus minimal/awkward prompt, or mostly greeting with a vague \"yes?\"), or the agent initially replies with a bare greeting but quickly follows up to move things forward within the same turn.\n- 0.0 (fail): The agent responds with only \"hi\"/\"hello\" (or effectively the same minimal greeting) and does not attempt to progress the conversation.\n\nReturn a score (0.0/0.5/1.0) and a brief rationale referencing specific parts of {{conversation}} and any relevant expectations from {{persona}}.",
+    "personaHint": "Use personas likely to open with minimal greetings (e.g., new user testing the assistant, busy user on mobile, shy/non-native speaker) so the agent must take initiative by asking how they can help or offering common tasks relevant to the persona.",
+    "simulationCount": 10,
+    "createdAt": "2025-12-22T22:22:38.639Z"
+  },
+  "results": [
+    {
+      "id": "result-1766442239907-3",
+      "personaId": "persona-1766442176841-3",
+      "persona": {
+        "id": "persona-1766442176841-3",
+        "name": "Noah Johnson",
+        "role": "Current owner needing service scheduling (oil change/check engine light)",
+        "goal": "Send exactly \"hi\" first and see whether the assistant responds with a routing question (buying vs service) and offers to schedule service, not just \"hi\" back.",
+        "context": "He’s had mixed experiences with chatbots and tests responsiveness with minimal input. He wants quick direction to service hours and an appointment slot.",
+        "tone": "matter-of-fact and concise"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi, I’m looking to get some service done on my car and had a couple quick questions."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, thanks for calling City Motors. Are you looking to buy a car or schedule service today?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "search_needed": "false",
+                "intent": "service question"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "Hi, thanks for calling City Motors. Are you looking to buy a car or schedule service today?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Service—current owner. I need to schedule an oil change and also have a check engine light looked at, plus I’d like to know your service hours."
+        },
+        {
+          "role": "assistant",
+          "content": "Our service center is open Monday‑Saturday, 7 am‑6 pm, and closed on Sundays.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "Our service center is open Monday‑Saturday, 7 am‑6 pm, and closed on Sundays."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Got it, thanks. What’s your earliest available appointment for an oil change and check engine light diagnosis, preferably tomorrow or the next day in the morning?"
+        },
+        {
+          "role": "assistant",
+          "content": "What is the year, make, and model of your vehicle?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": "2025-09-17",
+                "preferredApptTime": "10:00",
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "What is the year, make, and model of your vehicle?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "It’s a 2018 Honda Accord."
+        },
+        {
+          "role": "assistant",
+          "content": "How does Tuesday at nine am sound for your oil change and check‑engine‑light diagnosis?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": "Honda Accord",
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": "2025-09-17",
+                "preferredApptTime": "10:00",
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "How does Tuesday at nine am sound for your oil change and check‑engine‑light diagnosis?"
+              ],
+              "usedTools": [
+                {
+                  "tool": "current_date_time",
+                  "toolInput": {},
+                  "toolOutput": "{\"date\":\"2025-12-22\",\"time\":\"22:23:44\",\"day\":\"Monday\",\"timezone\":\"UTC\",\"timezoneOffset\":\"+00:00\",\"iso8601\":\"2025-12-22T22:23:44.487Z\",\"unix_timestamp\":1766442224}"
+                }
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "That works for me. Can you please book me for Tuesday at 9 am and let me know if you need anything else from me?"
+        },
+        {
+          "role": "assistant",
+          "content": "Appointment set for Tuesday 9am. Please bring your car, a valid driver’s license, and any related paperwork. Let us know if anything changes.",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": null,
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": "2025-09-23",
+                "preferredApptTime": "09:00",
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "Appointment set for Tuesday 9am. Please bring your car, a valid driver’s license, and any related paperwork. Let us know if anything changes."
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        }
+      ],
+      "score": 1,
+      "passed": true,
+      "rationale": "The agent does not respond with a bare greeting. After the lead’s initial “Hi…”, the agent replies with a greeting plus a clear routing/next-step prompt: “Hi, thanks for calling City Motors. Are you looking to buy a car or schedule service today?” This matches the expectation to move the conversation forward (buying vs. service) and aligns with the persona’s goal of being quickly directed to service scheduling.",
+      "scoredAt": "2025-12-22T22:23:59.907Z"
+    },
+    {
+      "id": "result-1766442231760-8",
+      "personaId": "persona-1766442191987-8",
+      "persona": {
+        "id": "persona-1766442191987-8",
+        "name": "George Whitaker",
+        "role": "Current owner seeking service help",
+        "goal": "Send 'hi' first to see if the assistant will ask what I need, then request to schedule service for a warning light and ask about earliest availability.",
+        "context": "Not comfortable with chat tools and tends to start with a generic greeting ('hi') before describing the issue. Needs the assistant to take initiative by asking whether it’s sales or service and then moving toward appointment scheduling.",
+        "tone": "reserved and straightforward"
+      },
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi, I’m George. I’m a current owner and I’m looking to get some help with my car."
+        },
+        {
+          "role": "assistant",
+          "content": "Hi, thanks for calling City Motors. Are you looking to buy a car or schedule service today?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "George",
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": null,
+                "search_needed": "false",
+                "intent": "service help"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "Hi, thanks for calling City Motors. Are you looking to buy a car or schedule service today?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Service, please. I’ve got a warning light on and I’d like to schedule an appointment—what’s your earliest availability?"
+        },
+        {
+          "role": "assistant",
+          "content": "What is the year, make, and model of your vehicle?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "George",
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "What is the year, make, and model of your vehicle?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "It’s a 2019 Honda Accord."
+        },
+        {
+          "role": "assistant",
+          "content": "What service do you need for your 2019 Honda Accord?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "George",
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "What service do you need for your 2019 Honda Accord?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "There’s a check engine warning light on the dash. I’d like to have that diagnosed and taken care of as soon as possible—when is your earliest appointment?"
+        },
+        {
+          "role": "assistant",
+          "content": "When would you like to bring your 2019 Honda Accord in for the check‑engine diagnosis?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "George",
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "When would you like to bring your 2019 Honda Accord in for the check‑engine diagnosis?"
+              ],
+              "usedTools": [
+                null
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "As soon as you can get me in—what’s the earliest date and time you have available?"
+        },
+        {
+          "role": "assistant",
+          "content": "We have an opening today at 5:30 PM. Does that time work for your check‑engine diagnosis?",
+          "traceData": [
+            {
+              "agentName": "Metadata Identifier",
+              "messages": [],
+              "usedTools": [],
+              "sourceDocuments": [],
+              "artifacts": [],
+              "state": {
+                "firstName": "George",
+                "lastName": null,
+                "serviceCategory": "service",
+                "vehicleInterest": null,
+                "vehicleColor": null,
+                "tradeInVehicle": null,
+                "preferredApptDate": null,
+                "preferredApptTime": null,
+                "preferredApptTimezone": "America/New_York",
+                "search_needed": "false",
+                "intent": "schedule service"
+              },
+              "nodeName": "seqLLMNode",
+              "nodeId": ""
+            },
+            {
+              "agentName": "Router",
+              "messages": [
+                "Service Department"
+              ],
+              "nodeName": "seqCondition",
+              "nodeId": "seqCondition_0"
+            },
+            {
+              "agentName": "Service Department",
+              "messages": [
+                "We have an opening today at 5:30 PM. Does that time work for your check‑engine diagnosis?"
+              ],
+              "usedTools": [
+                {
+                  "tool": "current_date_time",
+                  "toolInput": {},
+                  "toolOutput": "{\"date\":\"2025-12-22\",\"time\":\"22:23:45\",\"day\":\"Monday\",\"timezone\":\"UTC\",\"timezoneOffset\":\"+00:00\",\"iso8601\":\"2025-12-22T22:23:45.465Z\",\"unix_timestamp\":1766442225}"
+                }
+              ],
+              "sourceDocuments": [
+                null
+              ],
+              "artifacts": [
+                null
+              ],
+              "state": {},
+              "nodeName": "seqAgent",
+              "nodeId": "seqAgent_4"
+            }
+          ]
+        }
+      ],
+      "score": 1,
+      "passed": true,
+      "rationale": "The agent does not stall with a bare greeting. After the lead’s initial “Hi, I’m George…,” the agent replies: “Hi, thanks for calling City Motors. Are you looking to buy a car or schedule service today?” This is a greeting plus a clear, persona-relevant next-step question (sales vs. service) that moves the conversation toward the user’s goal of scheduling service.",
+      "scoredAt": "2025-12-22T22:23:51.760Z"
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "passRate": 100,
+    "avgScore": 1,
+    "duration": 85722,
+    "aiSummary": "The agent consistently handled the \"hi\" trigger correctly, avoiding a bare greeting and immediately moving the conversation forward. Responses were engaging and goal-directed, using a clear next-step question that aligns with the intended routing (sales vs. service).",
+    "recommendations": [
+      "Standardize the greeting template to always include (1) a warm greeting, (2) company/persona identification, and (3) a single routing question (e.g., \"Are you looking to buy a car or schedule service?\") to maintain consistent engagement across variants of greetings (\"hi\", \"hello\", \"hey\").",
+      "Add a lightweight personalization hook when the user provides a name (e.g., \"Hi George—thanks for calling...\") to reinforce engagement without slowing down the routing step.",
+      "Implement a fallback if the user’s intent is ambiguous after the first routing question (e.g., offer two quick options and an \"other\" path) to prevent stalls: \"Sales, Service, or something else?\"",
+      "Ensure the first response avoids excessive verbosity; keep it to one question to reduce friction and increase the likelihood of an immediate, actionable user reply."
+    ]
+  },
+  "status": "completed",
+  "createdAt": "2025-12-22T22:23:11.988Z",
+  "braintrustUrl": "https://www.braintrust.dev/app/Invoca/p/AI%20SMS%20Agent%20-%20Readiness%20Testing/experiments/Greeting%20Engagement-1766442163786",
+  "completedAt": "2025-12-22T22:24:09.509Z"
+}

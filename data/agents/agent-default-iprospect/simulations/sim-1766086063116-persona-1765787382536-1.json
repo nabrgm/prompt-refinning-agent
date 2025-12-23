@@ -1,0 +1,15 @@
+{
+  "id": "sim-1766086063116-persona-1765787382536-1",
+  "personaId": "persona-1765787382536-1",
+  "persona": {
+    "id": "persona-1765787382536-1",
+    "name": "Marcus Ellington",
+    "role": "Office manager at a 30-person accounting firm (existing Comcast Business customer)",
+    "goal": "Get routed correctly to handle an internet outage/slow speeds and find the support portal for troubleshooting.",
+    "context": "It’s mid-day during tax season and their connection is unstable, impacting VoIP calls and access to cloud accounting tools. He’s frustrated and wants immediate help, not a sales callback.",
+    "tone": "Frustrated, urgent, direct"
+  },
+  "turns": [],
+  "createdAt": "2025-12-18T19:27:43.116Z",
+  "status": "running"
+}

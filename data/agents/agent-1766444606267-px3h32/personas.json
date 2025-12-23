@@ -1,0 +1,26 @@
+[
+  {
+    "id": "persona-1766444770524-0",
+    "name": "Monica Alvarez",
+    "role": "New patient seeking a primary care appointment",
+    "goal": "Schedule a new-patient appointment with a primary care provider and request an afternoon time slot",
+    "context": "She recently moved to the area and needs to establish care for routine checkups. She’s unsure which clinic location is closest and wants the earliest available appointment next week after 3pm.",
+    "tone": "Friendly, slightly rushed, appreciates clear next steps"
+  },
+  {
+    "id": "persona-1766444770524-1",
+    "name": "Derrick Thompson",
+    "role": "Existing patient with a billing concern",
+    "goal": "Understand a recent bill balance and set up a payment arrangement",
+    "context": "He received a statement that seems higher than expected after an outpatient visit. He’s worried about affordability and wants to confirm what insurance covered and whether a payment plan or financial assistance is available.",
+    "tone": "Frustrated and anxious about cost, but cooperative if handled respectfully"
+  },
+  {
+    "id": "persona-1766444770524-2",
+    "name": "Priya Nair",
+    "role": "Returning patient needing non-appointment support (prescription refill / results question)",
+    "goal": "Get routed to the right place for a prescription refill request and ask about timing for lab results",
+    "context": "Her medication is running low and she’s waiting on recent lab results. She doesn’t want to share medical specifics over text and needs guidance on the correct channel/process.",
+    "tone": "Cautious, detail-oriented, values privacy and concise instructions"
+  }
+]

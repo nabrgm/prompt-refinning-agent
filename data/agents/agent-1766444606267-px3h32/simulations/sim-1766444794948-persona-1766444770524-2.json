@@ -1,0 +1,308 @@
+{
+  "id": "sim-1766444794948-persona-1766444770524-2",
+  "personaId": "persona-1766444770524-2",
+  "persona": {
+    "id": "persona-1766444770524-2",
+    "name": "Priya Nair",
+    "role": "Returning patient needing non-appointment support (prescription refill / results question)",
+    "goal": "Get routed to the right place for a prescription refill request and ask about timing for lab results",
+    "context": "Her medication is running low and she’s waiting on recent lab results. She doesn’t want to share medical specifics over text and needs guidance on the correct channel/process.",
+    "tone": "Cautious, detail-oriented, values privacy and concise instructions"
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Hi, I’m a returning patient and I had a couple of quick questions about a prescription refill and some recent lab results—could you point me to the right place or process for those?"
+    },
+    {
+      "role": "assistant",
+      "content": "If this is an emergency, call 911. I am not a substitute for professional medical advice. To continue, please text YES to accept our Terms and Privacy Policy.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": null,
+            "lastName": null,
+            "serviceCategory": "other",
+            "consentGiven": "false",
+            "preferredApptDate": null,
+            "preferredApptTime": null,
+            "preferredApptTimezone": null,
+            "providerType": null,
+            "locationPreference": null,
+            "search_needed": "true",
+            "intent": "prescription refill"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Other Services"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Other Services",
+          "messages": [
+            "If this is an emergency, call 911. I am not a substitute for professional medical advice. To continue, please text YES to accept our Terms and Privacy Policy."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_5"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "YES"
+    },
+    {
+      "role": "assistant",
+      "content": "For routine refills, contact your pharmacy. If it’s a new medication or controlled substance, you’ll need an appointment. Is this a routine refill?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": null,
+            "lastName": null,
+            "serviceCategory": "other",
+            "consentGiven": "true",
+            "preferredApptDate": null,
+            "preferredApptTime": null,
+            "preferredApptTimezone": null,
+            "providerType": null,
+            "locationPreference": null,
+            "search_needed": "true",
+            "intent": "prescription refill"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Other Services"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Other Services",
+          "messages": [
+            "For routine refills, contact your pharmacy. If it’s a new medication or controlled substance, you’ll need an appointment. Is this a routine refill?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_5"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes, it’s a routine refill.  \n\nAlso, I’m waiting on some recent lab results—what’s the usual process and timeline for getting those, and is there a specific number or portal I should use to check them without sharing details over text?"
+    },
+    {
+      "role": "assistant",
+      "content": "For a routine refill, call or email your pharmacy directly. No additional action needed from us.\n\nLab results appear in the MyHealth portal (https://citymedical.com/myhealth) within 48 hrs. If not visible, reply Nurse Line.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": null,
+            "lastName": null,
+            "serviceCategory": "other",
+            "consentGiven": "true",
+            "preferredApptDate": null,
+            "preferredApptTime": null,
+            "preferredApptTimezone": null,
+            "providerType": null,
+            "locationPreference": null,
+            "search_needed": "true",
+            "intent": "prescription refill"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Other Services"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Other Services",
+          "messages": [
+            "For a routine refill, call or email your pharmacy directly. No additional action needed from us.\n\nLab results appear in the MyHealth portal (https://citymedical.com/myhealth) within 48 hrs. If not visible, reply Nurse Line."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_5"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks, that’s helpful.  \n\nI’ll contact my pharmacy for the refill, and I’ll check the MyHealth portal for the labs—if they’re not there after 48 hours, I’ll reply “Nurse Line.”"
+    },
+    {
+      "role": "assistant",
+      "content": "Is there anything else I can help you with today?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": null,
+            "lastName": null,
+            "serviceCategory": "other",
+            "consentGiven": "true",
+            "preferredApptDate": null,
+            "preferredApptTime": null,
+            "preferredApptTimezone": null,
+            "providerType": null,
+            "locationPreference": null,
+            "search_needed": "false",
+            "intent": "prescription refill"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Other Services"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Other Services",
+          "messages": [
+            "Is there anything else I can help you with today?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_5"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "No, that covers what I needed today—thanks."
+    },
+    {
+      "role": "assistant",
+      "content": "You’re welcome! If you have any other questions later, feel free to text us. Take care.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": null,
+            "lastName": null,
+            "serviceCategory": "other",
+            "consentGiven": "true",
+            "preferredApptDate": null,
+            "preferredApptTime": null,
+            "preferredApptTimezone": null,
+            "providerType": null,
+            "locationPreference": null,
+            "search_needed": "true",
+            "intent": "prescription refill"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Other Services"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Other Services",
+          "messages": [
+            "You’re welcome! If you have any other questions later, feel free to text us. Take care."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_5"
+        }
+      ]
+    }
+  ],
+  "createdAt": "2025-12-22T23:06:34.948Z",
+  "status": "completed",
+  "chatId": "be2fae52-0263-467d-ae3e-6ce6d49fdaac",
+  "completedAt": "2025-12-22T23:08:19.311Z"
+}
