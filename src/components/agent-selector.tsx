@@ -142,7 +142,7 @@ export function AgentSelector({ onAgentSelect, selectedAgentId }: AgentSelectorP
             <div className="mb-8 text-center">
                 <h1 className="text-3xl font-bold mb-2">Prompt Refinement & Eval Tool</h1>
                 <p className="text-muted-foreground">
-                    Select an agent to refine its prompts, or add a new agent
+                    Select an agent to evaluate, or add a new agent
                 </p>
             </div>
 
