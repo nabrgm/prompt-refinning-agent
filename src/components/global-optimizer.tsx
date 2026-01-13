@@ -57,18 +57,18 @@ export function GlobalOptimizer({ agentId, chatHistory, nodes }: GlobalOptimizer
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+                <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
                     <Sparkles className="mr-2 h-4 w-4" />
                     Analyze & Refine
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[800px] h-[80vh] flex flex-col">
+            <DialogContent className="sm:max-w-[800px] h-[80vh] flex flex-col bg-card border-border">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center text-xl">
-                        <Sparkles className="mr-2 h-5 w-5 text-indigo-600" />
+                    <DialogTitle className="flex items-center text-xl text-foreground">
+                        <Sparkles className="mr-2 h-5 w-5 text-primary" />
                         Global Prompt Optimizer
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-muted-foreground">
                         AI analysis of the current conversation to suggest improvements across all agent nodes.
                     </DialogDescription>
                 </DialogHeader>
@@ -78,20 +78,20 @@ export function GlobalOptimizer({ agentId, chatHistory, nodes }: GlobalOptimizer
                         <div className="h-full flex flex-col items-center justify-center space-y-4 p-8">
                             <div className="w-full max-w-md space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="rule">Specific Rule (Optional)</Label>
+                                    <Label htmlFor="rule" className="text-foreground">Specific Rule (Optional)</Label>
                                     <Textarea
                                         id="rule"
                                         placeholder="e.g. 'When the user mentions pricing, always offer a 10% discount.'"
                                         value={userRule}
                                         onChange={(e) => setUserRule(e.target.value)}
-                                        className="bg-white"
+                                        className="bg-muted/30 border-border text-foreground"
                                     />
-                                    <p className="text-xs text-slate-500">
+                                    <p className="text-xs text-muted-foreground">
                                         Leave empty for general optimization, or describe a specific behavior you want to enforce.
                                     </p>
                                 </div>
 
-                                <Button onClick={handleAnalyze} disabled={isAnalyzing} size="lg" className="w-full">
+                                <Button onClick={handleAnalyze} disabled={isAnalyzing} size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                                     {isAnalyzing ? "Analyzing..." : "Start Analysis"}
                                 </Button>
                             </div>
@@ -100,42 +100,42 @@ export function GlobalOptimizer({ agentId, chatHistory, nodes }: GlobalOptimizer
                         <ScrollArea className="h-full pr-4">
                             <div className="space-y-6">
                                 {suggestions.map((suggestion, index) => (
-                                    <div key={index} className="border rounded-xl p-4 bg-slate-50 space-y-3">
+                                    <div key={index} className="border border-border rounded-xl p-4 bg-muted/20 space-y-3">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center space-x-2">
-                                                <Badge variant="outline" className="font-mono">
+                                                <Badge variant="outline" className="font-mono border-border text-foreground">
                                                     {getNodeLabel(suggestion.nodeId)}
                                                 </Badge>
-                                                <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-0">
+                                                <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border-0">
                                                     {suggestion.type === 'systemMessagePrompt' ? 'System' : 'Human'}
                                                 </Badge>
                                             </div>
                                             {appliedSuggestions.has(index) ? (
-                                                <Badge className="bg-green-100 text-green-700 border-green-200">
+                                                <Badge className="bg-primary/10 text-primary border-primary/20">
                                                     <Check className="mr-1 h-3 w-3" /> Applied
                                                 </Badge>
                                             ) : (
-                                                <Button size="sm" onClick={() => handleApply(suggestion, index)}>
+                                                <Button size="sm" onClick={() => handleApply(suggestion, index)} className="bg-primary text-primary-foreground hover:bg-primary/90">
                                                     Apply Change
                                                 </Button>
                                             )}
                                         </div>
 
-                                        <div className="bg-white p-3 rounded border border-slate-200 text-sm text-slate-600">
-                                            <span className="font-semibold text-slate-800 block mb-1">Reasoning:</span>
+                                        <div className="bg-muted/30 p-3 rounded border border-border text-sm text-muted-foreground">
+                                            <span className="font-semibold text-foreground block mb-1">Reasoning:</span>
                                             {suggestion.reasoning}
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div className="space-y-1">
-                                                <span className="text-xs font-medium text-slate-500">Current Prompt</span>
-                                                <div className="bg-red-50 border border-red-100 rounded p-2 text-xs font-mono text-slate-600 max-h-[150px] overflow-y-auto opacity-70">
+                                                <span className="text-xs font-medium text-muted-foreground">Current Prompt</span>
+                                                <div className="bg-destructive/5 border border-destructive/20 rounded p-2 text-xs font-mono text-muted-foreground max-h-[150px] overflow-y-auto opacity-70">
                                                     {nodes.find(n => n.id === suggestion.nodeId)?.[suggestion.type] || "(Empty)"}
                                                 </div>
                                             </div>
                                             <div className="space-y-1">
-                                                <span className="text-xs font-medium text-slate-500">New Prompt</span>
-                                                <div className="bg-green-50 border border-green-100 rounded p-2 text-xs font-mono text-slate-800 max-h-[150px] overflow-y-auto">
+                                                <span className="text-xs font-medium text-muted-foreground">New Prompt</span>
+                                                <div className="bg-primary/5 border border-primary/20 rounded p-2 text-xs font-mono text-foreground max-h-[150px] overflow-y-auto">
                                                     {suggestion.newPrompt}
                                                 </div>
                                             </div>

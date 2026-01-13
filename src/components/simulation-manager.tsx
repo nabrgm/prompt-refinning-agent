@@ -1,31 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Loader2, Play, Plus, UserPlus, MessageSquare, Trash2, History } from 'lucide-react';
+import { Loader2, BookOpen, AlertCircle, RefreshCw, History, Eye } from 'lucide-react';
 import {
-    createAndSavePersonas,
-    autoGeneratePersonas,
-    runSimulationStep,
-    sendChat,
-    fetchSavedPersonas,
-    deletePersona,
-    clearPersonas,
-    startSimulation,
-    completeSimulation,
-    fetchAllSimulations,
-    clearSimulations
+    generateSimulationOptions,
+    fetchSimulationOptions,
+    updateSimulationOptions,
+    startSimulationBatch,
+    fetchSimulationBatches,
+    fetchBatchSimulations,
+    removeBatch,
+    loadOnboardingGuide
 } from '@/app/actions';
-import { Persona, SimulationTurn } from '@/types/simulation';
-import { TracePanel } from '@/components/trace-panel';
+import {
+    Persona,
+    EnhancedSimulation,
+    SimulationConfig,
+    GeneratedSimulationOptions,
+    SimulationBatch
+} from '@/types/simulation';
 import { OverridableNode } from '@/types/polaris';
-import { GlobalOptimizer } from '@/components/global-optimizer';
-import { SavedSimulation } from '@/lib/persistence';
+import { SimulationConfigPanel } from '@/components/simulation-config-panel';
+import { SimulationResultsView } from '@/components/simulation-results-view';
+import { generateSimulationHTML, downloadHTML, generateExportFilename } from '@/lib/export';
 
 interface SimulationManagerProps {
     agentId: string;
@@ -38,6 +38,8 @@ interface SimulationManagerProps {
     stateOverrides?: Record<string, string>;
 }
 
+type ViewMode = 'loading' | 'no-guide' | 'config' | 'results';
+
 export function SimulationManager({
     agentId,
     nodes,
@@ -48,450 +50,352 @@ export function SimulationManager({
     onNewSimulation,
     stateOverrides
 }: SimulationManagerProps) {
-    const [isGenerating, setIsGenerating] = useState(false);
+    const [viewMode, setViewMode] = useState<ViewMode>('loading');
     const [isLoading, setIsLoading] = useState(true);
-    const [generationMode, setGenerationMode] = useState<'custom' | 'auto'>('auto');
-    const [generationPrompt, setGenerationPrompt] = useState('Customers wanting refunds');
-    const [personaCount, setPersonaCount] = useState(3);
-    const [activeSimulations, setActiveSimulations] = useState<Record<string, {
-        personaId: string;
-        turns: SimulationTurn[];
-        status: 'running' | 'idle';
-        chatId?: string;
-        savedId?: string;
-    }>>({});
-    const [selectedSimulationId, setSelectedSimulationId] = useState<string | null>(null);
-    const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([]);
-    const [showHistory, setShowHistory] = useState(false);
-    const [expandedPersonaId, setExpandedPersonaId] = useState<string | null>(null);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isRunning, setIsRunning] = useState(false);
+    const [simulationOptions, setSimulationOptions] = useState<GeneratedSimulationOptions | null>(null);
+    const [batches, setBatches] = useState<SimulationBatch[]>([]);
+    const [selectedBatchId, setSelectedBatchId] = useState<string | null>(null);
+    const [batchSimulations, setBatchSimulations] = useState<Record<string, EnhancedSimulation[]>>({});
+    const [error, setError] = useState<string | null>(null);
+    const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
 
-    // Load saved personas and simulations on mount
+    // Initial load
     useEffect(() => {
-        async function loadSavedData() {
-            try {
-                const [loadedPersonas, loadedSimulations] = await Promise.all([
-                    fetchSavedPersonas(agentId),
-                    fetchAllSimulations(agentId)
-                ]);
-                if (loadedPersonas.length > 0) {
-                    setPersonas(loadedPersonas);
-                }
-                setSavedSimulations(loadedSimulations);
-            } catch (error) {
-                console.error("Failed to load saved data", error);
-            } finally {
-                setIsLoading(false);
+        loadInitialData();
+        return () => {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
             }
-        }
-        loadSavedData();
-    }, [agentId, setPersonas]);
+        };
+    }, [agentId]);
 
-    const handleGeneratePersonas = async () => {
-        setIsGenerating(true);
+    const loadInitialData = async () => {
+        setIsLoading(true);
+        setError(null);
         try {
-            let newPersonas;
-            if (generationMode === 'auto') {
-                // Auto-generate based on agent prompts
-                newPersonas = await autoGeneratePersonas(agentId, personaCount, nodes);
-            } else {
-                // Custom prompt + agent context
-                newPersonas = await createAndSavePersonas(agentId, personaCount, generationPrompt, nodes);
+            // Check for onboarding guide
+            const guide = await loadOnboardingGuide(agentId);
+            if (!guide) {
+                setViewMode('no-guide');
+                setIsLoading(false);
+                return;
             }
-            setPersonas([...personas, ...newPersonas]);
-        } catch (error) {
-            console.error("Failed to generate personas", error);
-            alert("Failed to generate personas. Check API Key.");
+
+            // Load existing batches
+            const existingBatches = await fetchSimulationBatches(agentId);
+            setBatches(existingBatches);
+
+            // Load simulations for each batch
+            const simsMap: Record<string, EnhancedSimulation[]> = {};
+            for (const batch of existingBatches) {
+                simsMap[batch.id] = await fetchBatchSimulations(agentId, batch.id);
+            }
+            setBatchSimulations(simsMap);
+
+            // Load simulation options
+            const options = await fetchSimulationOptions(agentId);
+            setSimulationOptions(options);
+
+            // Determine view mode
+            if (existingBatches.length > 0) {
+                setSelectedBatchId(existingBatches[0].id);
+                setViewMode('results');
+                // Start polling if any batch is running
+                if (existingBatches.some(b => b.status === 'running')) {
+                    startPolling();
+                }
+            } else {
+                setViewMode('config');
+            }
+        } catch (err) {
+            console.error('Failed to load simulation data:', err);
+            setError('Failed to load simulation data. Please try again.');
+            setViewMode('config');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGenerateOptions = async () => {
+        setIsGenerating(true);
+        setError(null);
+        try {
+            const options = await generateSimulationOptions(agentId, nodes);
+            setSimulationOptions(options);
+        } catch (err) {
+            console.error('Failed to generate options:', err);
+            setError(err instanceof Error ? err.message : 'Failed to generate simulation options');
         } finally {
             setIsGenerating(false);
         }
     };
 
-    const handleDeletePersona = async (personaId: string) => {
+    const handleOptionsUpdate = async (options: GeneratedSimulationOptions) => {
+        setSimulationOptions(options);
         try {
-            const updated = await deletePersona(agentId, personaId);
-            setPersonas(updated);
-        } catch (error) {
-            console.error("Failed to delete persona", error);
+            await updateSimulationOptions(agentId, options);
+        } catch (err) {
+            console.error('Failed to save options:', err);
         }
     };
 
-    const runSimulation = async (persona: Persona) => {
-        // Start and save simulation
-        const savedSim = await startSimulation(agentId, persona);
-
-        setActiveSimulations(prev => ({
-            ...prev,
-            [persona.id]: { personaId: persona.id, turns: [], status: 'running', savedId: savedSim.id }
-        }));
-        setSelectedSimulationId(persona.id);
-
-        let currentHistory: { role: string, content: string }[] = [];
-        let currentChatId: string | undefined = undefined;
-        let turns: SimulationTurn[] = [];
-
+    const handleRunSimulations = async (config: SimulationConfig) => {
+        setIsRunning(true);
+        setError(null);
         try {
-            // Generate first user message
-            let currentUserMessage = await runSimulationStep(persona, []);
+            // Start the batch and get initial data immediately
+            const { batch, simulations } = await startSimulationBatch(agentId, config, nodes, stateOverrides);
 
-            for (let i = 0; i < 5; i++) {
-                // Add user message to turns
-                const userTurn: SimulationTurn = { role: 'user', content: currentUserMessage };
-                turns.push(userTurn);
-                currentHistory.push({ role: 'user', content: currentUserMessage });
+            // Update state with new batch
+            setBatches(prev => [batch, ...prev]);
+            setBatchSimulations(prev => ({ ...prev, [batch.id]: simulations }));
+            setSelectedBatchId(batch.id);
 
-                setActiveSimulations(prev => ({
-                    ...prev,
-                    [persona.id]: { ...prev[persona.id], turns: [...turns] }
-                }));
+            // Navigate to results immediately
+            setViewMode('results');
 
-                // Send to agent API (with chatId for conversation continuity)
-                const agentResponse = await sendChat(agentId, currentUserMessage, currentChatId, nodes, stateOverrides);
-                currentChatId = agentResponse.chatId; // Save chatId for next call
-
-                const agentTurn: SimulationTurn = {
-                    role: 'assistant',
-                    content: agentResponse.text,
-                    traceData: agentResponse.agentReasoning
-                };
-                turns.push(agentTurn);
-                currentHistory.push({ role: 'assistant', content: agentResponse.text });
-
-                setActiveSimulations(prev => ({
-                    ...prev,
-                    [persona.id]: { ...prev[persona.id], turns: [...turns], chatId: currentChatId }
-                }));
-
-                // Generate next user response based on conversation history
-                currentUserMessage = await runSimulationStep(persona, currentHistory);
-
-                await new Promise(r => setTimeout(r, 1000));
-            }
-
-            // Save completed simulation
-            await completeSimulation(agentId, savedSim.id, turns, currentChatId);
-
-            // Refresh saved simulations list
-            const updated = await fetchAllSimulations(agentId);
-            setSavedSimulations(updated);
-
-        } catch (error) {
-            console.error("Simulation failed", error);
+            // Start polling for updates
+            startPolling();
+        } catch (err) {
+            console.error('Failed to run simulations:', err);
+            setError(err instanceof Error ? err.message : 'Failed to run simulations');
         } finally {
-            setActiveSimulations(prev => ({
-                ...prev,
-                [persona.id]: { ...prev[persona.id], status: 'idle' }
-            }));
+            setIsRunning(false);
         }
     };
 
-    const runAllSimulations = () => {
-        // Run all simulations in parallel
-        personas.forEach(p => {
-            if (!activeSimulations[p.id] || activeSimulations[p.id].status === 'idle') {
-                runSimulation(p);
+    const startPolling = useCallback(() => {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+        }
+        const interval = setInterval(async () => {
+            try {
+                // Fetch updated batches
+                const updatedBatches = await fetchSimulationBatches(agentId);
+                setBatches(updatedBatches);
+
+                // Update simulations for running batches
+                const simsMap: Record<string, EnhancedSimulation[]> = { ...batchSimulations };
+                let hasRunning = false;
+                for (const batch of updatedBatches) {
+                    if (batch.status === 'running') {
+                        hasRunning = true;
+                        simsMap[batch.id] = await fetchBatchSimulations(agentId, batch.id);
+                    }
+                }
+                setBatchSimulations(simsMap);
+
+                // Stop polling if no batches are running
+                if (!hasRunning) {
+                    stopPolling();
+                }
+            } catch (err) {
+                console.error('Polling error:', err);
             }
-        });
+        }, 2000); // Poll every 2 seconds
+        setPollingInterval(interval);
+    }, [agentId, pollingInterval, batchSimulations]);
+
+    const stopPolling = useCallback(() => {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            setPollingInterval(null);
+        }
+    }, [pollingInterval]);
+
+    const handleBackToConfig = () => {
+        setViewMode('config');
     };
 
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[700px]">
-            {/* Sidebar: Personas */}
-            <Card className="lg:col-span-1 flex flex-col">
-                <CardHeader>
-                    <CardTitle>Personas</CardTitle>
-                    <CardDescription>Generate or select a persona</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col gap-4">
-                    <div className="space-y-3">
-                        {/* Mode Toggle */}
-                        <div className="flex rounded-lg border p-1 bg-slate-50">
-                            <button
-                                onClick={() => setGenerationMode('auto')}
-                                className={`flex-1 text-xs py-1.5 px-2 rounded transition-colors ${
-                                    generationMode === 'auto'
-                                        ? 'bg-white shadow text-indigo-600 font-medium'
-                                        : 'text-slate-500 hover:text-slate-700'
-                                }`}
-                            >
-                                Auto-Generate
-                            </button>
-                            <button
-                                onClick={() => setGenerationMode('custom')}
-                                className={`flex-1 text-xs py-1.5 px-2 rounded transition-colors ${
-                                    generationMode === 'custom'
-                                        ? 'bg-white shadow text-indigo-600 font-medium'
-                                        : 'text-slate-500 hover:text-slate-700'
-                                }`}
-                            >
-                                Custom Prompt
-                            </button>
-                        </div>
+    const handleDeleteBatch = async (batchId: string) => {
+        if (window.confirm('This will delete this batch and all its simulations. Are you sure?')) {
+            await removeBatch(agentId, batchId);
+            setBatches(prev => prev.filter(b => b.id !== batchId));
+            setBatchSimulations(prev => {
+                const updated = { ...prev };
+                delete updated[batchId];
+                return updated;
+            });
+            // Select another batch if this was selected
+            if (selectedBatchId === batchId) {
+                const remaining = batches.filter(b => b.id !== batchId);
+                setSelectedBatchId(remaining.length > 0 ? remaining[0].id : null);
+                if (remaining.length === 0) {
+                    setViewMode('config');
+                }
+            }
+        }
+    };
 
-                        {/* Custom prompt input (only shown in custom mode) */}
-                        {generationMode === 'custom' && (
-                            <Input
-                                value={generationPrompt}
-                                onChange={(e) => setGenerationPrompt(e.target.value)}
-                                placeholder="e.g., Frustrated customers wanting refunds"
-                                className="text-sm"
-                            />
-                        )}
+    const handleDownload = (batchId: string) => {
+        const sims = batchSimulations[batchId] || [];
+        if (sims.length === 0) return;
+        const html = generateSimulationHTML(sims);
+        const batch = batches.find(b => b.id === batchId);
+        const filename = generateExportFilename(batch?.name);
+        downloadHTML(html, filename);
+    };
 
-                        {/* Persona count selector */}
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-500">Personas:</span>
-                            <select
-                                value={personaCount}
-                                onChange={(e) => setPersonaCount(Number(e.target.value))}
-                                className="flex-1 text-sm border rounded px-2 py-1.5 bg-white"
-                            >
-                                <option value={3}>3 personas</option>
-                                <option value={5}>5 personas</option>
-                                <option value={10}>10 personas</option>
-                            </select>
-                        </div>
+    // Render based on view mode
+    if (viewMode === 'loading' || isLoading) {
+        return (
+            <div className="h-full flex items-center justify-center border border-border rounded-lg bg-card">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="text-muted-foreground">Loading simulation data...</p>
+                </div>
+            </div>
+        );
+    }
 
-                        {/* Generate button */}
-                        <Button onClick={handleGeneratePersonas} disabled={isGenerating} className="w-full">
-                            {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
-                            {generationMode === 'auto' ? 'Auto-Generate' : 'Generate'} Personas
+    if (viewMode === 'no-guide') {
+        return (
+            <div className="h-full flex items-center justify-center border border-border rounded-lg bg-card">
+                <div className="text-center py-12 max-w-md px-6">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <BookOpen className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-serif text-foreground mb-2">
+                        Onboarding Guide Required
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6">
+                        To generate realistic simulations, you need to add an onboarding guide first.
+                        Click the "Onboarding Guide" button in the header to add your training document.
+                    </p>
+                    <div className="bg-muted/30 p-4 rounded-lg text-left text-xs text-muted-foreground">
+                        <p className="font-medium mb-2 text-foreground">What to include:</p>
+                        <ul className="space-y-1 list-disc list-inside">
+                            <li>Company/brand overview</li>
+                            <li>Products or services offered</li>
+                            <li>Customer types and personas</li>
+                            <li>Common scenarios and issues</li>
+                            <li>Agent guidelines and policies</li>
+                        </ul>
+                    </div>
+                    <Button
+                        className="mt-6 bg-primary text-primary-foreground hover:bg-primary/90"
+                        onClick={loadInitialData}
+                    >
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        Check Again
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="h-full flex items-center justify-center border border-border rounded-lg bg-card">
+                <div className="text-center max-w-md px-6">
+                    <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <AlertCircle className="h-8 w-8 text-destructive" />
+                    </div>
+                    <h3 className="text-lg font-serif text-foreground mb-2">
+                        Something went wrong
+                    </h3>
+                    <p className="text-sm text-destructive mb-6">{error}</p>
+                    <div className="flex gap-3 justify-center">
+                        <Button variant="outline" onClick={() => setError(null)} className="border-border text-foreground hover:bg-muted">
+                            Dismiss
                         </Button>
-                        <Button onClick={runAllSimulations} disabled={personas.length === 0} variant="secondary" className="w-full mt-2">
-                            <Play className="mr-2 h-4 w-4" /> Run All Simulations
-                        </Button>
-                        <Button
-                            onClick={() => setShowHistory(!showHistory)}
-                            variant="outline"
-                            className="w-full mt-2"
-                        >
-                            <History className="mr-2 h-4 w-4" /> {showHistory ? 'Show Personas' : 'View History'} ({savedSimulations.length})
-                        </Button>
-                        <Button
-                            onClick={async () => {
-                                if (window.confirm('Start fresh? This will clear all personas and simulation history.')) {
-                                    await Promise.all([clearPersonas(agentId), clearSimulations(agentId)]);
-                                    onNewSimulation();
-                                    setActiveSimulations({});
-                                    setSelectedSimulationId(null);
-                                    setSavedSimulations([]);
-                                    setShowHistory(false);
-                                }
-                            }}
-                            variant="outline"
-                            className="w-full mt-2 text-red-600 hover:text-red-700"
-                        >
-                            <Trash2 className="mr-2 h-4 w-4" /> Clear All
+                        <Button onClick={loadInitialData} className="bg-primary text-primary-foreground hover:bg-primary/90">
+                            <RefreshCw className="h-4 w-4 mr-2" />
+                            Retry
                         </Button>
                     </div>
+                </div>
+            </div>
+        );
+    }
 
-                    <Separator />
+    if (viewMode === 'results' && batches.length > 0) {
+        return (
+            <div className="h-full">
+                <SimulationResultsView
+                    agentId={agentId}
+                    batches={batches}
+                    batchSimulations={batchSimulations}
+                    selectedBatchId={selectedBatchId}
+                    onSelectBatch={setSelectedBatchId}
+                    onDeleteBatch={handleDeleteBatch}
+                    onBackToConfig={handleBackToConfig}
+                    onDownload={handleDownload}
+                    onSimulationsUpdate={(batchId, sims) => {
+                        setBatchSimulations(prev => ({ ...prev, [batchId]: sims }));
+                    }}
+                />
+            </div>
+        );
+    }
 
-                    <ScrollArea className="flex-1">
-                        {isLoading ? (
-                            <div className="flex items-center justify-center py-8">
-                                <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-                            </div>
-                        ) : showHistory ? (
-                            // Show saved simulations history
-                            <div className="space-y-3 pr-4">
-                                {savedSimulations.map(sim => (
-                                    <div
-                                        key={sim.id}
-                                        className={`p-3 border rounded-lg cursor-pointer transition-colors ${selectedSimulationId === sim.id ? 'bg-indigo-50 border-indigo-200' : 'hover:bg-slate-50'}`}
-                                        onClick={() => {
-                                            // Load this simulation into activeSimulations for viewing
-                                            setActiveSimulations(prev => ({
-                                                ...prev,
-                                                [sim.id]: {
-                                                    personaId: sim.personaId,
-                                                    turns: sim.turns as SimulationTurn[],
-                                                    status: 'idle',
-                                                    chatId: sim.chatId,
-                                                    savedId: sim.id
-                                                }
-                                            }));
-                                            setSelectedSimulationId(sim.id);
-                                        }}
-                                    >
-                                        <div className="flex justify-between items-start mb-1">
-                                            <span className="font-semibold text-sm">{sim.persona.name}</span>
-                                            <Badge variant={sim.status === 'completed' ? 'default' : 'secondary'} className="text-xs">
-                                                {sim.status}
-                                            </Badge>
-                                        </div>
-                                        <p className="text-xs text-slate-500 mb-1">{sim.persona.role}</p>
-                                        <div className="flex justify-between items-center text-[10px] text-slate-400">
-                                            <span>{sim.turns.length} turns</span>
-                                            <span>{new Date(sim.createdAt).toLocaleDateString()}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                                {savedSimulations.length === 0 && (
-                                    <div className="text-center text-slate-400 text-sm py-8">
-                                        No saved simulations yet.
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            // Show personas
-                            <div className="space-y-2 pr-4">
-                                {personas.map(p => {
-                                    const isExpanded = expandedPersonaId === p.id;
-                                    return (
-                                        <div
-                                            key={p.id}
-                                            className={`border rounded-lg transition-colors ${selectedSimulationId === p.id ? 'bg-indigo-50 border-indigo-200' : 'hover:bg-slate-50'}`}
-                                        >
-                                            {/* Header - always visible */}
-                                            <div
-                                                className="p-3 cursor-pointer"
-                                                onClick={() => {
-                                                    setExpandedPersonaId(isExpanded ? null : p.id);
-                                                    setSelectedSimulationId(p.id); // Also select this simulation to view
-                                                }}
-                                            >
-                                                <div className="flex items-start justify-between gap-2 mb-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="font-semibold text-sm">{p.name}</span>
-                                                        {activeSimulations[p.id]?.status === 'running' && (
-                                                            <span className="flex h-2 w-2 relative">
-                                                                <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-green-400 opacity-75"></span>
-                                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                                            </span>
-                                                        )}
-                                                        {activeSimulations[p.id]?.turns?.length > 0 && activeSimulations[p.id]?.status !== 'running' && (
-                                                            <span className="text-[10px] text-slate-400">({activeSimulations[p.id].turns.length})</span>
-                                                        )}
-                                                    </div>
-                                                    <div className="flex items-center gap-1 shrink-0">
-                                                        <Button
-                                                            size="sm"
-                                                            variant="outline"
-                                                            className="h-6 w-6 p-0"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                runSimulation(p);
-                                                            }}
-                                                            disabled={activeSimulations[p.id]?.status === 'running'}
-                                                        >
-                                                            {activeSimulations[p.id]?.status === 'running' ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
-                                                        </Button>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            className="h-6 w-6 p-0 text-slate-400 hover:text-red-500"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                if (window.confirm(`Delete "${p.name}"?`)) {
-                                                                    handleDeletePersona(p.id);
-                                                                }
-                                                            }}
-                                                        >
-                                                            <Trash2 className="h-3 w-3" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                                <p className="text-[11px] text-slate-600 font-medium mb-1 leading-snug">{p.role}</p>
-                                                {!isExpanded && (
-                                                    <p className="text-xs text-slate-500 line-clamp-2">{p.context}</p>
-                                                )}
-                                            </div>
-
-                                            {/* Expanded details */}
-                                            {isExpanded && (
-                                                <div className="px-3 pb-3 border-t border-slate-100 pt-2 space-y-2 text-xs">
-                                                    <div>
-                                                        <span className="font-medium text-slate-600">Goal:</span>
-                                                        <p className="text-slate-700 mt-0.5">{p.goal}</p>
-                                                    </div>
-                                                    <div>
-                                                        <span className="font-medium text-slate-600">Context:</span>
-                                                        <p className="text-slate-700 mt-0.5">{p.context}</p>
-                                                    </div>
-                                                    <div>
-                                                        <span className="font-medium text-slate-600">Tone:</span>
-                                                        <p className="text-slate-700 mt-0.5">{p.tone}</p>
-                                                    </div>
-                                                    {activeSimulations[p.id] && (
-                                                        <div className="text-[10px] text-slate-400 pt-1">
-                                                            {activeSimulations[p.id].turns.length} turns completed
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                                {personas.length === 0 && (
-                                    <div className="text-center text-slate-400 text-sm py-8">
-                                        No personas generated yet.
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </ScrollArea>
-                </CardContent>
-            </Card>
-
-            {/* Main: Simulation Output */}
-            <Card className="lg:col-span-2 flex flex-col">
-                <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                        <span>Simulation Output</span>
-                        {selectedSimulationId && activeSimulations[selectedSimulationId]?.status === 'running' && (
-                            <Badge variant="default" className="bg-green-500 animate-pulse">Running...</Badge>
-                        )}
-                        {selectedSimulationId && activeSimulations[selectedSimulationId] && (
-                            <GlobalOptimizer
-                                agentId={agentId}
-                                chatHistory={activeSimulations[selectedSimulationId].turns.map(t => `${t.role}: ${t.content}`).join('\n')}
-                                nodes={nodes}
-                            />
-                        )}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 overflow-hidden">
-                    <ScrollArea className="h-full pr-4">
-                        {selectedSimulationId && activeSimulations[selectedSimulationId] ? (
-                            <div className="space-y-6">
-                                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-6">
-                                    <h3 className="font-semibold text-sm mb-1">Active Persona</h3>
-                                    {(() => {
-                                        // Find persona from either personas list or saved simulation
-                                        const persona = personas.find(p => p.id === selectedSimulationId) ||
-                                            savedSimulations.find(s => s.id === selectedSimulationId)?.persona;
-                                        return persona ? (
-                                            <div className="grid grid-cols-2 gap-4 text-xs">
-                                                <div><span className="text-slate-500">Name:</span> {persona.name}</div>
-                                                <div><span className="text-slate-500">Goal:</span> {persona.goal}</div>
-                                            </div>
-                                        ) : null;
-                                    })()}
+    // Default: config view
+    return (
+        <div className="space-y-4">
+            {/* Show previous simulations banner if they exist */}
+            {batches.length > 0 && (
+                <Card className="bg-primary/5 border-primary/20">
+                    <CardContent className="py-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <History className="h-5 w-5 text-primary" />
+                                <div>
+                                    <p className="font-medium text-foreground">Previous Simulations Available</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        {batches.length} batch{batches.length !== 1 ? 'es' : ''} with simulation results
+                                    </p>
                                 </div>
+                            </div>
+                            <Button
+                                onClick={() => setViewMode('results')}
+                                variant="outline"
+                                className="bg-transparent border-primary/20 hover:bg-primary/10 text-primary hover:text-primary"
+                            >
+                                <Eye className="h-4 w-4 mr-2" />
+                                View Results
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
 
-                                {activeSimulations[selectedSimulationId].turns.map((turn, i) => (
-                                    <div key={i} className={`flex ${turn.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[85%] ${turn.role === 'user' ? 'bg-indigo-50 border-indigo-100' : 'bg-white border-slate-200'} border p-3 rounded-xl`}>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <Badge variant="outline" className="h-5 text-[10px]">
-                                                    {turn.role === 'user' ? 'Persona' : 'Agent'}
-                                                </Badge>
-                                            </div>
-                                            <p className="text-sm text-slate-800 whitespace-pre-wrap">{turn.content}</p>
-                                            {turn.traceData && <TracePanel reasoning={turn.traceData} />}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="h-full flex flex-col items-center justify-center text-slate-400">
-                                <MessageSquare className="h-12 w-12 mb-4 opacity-20" />
-                                <p>Select a persona to start a simulation</p>
-                            </div>
-                        )}
-                    </ScrollArea>
+            <Card className="bg-card border-border shadow-none">
+                <CardHeader className="pb-3 border-b border-border mb-4">
+                    <CardTitle className="font-serif text-xl">Enhanced Simulation</CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                        Generate personas, emotions, and intents from your onboarding guide,
+                        then run realistic multi-turn simulations.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <SimulationConfigPanel
+                        options={simulationOptions}
+                        isGenerating={isGenerating}
+                        isRunning={isRunning}
+                        onGenerate={handleGenerateOptions}
+                        onRunSimulations={handleRunSimulations}
+                        onOptionsUpdate={handleOptionsUpdate}
+                    />
                 </CardContent>
             </Card>
+
+            {isRunning && (
+                <Card className="bg-primary/5 border-primary/20">
+                    <CardContent className="py-4">
+                        <div className="flex items-center gap-3">
+                            <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                            <div>
+                                <p className="font-medium text-foreground">Starting Simulations...</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Preparing to run simulations
+                                </p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 }

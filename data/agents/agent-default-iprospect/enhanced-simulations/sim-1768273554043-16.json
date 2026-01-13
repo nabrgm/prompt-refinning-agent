@@ -1,0 +1,142 @@
+{
+  "id": "sim-1768273554043-16",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 17,
+  "metadata": {
+    "name": "Michael Anderson",
+    "persona": {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    "intent": {
+      "id": "intent-1768251229674-6",
+      "name": "Renewal / Contract Review Callback",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer wants to renew or review their plan, which should be routed to a scheduled sales callback.",
+      "goal": "Confirm renewal intent, capture details, and schedule a callback appointment.",
+      "initialMessage": "Our contract is up soon—can someone call me to go over renewal options?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-1",
+      "name": "Excited",
+      "description": "Upbeat language, quick replies, eager to schedule; uses positive framing like “ready to get this set up” or “can’t wait to switch.”"
+    },
+    "outcome": "Billing support channel confirmed and renewal callback time provided."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Our contract is up soon—can someone call me to go over renewal options and also a billing discrepancy on our last invoice?"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you need to discuss renewal and a billing issue.  \nFor the billing discrepancy, please visit https://business.comcast.com/support/home/.  \nMay I have your name to schedule a call about the renewal?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "I understand you need to discuss renewal and a billing issue.  \nFor the billing discrepancy, please visit https://business.comcast.com/support/home/.  \nMay I have your name to schedule a call about the renewal?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Sure thing, I’m Jamal Carter, accounting contact for our manufacturing office.  \n\nBefore we lock in a time, can you tell me if that support link is the right place specifically for invoice amount disputes, or is there a dedicated billing phone line or form I should use so I can upload the invoice and notes?"
+    },
+    {
+      "role": "assistant",
+      "content": "The support link lets you upload the invoice and work with a billing specialist for disputes.  \nWhen would you like a call to discuss renewal options—please share a preferred date, time, and your timezone?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "The support link lets you upload the invoice and work with a billing specialist for disputes.  \nWhen would you like a call to discuss renewal options—please share a preferred date, time, and your timezone?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Perfect, that’s exactly what I needed on the billing side—I'll use that link to upload the invoice and details.  \n\nFor the renewal call, tomorrow at 2:00 PM Eastern works great for me."
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.043Z",
+  "status": "completed",
+  "chatId": "1c2ad9ad-cf48-447f-9886-b438da68c54a",
+  "completedAt": "2026-01-13T03:06:14.567Z"
+}

@@ -124,15 +124,15 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
         >
-            <Card className="w-full bg-white/50 backdrop-blur-sm border-slate-200 shadow-xl">
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="text-xl font-bold text-slate-800">
-                        Edit Prompt: <span className="text-indigo-600">{node.label}</span>
+            <Card className="w-full bg-card border-border shadow-none">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-xl font-serif font-normal text-foreground">
+                        Edit Prompt: <span className="text-lime-400">{node.label}</span>
                     </CardTitle>
                     <div className="flex items-center gap-2">
                         <Dialog open={isVersionDialogOpen} onOpenChange={setIsVersionDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button variant="outline" size="sm">
+                                <Button variant="outline" size="sm" className="border-border text-muted-foreground hover:text-foreground">
                                     <GitBranch className="h-4 w-4 mr-2" />
                                     Save Version
                                 </Button>
@@ -165,15 +165,15 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
                         </Dialog>
 
                         <Select value={selectedVersion} onValueChange={handleVersionSelect}>
-                            <SelectTrigger className="w-[180px] h-8">
-                                <History className="h-4 w-4 mr-2 text-slate-500" />
+                            <SelectTrigger className="w-[180px] h-8 border-border text-muted-foreground">
+                                <History className="h-4 w-4 mr-2" />
                                 <SelectValue placeholder="Load Version" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="current">Current Draft</SelectItem>
                                 {versions.map((v) => (
                                     <SelectItem key={v.id} value={v.id}>
-                                        {v.label} <span className="text-xs text-slate-400 ml-2">({new Date(v.timestamp).toLocaleDateString()})</span>
+                                        {v.label} <span className="text-xs text-muted-foreground ml-2">({new Date(v.timestamp).toLocaleDateString()})</span>
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -182,7 +182,7 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
                         <Button
                             onClick={handleSave}
                             disabled={isSaving}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90"
                         >
                             {isSaving ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                             {isSaving ? 'Saving...' : 'Save Changes'}
@@ -191,7 +191,7 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
 
                     <Dialog open={isCompareDialogOpen} onOpenChange={setIsCompareDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="ml-2">
+                            <Button variant="outline" size="sm" className="ml-2 border-border text-muted-foreground hover:text-foreground">
                                 <SplitSquareHorizontal className="h-4 w-4 mr-2" />
                                 Compare
                             </Button>
@@ -241,7 +241,7 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
                     {node.systemMessagePrompt !== undefined && (
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                                <Label htmlFor="system-prompt" className="text-slate-600 font-medium">System Message Prompt</Label>
+                                <Label htmlFor="system-prompt" className="text-muted-foreground font-medium">System Message Prompt</Label>
                                 <PromptOptimizer
                                     currentPrompt={systemPrompt}
                                     type="system"
@@ -255,7 +255,7 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
                                 id="system-prompt"
                                 value={systemPrompt}
                                 onChange={(e) => setSystemPrompt(e.target.value)}
-                                className="min-h-[200px] font-mono text-sm bg-slate-50 border-slate-200 focus:ring-indigo-500"
+                                className="min-h-[200px] font-mono text-sm bg-muted/30 border-border focus:ring-primary/20"
                                 placeholder="Enter system prompt..."
                             />
                         </div>
@@ -264,7 +264,7 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
                     {node.humanMessagePrompt !== undefined && (
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                                <Label htmlFor="human-prompt" className="text-slate-600 font-medium">Human Message Prompt</Label>
+                                <Label htmlFor="human-prompt" className="text-muted-foreground font-medium">Human Message Prompt</Label>
                                 <PromptOptimizer
                                     currentPrompt={humanPrompt}
                                     type="human"
@@ -278,7 +278,7 @@ export function PromptEditor({ agentId, node, onUpdate, allNodes, stateFields }:
                                 id="human-prompt"
                                 value={humanPrompt}
                                 onChange={(e) => setHumanPrompt(e.target.value)}
-                                className="min-h-[100px] font-mono text-sm bg-slate-50 border-slate-200 focus:ring-indigo-500"
+                                className="min-h-[100px] font-mono text-sm bg-muted/30 border-border focus:ring-primary/20"
                                 placeholder="Enter human prompt..."
                             />
                         </div>

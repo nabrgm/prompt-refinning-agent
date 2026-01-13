@@ -1,0 +1,141 @@
+{
+  "id": "sim-1768271547071-7",
+  "simulationNumber": 8,
+  "metadata": {
+    "name": "Anthony Martin",
+    "persona": {
+      "id": "persona-1768251229674-6",
+      "name": "Elena Petrova",
+      "role": "Existing customer, restaurant manager",
+      "goal": "Get help with intermittent internet dropping and be routed to support resources",
+      "context": "Lunch rush is impacted; staff can’t process orders reliably; needs troubleshooting steps or correct support path",
+      "tone": "Frustrated, short messages, wants resolution quickly"
+    },
+    "intent": {
+      "id": "intent-1768251229674-6",
+      "name": "Renewal / Contract Review Callback",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer wants to renew or review their plan, which should be routed to a scheduled sales callback.",
+      "goal": "Confirm renewal intent, capture details, and schedule a callback appointment.",
+      "initialMessage": "Our contract is up soon—can someone call me to go over renewal options?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-3",
+      "name": "Professional",
+      "description": "Brief, businesslike messages; focuses on requirements, timelines, and next steps; avoids small talk."
+    },
+    "outcome": "Got support link for connectivity issues and requested a scheduled renewal review call."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Our contract is up soon—can someone call me to go over renewal options?"
+    },
+    {
+      "role": "assistant",
+      "content": "I can set up a call to discuss renewal options. Could you share your name and confirm this is for a business account?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "I can set up a call to discuss renewal options. Could you share your name and confirm this is for a business account?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes, it’s a business account. Name is Elena Petrova, for “Elena’s Bistro.”  \n\nBefore we talk renewal, I’m having intermittent internet drops during our lunch rush and it’s killing order processing—can you point me to the right support or help me troubleshoot?"
+    },
+    {
+      "role": "assistant",
+      "content": "I’m sorry the internet drops are affecting lunch‑rush orders. For immediate troubleshooting, please visit https://business.comcast.com/support/home/. Would you like to schedule a call to review renewal options?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Elena",
+            "lastName": "Petrova",
+            "customerType": "new_sales_lead",
+            "intent": "technical support"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "I’m sorry the internet drops are affecting lunch‑rush orders. For immediate troubleshooting, please visit https://business.comcast.com/support/home/. Would you like to schedule a call to review renewal options?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks, I’ll start with that link.  \n\nYes, please schedule a renewal review call for tomorrow at 10am local time and email confirmation to elena.petrov@elenasbistro.com."
+    }
+  ],
+  "createdAt": "2026-01-13T02:32:27.071Z",
+  "status": "completed",
+  "chatId": "824569ba-62e8-4f49-b392-aa963cf7a3b4",
+  "completedAt": "2026-01-13T02:32:52.424Z"
+}

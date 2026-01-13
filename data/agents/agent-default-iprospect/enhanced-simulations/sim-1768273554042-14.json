@@ -1,0 +1,200 @@
+{
+  "id": "sim-1768273554042-14",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 15,
+  "metadata": {
+    "name": "Kimberly Smith",
+    "persona": {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    "intent": {
+      "id": "intent-1768251229674-2",
+      "name": "Check Availability at a Business Address",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new prospect wants to confirm serviceability for a specific business location before proceeding.",
+      "goal": "Provide the next step to verify address and schedule a callback to complete qualification.",
+      "initialMessage": "Can you tell me if service is available at 2450 W Main St, Suite 110?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-1",
+      "name": "Excited",
+      "description": "Upbeat language, quick replies, eager to schedule; uses positive framing like “ready to get this set up” or “can’t wait to switch.”"
+    },
+    "outcome": "Provided contact details and confirmed time for the Business Class agent call."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Can you tell me if service is available at 2450 W Main St, Suite 110?"
+    },
+    {
+      "role": "assistant",
+      "content": "Sure, we can check that. May I have your name and confirm this is for a business location?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "",
+            "lastName": "",
+            "customerType": "new_sales_lead",
+            "intent": "service availability"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Sure, we can check that. May I have your name and confirm this is for a business location?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yep, it’s for a business location. My name is Jamal Carter, and this is for our manufacturing office at 2450 W Main St, Suite 110."
+    },
+    {
+      "role": "assistant",
+      "content": "Great, Jamal. I can set up a call with our Business Class agent. What date, time, and timezone work best for you?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "new_sales_lead",
+            "intent": "service availability"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Great, Jamal. I can set up a call with our Business Class agent. What date, time, and timezone work best for you?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Perfect, I’m ready to get this set up. Can we do tomorrow at 2:00 PM Eastern Time?"
+    },
+    {
+      "role": "assistant",
+      "content": "Got it. To set the reminder, could you share the best phone number for us to reach you?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Got it. To set the reminder, could you share the best phone number for us to reach you?"
+          ],
+          "usedTools": [
+            {
+              "tool": "schedule_sms_tool",
+              "toolInput": {
+                "action": "schedule",
+                "sendAt": "2026-01-14T13:55:00-05:00"
+              },
+              "toolOutput": "{\"success\":false,\"action\":\"schedule\",\"error\":\"Missing required parameter: from phone number\"}"
+            }
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Sure thing, you can reach me at 214-303-5491."
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.042Z",
+  "status": "completed",
+  "chatId": "99a27250-8e85-4703-b4d9-fdddfd0a6e5c",
+  "completedAt": "2026-01-13T03:06:43.123Z"
+}

@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, Upload, Trash2, Bot, ExternalLink, Loader2 } from 'lucide-react';
+import { Plus, Upload, Trash2, Sparkles, ExternalLink, Loader2, ArrowRight } from 'lucide-react';
 import { AgentConfig } from '@/types/polaris';
 import { fetchAgents, createAgent, deleteAgentAction } from '@/app/actions';
 
@@ -131,127 +131,93 @@ export function AgentSelector({ onAgentSelect, selectedAgentId }: AgentSelectorP
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="text-sm text-muted-foreground">Loading agents...</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
-            <div className="mb-8 text-center">
-                <h1 className="text-3xl font-bold mb-2">Prompt Refinement & Eval Tool</h1>
-                <p className="text-muted-foreground">
-                    Select an agent to evaluate, or add a new agent
-                </p>
+        <div className="min-h-screen">
+            {/* Compact header */}
+            <div className="border-b">
+                <div className="px-4 py-3 flex items-center gap-3">
+                    <div className="flex items-center justify-center w-7 h-7 rounded bg-primary/10">
+                        <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xs text-primary">Agents</span>
+                        <span className="text-muted-foreground">/</span>
+                        <span className="text-sm font-medium">Select Agent</span>
+                    </div>
+                </div>
             </div>
 
-            <div className="grid gap-4 mb-6">
-                {agents.length === 0 ? (
-                    <Card className="border-dashed">
-                        <CardContent className="flex flex-col items-center justify-center py-12">
-                            <Bot className="h-12 w-12 text-muted-foreground mb-4" />
-                            <p className="text-muted-foreground mb-4">No agents registered yet</p>
-                            <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                                <DialogTrigger asChild>
-                                    <Button>
-                                        <Plus className="h-4 w-4 mr-2" />
-                                        Add Your First Agent
-                                    </Button>
-                                </DialogTrigger>
-                                <CreateAgentDialog
-                                    name={name}
-                                    setName={setName}
-                                    apiUrl={apiUrl}
-                                    setApiUrl={setApiUrl}
-                                    graphJson={graphJson}
-                                    setGraphJson={setGraphJson}
-                                    createdBy={createdBy}
-                                    setCreatedBy={setCreatedBy}
-                                    description={description}
-                                    setDescription={setDescription}
-                                    error={error}
-                                    creating={creating}
-                                    handleFileUpload={handleFileUpload}
-                                    handleCreate={handleCreate}
-                                />
-                            </Dialog>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    <>
-                        {agents.map((agent) => (
-                            <Card
-                                key={agent.id}
-                                className={`cursor-pointer transition-all hover:border-primary ${
-                                    selectedAgentId === agent.id ? 'border-primary ring-2 ring-primary/20' : ''
-                                }`}
-                                onClick={() => onAgentSelect(agent.id)}
-                            >
-                                <CardHeader className="pb-2">
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-lg flex items-center gap-2">
-                                            <Bot className="h-5 w-5" />
-                                            {agent.name}
-                                        </CardTitle>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                            onClick={(e) => handleDelete(agent.id, e)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+            {/* Main content */}
+            <div className="px-4 py-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {agents.map((agent) => (
+                        <div
+                            key={agent.id}
+                            className={`group relative border rounded-lg p-3 cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors ${
+                                selectedAgentId === agent.id ? 'border-primary bg-primary/5' : 'bg-card'
+                            }`}
+                            onClick={() => onAgentSelect(agent.id)}
+                        >
+                            <div className="flex items-start gap-2.5">
+                                <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-medium text-sm truncate">{agent.name}</h3>
                                     {agent.description && (
-                                        <CardDescription>{agent.description}</CardDescription>
+                                        <p className="text-xs text-muted-foreground truncate mt-0.5">
+                                            {agent.description}
+                                        </p>
                                     )}
-                                </CardHeader>
-                                <CardContent className="pt-0">
-                                    <div className="text-xs text-muted-foreground space-y-1">
-                                        <div className="flex items-center gap-1">
-                                            <ExternalLink className="h-3 w-3" />
-                                            <span className="truncate">{agent.apiUrl}</span>
-                                        </div>
-                                        {agent.createdBy && (
-                                            <div>Created by: {agent.createdBy}</div>
-                                        )}
-                                        <div>Added: {new Date(agent.createdAt).toLocaleDateString()}</div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                    <p className="text-xs text-muted-foreground mt-1 tabular-nums">
+                                        {new Date(agent.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                            </div>
+                            <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 h-6 w-6 text-muted-foreground hover:text-destructive"
+                                onClick={(e) => handleDelete(agent.id, e)}
+                            >
+                                <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                        </div>
+                    ))}
 
-                        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                            <DialogTrigger asChild>
-                                <Card className="border-dashed cursor-pointer hover:border-primary transition-all">
-                                    <CardContent className="flex items-center justify-center py-8">
-                                        <Button variant="ghost" className="gap-2">
-                                            <Plus className="h-5 w-5" />
-                                            Add New Agent
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                            </DialogTrigger>
-                            <CreateAgentDialog
-                                name={name}
-                                setName={setName}
-                                apiUrl={apiUrl}
-                                setApiUrl={setApiUrl}
-                                graphJson={graphJson}
-                                setGraphJson={setGraphJson}
-                                createdBy={createdBy}
-                                setCreatedBy={setCreatedBy}
-                                description={description}
-                                setDescription={setDescription}
-                                error={error}
-                                creating={creating}
-                                handleFileUpload={handleFileUpload}
-                                handleCreate={handleCreate}
-                            />
-                        </Dialog>
-                    </>
-                )}
+                    {/* Add new agent card */}
+                    <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                        <DialogTrigger asChild>
+                            <div className="border border-dashed rounded-lg p-3 cursor-pointer hover:border-primary/50 hover:bg-muted/30 transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground min-h-[76px]">
+                                <Plus className="h-4 w-4" />
+                                <span className="text-sm">Add Agent</span>
+                            </div>
+                        </DialogTrigger>
+                        <CreateAgentDialog
+                            name={name}
+                            setName={setName}
+                            apiUrl={apiUrl}
+                            setApiUrl={setApiUrl}
+                            graphJson={graphJson}
+                            setGraphJson={setGraphJson}
+                            createdBy={createdBy}
+                            setCreatedBy={setCreatedBy}
+                            description={description}
+                            setDescription={setDescription}
+                            error={error}
+                            creating={creating}
+                            handleFileUpload={handleFileUpload}
+                            handleCreate={handleCreate}
+                        />
+                    </Dialog>
+                </div>
             </div>
         </div>
     );
@@ -291,27 +257,27 @@ function CreateAgentDialog({
     handleCreate,
 }: CreateAgentDialogProps) {
     return (
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
                 <DialogTitle>Add New Agent</DialogTitle>
                 <DialogDescription>
-                    Upload your agent's JSON and provide the Polaris API URL
+                    Upload your agent configuration to start refining prompts
                 </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4 py-4 overflow-hidden">
+            <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                    <Label htmlFor="name">Agent Name *</Label>
+                    <Label htmlFor="name">Agent Name</Label>
                     <Input
                         id="name"
-                        placeholder="e.g., iProspect Support Agent"
+                        placeholder="e.g., Customer Support Agent"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="apiUrl">Polaris API URL *</Label>
+                    <Label htmlFor="apiUrl">API URL</Label>
                     <Input
                         id="apiUrl"
                         placeholder="https://polaris.invoca.net/api/v1/prediction/..."
@@ -324,10 +290,10 @@ function CreateAgentDialog({
                 </div>
 
                 <div className="space-y-2">
-                    <Label>Agent JSON *</Label>
-                    <div className="flex gap-2">
-                        <Button variant="outline" className="gap-2" asChild>
-                            <label>
+                    <Label>Agent JSON Configuration</Label>
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="gap-2" asChild>
+                            <label className="cursor-pointer">
                                 <Upload className="h-4 w-4" />
                                 Upload JSON
                                 <input
@@ -339,41 +305,39 @@ function CreateAgentDialog({
                             </label>
                         </Button>
                         {graphJson && (
-                            <span className="text-sm text-green-600 flex items-center">
+                            <span className="text-xs text-emerald-600 font-medium">
                                 JSON loaded ({Math.round(graphJson.length / 1024)}KB)
                             </span>
                         )}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                        Or paste the JSON below:
-                    </p>
                     <Textarea
                         placeholder='{"nodes": [...], ...}'
                         value={graphJson}
                         onChange={(e) => setGraphJson(e.target.value)}
-                        className="font-mono text-xs h-32 whitespace-pre-wrap break-all overflow-x-hidden"
+                        className="font-mono text-xs h-28"
                     />
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="createdBy">Your Name (optional)</Label>
-                    <Input
-                        id="createdBy"
-                        placeholder="e.g., John Doe"
-                        value={createdBy}
-                        onChange={(e) => setCreatedBy(e.target.value)}
-                    />
-                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="createdBy">Your Name (optional)</Label>
+                        <Input
+                            id="createdBy"
+                            placeholder="e.g., John Doe"
+                            value={createdBy}
+                            onChange={(e) => setCreatedBy(e.target.value)}
+                        />
+                    </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="description">Description (optional)</Label>
-                    <Textarea
-                        id="description"
-                        placeholder="Brief description of this agent..."
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="h-20"
-                    />
+                    <div className="space-y-2">
+                        <Label htmlFor="description">Description (optional)</Label>
+                        <Input
+                            id="description"
+                            placeholder="Brief description..."
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </div>
                 </div>
 
                 {error && (

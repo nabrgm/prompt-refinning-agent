@@ -1,0 +1,346 @@
+{
+  "id": "sim-1768273554036-8",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 9,
+  "metadata": {
+    "name": "Patricia Martin",
+    "persona": {
+      "id": "persona-1768251229674-8",
+      "name": "Hannah Lee",
+      "role": "Existing customer, moving coordinator for a nonprofit (change of address)",
+      "goal": "Move service to a new business address and schedule a callback appointment",
+      "context": "Office relocation next month; needs continuity of phone/internet; wants to confirm new address coverage",
+      "tone": "Organized, deadline-driven, cooperative"
+    },
+    "intent": {
+      "id": "intent-1768251229674-4",
+      "name": "Technical Support for Outage/Intermittent Connection",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer reports service issues and needs support guidance.",
+      "goal": "Acknowledge the issue and route them to the official support portal.",
+      "initialMessage": "Our internet keeps dropping every 10 minutes—how do I get tech support?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-7",
+      "name": "Skeptical",
+      "description": "Challenges claims, asks for proof or confirmation, references past bad experiences, and questions pricing or reliability."
+    },
+    "outcome": "Callback appointment confirmed for move consultation and coverage verification."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Our internet keeps dropping every 10 minutes—how do I get tech support?"
+    },
+    {
+      "role": "assistant",
+      "content": "I hear the drops are frustrating. For tech help, visit https://business.comcast.com/support/home/ or call our 24/7 support line. Let me know if you need anything else.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "technical support"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear the drops are frustrating. For tech help, visit https://business.comcast.com/support/home/ or call our 24/7 support line. Let me know if you need anything else."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "I was really hoping you could actually help instead of just sending me to a generic page.  \n\nWe’re moving offices next month and I need to (1) confirm our new address is covered and (2) schedule a callback to move our existing service so we don’t have downtime. Can you check coverage if I give you the new address and then help set up a callback window?"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you need to verify coverage and set up a move call. Could you share your first and last name so I can get this started?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "I understand you need to verify coverage and set up a move call. Could you share your first and last name so I can get this started?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Sure. It’s Hannah Lee.  \n\nWhat else do you need from me to check coverage—new address, current account number, or both?"
+    },
+    {
+      "role": "assistant",
+      "content": "Got it, Hannah. Just to confirm, this request is for your business location, right?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Hannah",
+            "lastName": "Lee",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Got it, Hannah. Just to confirm, this request is for your business location, right?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes, this is for our business office.  \n\nWe’re relocating the nonprofit’s main office and I need our existing business phone/internet moved over with no gap in service."
+    },
+    {
+      "role": "assistant",
+      "content": "Thanks, Hannah. Could you please provide the new office address you’d like us to check for coverage?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Hannah",
+            "lastName": "Lee",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Thanks, Hannah. Could you please provide the new office address you’d like us to check for coverage?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Sure. The new office address is:\n\nBrightPath Community Services  \n1842 West Fulton Street, Suite 310  \nChicago, IL 60612  \n\nOnce you check that, can you also tell me what kind of installation window we’d be looking at so I can plan around it?"
+    },
+    {
+      "role": "assistant",
+      "content": "Great, Hannah. To get exact coverage details and a move‑in installation window, what date, time, and time zone work best for a callback with our Business Class agent?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Hannah",
+            "lastName": "Lee",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Great, Hannah. To get exact coverage details and a move‑in installation window, what date, time, and time zone work best for a callback with our Business Class agent?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Let’s do next Monday between 10am–12pm Central.  \n\nAnd just so I’m clear, will that agent be able to both (1) confirm service at the new address and (2) actually schedule the move/installation date on that same call?"
+    },
+    {
+      "role": "assistant",
+      "content": "Thanks, Hannah. I can set a call for Monday, Jan 19, 2026 at 10:30 AM Central (11:30 AM ET). Does that work for you?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Hannah",
+            "lastName": "Lee",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Thanks, Hannah. I can set a call for Monday, Jan 19, 2026 at 10:30 AM Central (11:30 AM ET). Does that work for you?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yes, 10:30 AM Central on Monday, Jan 19, 2026 works.  \n\nWhat number will they call from, and can you confirm they’ll review coverage for 1842 West Fulton St, Suite 310 and set the actual move/installation date during that call?"
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.036Z",
+  "status": "completed",
+  "chatId": "7c4305c7-3e4f-492f-8789-0d09ad575ad3",
+  "completedAt": "2026-01-13T03:06:35.636Z"
+}

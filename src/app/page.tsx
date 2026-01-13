@@ -5,7 +5,7 @@ import { fetchNodes, fetchStateMemory, fetchAgents } from '@/app/actions';
 import { Dashboard } from '@/components/dashboard';
 import { AgentSelector } from '@/components/agent-selector';
 import { OverridableNode, StateMemory, AgentConfig } from '@/types/polaris';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
@@ -16,13 +16,11 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // Check if there's only one agent, auto-select it
   useEffect(() => {
     const checkAgents = async () => {
       try {
         const agents = await fetchAgents();
         if (agents.length === 1) {
-          // Auto-select if only one agent
           handleAgentSelect(agents[0].id);
         }
       } catch (err) {
@@ -73,18 +71,26 @@ export default function Home() {
 
   if (initialLoading) {
     return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <main className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
+            <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-primary/10">
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
       </main>
     );
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto" />
-          <p className="text-muted-foreground">Loading agent...</p>
+      <main className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Loading agent configuration...</p>
         </div>
       </main>
     );
@@ -92,7 +98,7 @@ export default function Home() {
 
   if (!selectedAgentId) {
     return (
-      <main className="min-h-screen bg-slate-50">
+      <main className="min-h-screen bg-background">
         <AgentSelector
           onAgentSelect={handleAgentSelect}
           selectedAgentId={selectedAgentId || undefined}
@@ -102,21 +108,38 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Agent header with back button */}
-        <div className="flex items-center gap-4 mb-4">
-          <Button variant="ghost" size="sm" onClick={handleBackToSelector}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Switch Agent
+    <main className="min-h-screen bg-background">
+      {/* Top navigation bar */}
+      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex h-14 items-center gap-4 px-6">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleBackToSelector}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Switch Agent</span>
           </Button>
+
+          <div className="h-4 w-px bg-border" />
+
           {selectedAgent && (
-            <div className="text-sm text-muted-foreground">
-              Working with: <span className="font-medium text-foreground">{selectedAgent.name}</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/10">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium leading-none">{selectedAgent.name}</span>
+                <span className="text-xs text-muted-foreground">Active Agent</span>
+              </div>
             </div>
           )}
         </div>
+      </header>
 
+      {/* Main content */}
+      <div className="px-6 py-6">
         <Dashboard
           agentId={selectedAgentId}
           initialNodes={nodes}

@@ -1,0 +1,193 @@
+{
+  "id": "sim-1768273554045-19",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 20,
+  "metadata": {
+    "name": "Margaret Davis",
+    "persona": {
+      "id": "persona-1768251229674-9",
+      "name": "Kevin O'Brien",
+      "role": "Prospective customer, real estate broker (home office; uncertain if business-eligible)",
+      "goal": "Figure out whether to use residential portal or business service and get pointed to the right place",
+      "context": "Works from home, needs reliable internet for video tours; unsure whether to buy business-class or residential; starts with a vague inquiry",
+      "tone": "Casual, exploratory, not sure what to ask"
+    },
+    "intent": {
+      "id": "intent-1768251229674-7",
+      "name": "Change of Address / Move Service",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer needs to move service to a new business location; should be qualified and scheduled for a callback.",
+      "goal": "Capture new address and timeline and schedule a callback to coordinate the move.",
+      "initialMessage": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-7",
+      "name": "Skeptical",
+      "description": "Challenges claims, asks for proof or confirmation, references past bad experiences, and questions pricing or reliability."
+    },
+    "outcome": "Agreed to schedule a Business Class callback to determine whether business or residential service is appropriate."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    {
+      "role": "assistant",
+      "content": "I can set up a move appointment for you. What date, time, and timezone work best for the transfer?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "service transfer"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I can set up a move appointment for you. What date, time, and timezone work best for the transfer?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Before we book anything, can you help me figure out if I should even be on business service?  \n\nI’m a real estate broker working out of my home—mostly video tours and calls—and I’ve been burned before by paying extra for “business” and getting the same thing as residential. How do I know which one I’m supposed to use with you, and does it actually make a difference in reliability or support?"
+    },
+    {
+      "role": "assistant",
+      "content": "Our Business Class agent can walk you through the differences and help you decide. Would you like me to schedule a call?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "service plan inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "Our Business Class agent can walk you through the differences and help you decide. Would you like me to schedule a call?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Maybe, but I don’t want to get thrown into a sales pitch if I’m really supposed to be on residential.  \n\nCan you first tell me: if I’m running my brokerage from home, do you treat that as a business account or residential by default? And is there a separate residential support line/portal I should be using instead?"
+    },
+    {
+      "role": "assistant",
+      "content": "Our Business Class agent can explain the differences and which option fits your home‑based brokerage. Would you like me to set up a call?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "service type inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Our Business Class agent can explain the differences and which option fits your home‑based brokerage. Would you like me to set up a call?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Alright, let’s do the call, but I want it clear I’m just trying to figure out if I *should* be on business, not commit to anything.\n\nThey’ll still help me even if it turns out I’m better off on residential, right? And what times do they have tomorrow afternoon Eastern?"
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.045Z",
+  "status": "completed",
+  "chatId": "a063e938-47da-4c1e-8b58-43fa01cdf5e0",
+  "completedAt": "2026-01-13T03:06:20.461Z"
+}

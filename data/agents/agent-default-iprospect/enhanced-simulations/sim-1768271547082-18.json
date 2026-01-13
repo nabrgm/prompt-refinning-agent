@@ -1,0 +1,90 @@
+{
+  "id": "sim-1768271547082-18",
+  "simulationNumber": 19,
+  "metadata": {
+    "name": "Anthony Hernandez",
+    "persona": {
+      "id": "persona-1768251229674-0",
+      "name": "Angela Martinez",
+      "role": "Owner, neighborhood bakery (single location)",
+      "goal": "Get fast business internet with a reliable install date and a callback appointment",
+      "context": "Opening a new storefront in 2 weeks; needs internet for POS terminals and guest WiFi; comparing providers after a bad experience with outages",
+      "tone": "Busy, straightforward, wants clear next steps"
+    },
+    "intent": {
+      "id": "intent-1768251229674-5",
+      "name": "Billing Question / Dispute",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer has a billing concern and needs the right billing support path.",
+      "goal": "Direct them to the support portal for billing and set expectations for resolution steps.",
+      "initialMessage": "My bill is higher this month and I don’t recognize one of the charges—who can fix this?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-8",
+      "name": "Anxious",
+      "description": "Worried about downtime or deadlines; asks repeated reassurance questions about install dates, service continuity, or disruptions."
+    },
+    "outcome": "Received direction to call support but requested more specific billing path."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "My bill is higher this month and I don’t recognize one of the charges—who can fix this?"
+    },
+    {
+      "role": "assistant",
+      "content": "I hear you—bills can be confusing. For help with the charge, visit https://business.comcast.com/support/home/ or call our 24/7 support line.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear you—bills can be confusing. For help with the charge, visit https://business.comcast.com/support/home/ or call our 24/7 support line."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "I don’t really have time to dig through a website right now—can you tell me which option I pick once I call, or is there a direct number for billing so I’m not bounced around?"
+    }
+  ],
+  "createdAt": "2026-01-13T02:32:27.082Z",
+  "status": "completed",
+  "chatId": "47c1effb-ea8d-4703-bd02-15fe10b1b08d",
+  "completedAt": "2026-01-13T02:32:36.714Z"
+}

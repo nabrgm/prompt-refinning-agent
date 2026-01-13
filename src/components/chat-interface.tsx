@@ -5,22 +5,14 @@ import { Send, Trash2, User, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card } from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { sendChat } from '@/app/actions';
 import { TracePanel } from '@/components/trace-panel';
 import { OverridableNode } from '@/types/polaris';
 import { ChatMessage } from '@/lib/api';
 import { GlobalOptimizer } from '@/components/global-optimizer';
-import { SplitSquareHorizontal, X } from 'lucide-react';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import { SplitSquareHorizontal } from 'lucide-react';
 import {
     Select,
     SelectContent,
@@ -110,12 +102,10 @@ export function ChatInterface({
         setIsLoading(true);
 
         try {
-            // Helper to get nodes from a version
             const getNodesForVersion = (versionId: string) => {
                 if (versionId === 'current') return nodes;
                 const version = availableVersions.find(v => v.id === versionId);
                 if (!version) return nodes;
-                // Map version nodes back to OverridableNode format
                 return version.nodes.map(vNode => {
                     const originalNode = nodes.find(n => n.id === vNode.id);
                     return {
@@ -129,13 +119,9 @@ export function ChatInterface({
                 });
             };
 
-            // Build left panel nodes with selected version
             const leftNodes = getNodesForVersion(selectedVersionIdLeft);
-
-            // Left Panel
             const responseLeftPromise = sendChat(agentId, input, chatId, leftNodes, stateOverrides);
 
-            // Right Panel (Configured Versions)
             let responseRightPromise: Promise<any> | null = null;
             if (isSplitView) {
                 const rightNodes = getNodesForVersion(selectedVersionIdRight);
@@ -147,7 +133,6 @@ export function ChatInterface({
                 isSplitView ? responseRightPromise : Promise.resolve(null)
             ]);
 
-            // Handle Left Response
             if (responseLeft.chatId && !chatId) {
                 setChatId(responseLeft.chatId);
             }
@@ -159,7 +144,6 @@ export function ChatInterface({
             };
             setMessages(prev => [...prev, agentMessageLeft]);
 
-            // Handle Right Response
             if (responseRight) {
                 if (responseRight.chatId && !chatIdRight) {
                     setChatIdRight(responseRight.chatId);
@@ -202,96 +186,100 @@ export function ChatInterface({
     };
 
     return (
-        <div className="flex flex-col h-[600px] bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
-                <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="font-medium text-slate-700">Live Agent</span>
+        <div className="flex flex-col h-full border border-border rounded-lg bg-card overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between p-3 border-b border-border bg-muted/20">
+                <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span className="font-medium text-sm text-foreground">Live Agent</span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={handleClear} className="text-slate-500 hover:text-red-600">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Clear Chat
-                </Button>
-                <Button
-                    variant={isSplitView ? "secondary" : "ghost"}
-                    size="sm"
-                    onClick={() => setIsSplitView(!isSplitView)}
-                    className={isSplitView ? "bg-indigo-100 text-indigo-700" : "text-slate-500"}
-                >
-                    <SplitSquareHorizontal className="h-4 w-4 mr-2" />
-                    {isSplitView ? 'Split View On' : 'Split View'}
-                </Button>
-
-                {isSplitView && (
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <Label className="text-sm text-slate-600">Left:</Label>
-                            <Select value={selectedVersionIdLeft} onValueChange={setSelectedVersionIdLeft}>
-                                <SelectTrigger className="w-[180px] h-8">
-                                    <SelectValue placeholder="Select version" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="current">Current Draft</SelectItem>
-                                    {availableVersions.map(v => (
-                                        <SelectItem key={v.id} value={v.id}>
-                                            {v.name} ({new Date(v.createdAt).toLocaleDateString()})
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Label className="text-sm text-slate-600">Right:</Label>
-                            <Select value={selectedVersionIdRight} onValueChange={setSelectedVersionIdRight}>
-                                <SelectTrigger className="w-[180px] h-8">
-                                    <SelectValue placeholder="Select version" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="current">Current Draft</SelectItem>
-                                    {availableVersions.map(v => (
-                                        <SelectItem key={v.id} value={v.id}>
-                                            {v.name} ({new Date(v.createdAt).toLocaleDateString()})
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                )}
-                <GlobalOptimizer
-                    agentId={agentId}
-                    chatHistory={messages.map(m => `${m.role}: ${m.content}`).join('\n')}
-                    nodes={nodes}
-                />
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" onClick={handleClear} className="text-muted-foreground hover:text-destructive h-8">
+                        <Trash2 className="h-4 w-4 mr-1.5" />
+                        Clear Chat
+                    </Button>
+                    <Button
+                        variant={isSplitView ? "secondary" : "ghost"}
+                        size="sm"
+                        onClick={() => setIsSplitView(!isSplitView)}
+                        className={`h-8 ${isSplitView ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                        <SplitSquareHorizontal className="h-4 w-4 mr-1.5" />
+                        Split View
+                    </Button>
+                    <GlobalOptimizer
+                        agentId={agentId}
+                        chatHistory={messages.map(m => `${m.role}: ${m.content}`).join('\n')}
+                        nodes={nodes}
+                    />
+                </div>
             </div>
 
-            <div className={`flex-1 flex overflow-hidden ${isSplitView ? 'divide-x divide-slate-200' : ''}`}>
+            {/* Version Selectors for Split View */}
+            {isSplitView && (
+                <div className="flex items-center gap-4 px-4 py-2 border-b border-border bg-muted/10">
+                    <div className="flex items-center gap-2 flex-1">
+                        <Label className="text-xs text-muted-foreground">Left:</Label>
+                        <Select value={selectedVersionIdLeft} onValueChange={setSelectedVersionIdLeft}>
+                            <SelectTrigger className="flex-1 h-7 text-xs border-border">
+                                <SelectValue placeholder="Select version" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="current">Current Draft</SelectItem>
+                                {availableVersions.map(v => (
+                                    <SelectItem key={v.id} value={v.id}>
+                                        {v.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="flex items-center gap-2 flex-1">
+                        <Label className="text-xs text-muted-foreground">Right:</Label>
+                        <Select value={selectedVersionIdRight} onValueChange={setSelectedVersionIdRight}>
+                            <SelectTrigger className="flex-1 h-7 text-xs border-border">
+                                <SelectValue placeholder="Select version" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="current">Current Draft</SelectItem>
+                                {availableVersions.map(v => (
+                                    <SelectItem key={v.id} value={v.id}>
+                                        {v.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            )}
+
+            {/* Chat Area */}
+            <div className={`flex-1 flex overflow-hidden ${isSplitView ? 'divide-x divide-border' : ''}`}>
                 {/* Left Panel */}
                 <ScrollArea className="flex-1 p-4">
                     {isSplitView && (
-                        <div className="mb-2 px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-medium rounded inline-block">
+                        <Badge variant="outline" className="mb-3 bg-primary/10 text-primary border-primary/20 text-xs">
                             {getVersionLabel(selectedVersionIdLeft)}
-                        </div>
+                        </Badge>
                     )}
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         {messages.map((msg) => (
                             <div
                                 key={msg.id}
                                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
-                                <div className={`flex max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-3`}>
-                                    <Avatar className={`h-8 w-8 ${msg.role === 'user' ? 'bg-indigo-100' : 'bg-emerald-100'}`}>
-                                        <AvatarFallback className={msg.role === 'user' ? 'text-indigo-600' : 'text-emerald-600'}>
-                                            {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                                <div className={`flex max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-2`}>
+                                    <Avatar className={`h-7 w-7 ${msg.role === 'user' ? 'bg-primary/20' : 'bg-muted'}`}>
+                                        <AvatarFallback className={`text-xs ${msg.role === 'user' ? 'text-primary' : 'text-muted-foreground'}`}>
+                                            {msg.role === 'user' ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
                                         </AvatarFallback>
                                     </Avatar>
-
                                     <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                                         <div
                                             className={`p-3 rounded-2xl text-sm ${msg.role === 'user'
-                                                ? 'bg-indigo-600 text-white rounded-tr-none'
-                                                : 'bg-slate-100 text-slate-800 rounded-tl-none'
-                                                }`}
+                                                ? 'bg-primary text-primary-foreground rounded-tr-sm'
+                                                : 'bg-muted/50 text-foreground border border-border rounded-tl-sm'
+                                            }`}
                                         >
                                             {msg.content}
                                         </div>
@@ -304,15 +292,15 @@ export function ChatInterface({
                         ))}
                         {isLoading && (
                             <div className="flex justify-start">
-                                <div className="flex flex-row items-start gap-3">
-                                    <Avatar className="h-8 w-8 bg-emerald-100">
-                                        <AvatarFallback className="text-emerald-600"><Bot className="h-4 w-4" /></AvatarFallback>
+                                <div className="flex flex-row items-start gap-2">
+                                    <Avatar className="h-7 w-7 bg-muted">
+                                        <AvatarFallback className="text-muted-foreground text-xs"><Bot className="h-3.5 w-3.5" /></AvatarFallback>
                                     </Avatar>
-                                    <div className="bg-slate-100 p-3 rounded-2xl rounded-tl-none">
+                                    <div className="bg-muted/50 border border-border p-3 rounded-2xl rounded-tl-sm">
                                         <div className="flex space-x-1">
-                                            <div className="h-2 w-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                            <div className="h-2 w-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                            <div className="h-2 w-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                            <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                            <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                            <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                                         </div>
                                     </div>
                                 </div>
@@ -324,29 +312,28 @@ export function ChatInterface({
 
                 {/* Right Panel */}
                 {isSplitView && (
-                    <ScrollArea className="flex-1 p-4 bg-slate-50/30">
-                        <div className="mb-2 px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded inline-block">
+                    <ScrollArea className="flex-1 p-4 bg-muted/5">
+                        <Badge variant="outline" className="mb-3 bg-amber-500/10 text-amber-600 border-amber-500/20 text-xs">
                             {getVersionLabel(selectedVersionIdRight)}
-                        </div>
-                        <div className="space-y-6">
+                        </Badge>
+                        <div className="space-y-4">
                             {messagesRight.map((msg) => (
                                 <div
                                     key={msg.id}
                                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
-                                    <div className={`flex max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-3`}>
-                                        <Avatar className={`h-8 w-8 ${msg.role === 'user' ? 'bg-indigo-100' : 'bg-purple-100'}`}>
-                                            <AvatarFallback className={msg.role === 'user' ? 'text-indigo-600' : 'text-purple-600'}>
-                                                {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                                    <div className={`flex max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-2`}>
+                                        <Avatar className={`h-7 w-7 ${msg.role === 'user' ? 'bg-primary/20' : 'bg-amber-500/10'}`}>
+                                            <AvatarFallback className={`text-xs ${msg.role === 'user' ? 'text-primary' : 'text-amber-600'}`}>
+                                                {msg.role === 'user' ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
                                             </AvatarFallback>
                                         </Avatar>
-
                                         <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                                             <div
                                                 className={`p-3 rounded-2xl text-sm ${msg.role === 'user'
-                                                    ? 'bg-indigo-600 text-white rounded-tr-none'
-                                                    : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none'
-                                                    }`}
+                                                    ? 'bg-primary text-primary-foreground rounded-tr-sm'
+                                                    : 'bg-card border border-border text-foreground rounded-tl-sm'
+                                                }`}
                                             >
                                                 {msg.content}
                                             </div>
@@ -359,15 +346,15 @@ export function ChatInterface({
                             ))}
                             {isLoading && (
                                 <div className="flex justify-start">
-                                    <div className="flex flex-row items-start gap-3">
-                                        <Avatar className="h-8 w-8 bg-purple-100">
-                                            <AvatarFallback className="text-purple-600"><Bot className="h-4 w-4" /></AvatarFallback>
+                                    <div className="flex flex-row items-start gap-2">
+                                        <Avatar className="h-7 w-7 bg-amber-500/10">
+                                            <AvatarFallback className="text-amber-600 text-xs"><Bot className="h-3.5 w-3.5" /></AvatarFallback>
                                         </Avatar>
-                                        <div className="bg-white border border-slate-200 p-3 rounded-2xl rounded-tl-none">
+                                        <div className="bg-card border border-border p-3 rounded-2xl rounded-tl-sm">
                                             <div className="flex space-x-1">
-                                                <div className="h-2 w-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                                <div className="h-2 w-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                                <div className="h-2 w-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                                <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                                <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                                <div className="h-2 w-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                                             </div>
                                         </div>
                                     </div>
@@ -379,7 +366,8 @@ export function ChatInterface({
                 )}
             </div>
 
-            <div className="p-4 border-t border-slate-100 bg-white">
+            {/* Input */}
+            <div className="p-3 border-t border-border">
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -391,11 +379,10 @@ export function ChatInterface({
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type a message..."
-                        className="flex-1 bg-slate-50 border-slate-200 focus:ring-indigo-500"
+                        className="flex-1 bg-muted/30 border-border focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                     />
-                    <Button type="submit" disabled={isLoading || !input.trim()} className="bg-indigo-600 hover:bg-indigo-700">
+                    <Button type="submit" disabled={isLoading || !input.trim()} className="bg-primary text-primary-foreground hover:bg-primary/90">
                         <Send className="h-4 w-4" />
-                        <span className="sr-only">Send</span>
                     </Button>
                 </form>
             </div>

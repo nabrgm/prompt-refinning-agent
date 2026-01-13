@@ -1,0 +1,141 @@
+{
+  "id": "sim-1768271547077-13",
+  "simulationNumber": 14,
+  "metadata": {
+    "name": "Sandra Hernandez",
+    "persona": {
+      "id": "persona-1768251229674-9",
+      "name": "Kevin O'Brien",
+      "role": "Prospective customer, real estate broker (home office; uncertain if business-eligible)",
+      "goal": "Figure out whether to use residential portal or business service and get pointed to the right place",
+      "context": "Works from home, needs reliable internet for video tours; unsure whether to buy business-class or residential; starts with a vague inquiry",
+      "tone": "Casual, exploratory, not sure what to ask"
+    },
+    "intent": {
+      "id": "intent-1768251229674-7",
+      "name": "Change of Address / Move Service",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer needs to move service to a new business location; should be qualified and scheduled for a callback.",
+      "goal": "Capture new address and timeline and schedule a callback to coordinate the move.",
+      "initialMessage": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-4",
+      "name": "Matter-of-fact",
+      "description": "States the issue plainly, provides specifics (invoice date, outage time), expects direct routing and minimal back-and-forth."
+    },
+    "outcome": "Agreed to schedule a callback with a Business Class agent to discuss business vs residential options."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you’re moving offices next month and want to transfer your service. What date, time, and time zone work best for a move appointment?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "service transfer"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I understand you’re moving offices next month and want to transfer your service. What date, time, and time zone work best for a move appointment?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "I’m still trying to figure out if I should even be on a business account. It’s just me working from my home office as a real estate broker—should I be using your business move service, or is this something that should go through your residential side instead?"
+    },
+    {
+      "role": "assistant",
+      "content": "I hear you’re unsure whether a business or residential plan fits your home office. Our Business Class agent can review your needs and advise. Would you like me to schedule a call?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "account type inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear you’re unsure whether a business or residential plan fits your home office. Our Business Class agent can review your needs and advise. Would you like me to schedule a call?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yeah, a call would be helpful.  \n\nCan you do sometime tomorrow afternoon, Eastern time? I’m flexible between 1–4 pm, and they can reach me at 713-796-2081."
+    }
+  ],
+  "createdAt": "2026-01-13T02:32:27.077Z",
+  "status": "completed",
+  "chatId": "e797b120-07e9-4b70-b141-d0776ad48bfd",
+  "completedAt": "2026-01-13T02:32:46.651Z"
+}

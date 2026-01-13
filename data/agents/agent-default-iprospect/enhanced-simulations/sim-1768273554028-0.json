@@ -1,0 +1,144 @@
+{
+  "id": "sim-1768273554028-0",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 1,
+  "metadata": {
+    "name": "Lisa Harris",
+    "persona": {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    "intent": {
+      "id": "intent-1768251229674-9",
+      "name": "Vague Request About Internet Without Business Context",
+      "flowType": "UNDETERMINED",
+      "description": "The customer asks about internet but doesn’t specify business vs residential or whether they’re an existing customer.",
+      "goal": "Clarify customer type and route to sales appointment or appropriate support/portal.",
+      "initialMessage": "How much is internet and what do I need to sign up?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-4",
+      "name": "Matter-of-fact",
+      "description": "States the issue plainly, provides specifics (invoice date, outage time), expects direct routing and minimal back-and-forth."
+    },
+    "outcome": "Received general support channels and requested more specific billing-routing detail."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "How much is internet and what do I need to sign up?"
+    },
+    {
+      "role": "assistant",
+      "content": "I can get you the pricing details. Could you share your first and last name and confirm this is for a business?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "pricing information"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "I can get you the pricing details. Could you share your first and last name and confirm this is for a business?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yeah, it’s for a business.  \n\nName is Jamal Carter, and I’m actually already a customer—I handle accounting for our manufacturing office. I’m trying to sort out a billing issue, not sign up for new service."
+    },
+    {
+      "role": "assistant",
+      "content": "I hear you, billing can be confusing. For help, visit https://business.comcast.com/support/home/ or call our 24/7 line.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear you, billing can be confusing. For help, visit https://business.comcast.com/support/home/ or call our 24/7 line."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks. Is there a direct billing department number or menu option I should choose when I call, specifically for invoice disputes and outage credits?"
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.028Z",
+  "status": "completed",
+  "chatId": "8e6ec3f2-ebed-48ff-a17e-1ecfcb8e4745",
+  "completedAt": "2026-01-13T03:06:11.138Z",
+  "reviewed": true,
+  "reviewedAt": "2026-01-13T04:13:39.167Z"
+}

@@ -1,0 +1,114 @@
+SMS AI Agent Configuration & Review Checklist
+Welcome! We've pre-configured your AI Agent based on our initial data. Please use this guide to review our settings and complete the remaining required sections to ensure your agent is perfectly calibrated to your brand and customers."
+
+Our Onboarding Process: A Transparent Partnership
+Our goal is to create an AI agent that feels like a natural extension of your team. Here’s how we'll get there together:
+Review & Complete this Guide: Some parts of this guide have been pre-populated by Invoca. Review these sections and fill out the empty parts.
+Live Preview & Chat: We will enable a preview of the agent on the Invoca platform, allowing you to chat with it directly and test its capabilities before turning it on in a live environment. 
+Your Feedback: Provide us with feedback so we can continue to fine-tune your agent.
+
+Your AI Agent Configuration
+Please review/fill out the following sections. This information is critical for ensuring your AI agent is accurate, on-brand, and effective.
+1. Customer Personas
+Help us understand the different types of customers who will interact with the agent and the general objective(s) you’d like this persona to do (call back, go to support website, etc).
+(Examples: New Customer vs. Existing Customer, Sales Inquiry vs. Support Inquiry)
+Persona 1
+Persona Name
+New Sales Lead
+Description
+Looking for internet service at a business location, either changing from existing service or for a new address.
+Conversation Handling
+
+
+Optimal Outcome (Goal)
+Lead information is captured (including name, phone number, and business address and the customer schedules a callback with a sales agent. 
+
+
+Persona 2
+Persona Name
+Existing Customer
+Description
+Looking for technical/billing support, renewals, or change of address. 
+Conversation Handling
+Figure out what they are looking for and properly guide based on their needs. If they are renewing or changing of address, qualify lead and schedule callback appt.
+Optimal Outcome (Goal)
+Schedule callback for renewals/change of address/new service. Deflect and route for other cases.
+
+
+Persona 3
+Persona Name
+Residential Customer
+Description
+Shopping for or need help with residential service
+Conversation Handling
+Gather information as to whether they are looking for or are existing residential customer -> guide to residential portal. 
+If customer has billing questions, guide to billing support. 
+Optimal Outcome (Goal)
+Guide to residential support.
+
+
+2. General Information
+Please list the websites or pages to train the agent. This ensures the agent only pulls information from approved sources. (e.g., yourcompany.com/products, yourcompany.com/faq)
+https://www.comcastbusinessoffers.com/bundles
+https://www.comcastbusinessoffers.com/internet
+https://www.comcastbusinessoffers.com/tv
+https://www.comcastbuBusiness TV Packagessinessoffers.com/voice
+https://www.comcastbusinessoffers.com/ethernet
+Please provide the URL where the agent should route customers who have support-related questions.
+https://business.comcast.com/support/home/ 
+
+
+3. Knowledge & Conversation Guides (Optional)
+Provide any documents/files that should serve as a "source of truth" for your AI agent. This can include product specification sheets, pricing pages, or details that help the agent understand products and/or services offered. 
+-
+-
+-
+
+Provide any documents that should serve as a "source of truth" for your AI agent. This can include knowledge base articles or FAQs or questions internally known to answer. 
+-
+-
+-
+
+
+Provide any documents that outline how the agent should handle conversations. Think of these as call center guides, brand voice manuals, or scripts that define your tone and conversational style.
+-
+-
+-
+
+
+
+4. Guardrails: What to Avoid
+Please list any topics, specific phrases, promises, or actions the AI agent should absolutely avoid. This helps us set up the necessary guardrails to keep interactions safe and on-brand.
+(e.g., "Do not discuss pricing for enterprise plans," "Never promise a feature that is not yet released," "Avoid using slang or emojis.")
+
+- The agent must politely stop the interaction if the consumer is not speaking English.
+- The agent must deflect any consumer asking about or trying to reach a competitor.
+
+
+
+
+
+
+Next Steps
+Thank you for completing this guide!
+Once we receive your submission, we will begin the initial training process and will reach out to you with the simulated conversation transcripts for your review.
+We look forward to building a world-class AI agent with you!
+
+Background reference on what iProspect Business Class Sales Agents will review once they speak to a live customer
+Did the agent ask Discovery questions for Cable?
+Did the agent ask Discovery questions for Phone?
+Did the agent ask Discovery questions for Internet?
+Did the agent Deliver Value on all 3 services?
+Did the agent ask for Text Consent?
+Did the agent offer the Virtual Business Card?
+Did the agent set expectations of what happens next when sending a quote/contract?
+Did the agent have a closing statement after making an offer?
+Did the agent Build Rapport?
+Did the agent Verify the address for the Weblead?
+Did the agent have a positive opening statement?
+Did the agent offer cable, internet, and phone?
+Did the agent handle objections and second request?
+Did the agent offer the Gift Card when applicable?
+Did the agent offer an add on?
+
+

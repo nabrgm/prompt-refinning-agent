@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { ChevronDown, ChevronRight, Activity, Database, Terminal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface TracePanelProps {
     reasoning: any[];
@@ -16,10 +15,10 @@ export function TracePanel({ reasoning }: TracePanelProps) {
     if (!reasoning || reasoning.length === 0) return null;
 
     return (
-        <div className="mt-2 border-t border-slate-100 pt-2">
+        <div className="mt-2 border-t border-border pt-2">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center text-xs text-slate-500 hover:text-indigo-600 transition-colors"
+                className="flex items-center text-xs text-muted-foreground hover:text-primary transition-colors"
             >
                 {isOpen ? <ChevronDown className="h-3 w-3 mr-1" /> : <ChevronRight className="h-3 w-3 mr-1" />}
                 <Activity className="h-3 w-3 mr-1" />
@@ -34,22 +33,22 @@ export function TracePanel({ reasoning }: TracePanelProps) {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                     >
-                        <div className="mt-2 space-y-3 pl-2 border-l-2 border-indigo-100">
+                        <div className="mt-2 space-y-3 pl-2 border-l-2 border-primary/20">
                             {reasoning.map((step, index) => (
                                 <div key={index} className="text-xs space-y-1">
                                     <div className="flex items-center justify-between">
-                                        <span className="font-semibold text-slate-700 flex items-center">
-                                            <Badge variant="outline" className="mr-2 text-[10px] h-5 px-1">{step.nodeName || 'Node'}</Badge>
+                                        <span className="font-semibold text-foreground flex items-center">
+                                            <Badge variant="outline" className="mr-2 text-[10px] h-5 px-1 border-border">{step.nodeName || 'Node'}</Badge>
                                             {step.agentName}
                                         </span>
-                                        <span className="text-slate-400 font-mono text-[10px]">{step.nodeId}</span>
+                                        <span className="text-muted-foreground font-mono text-[10px]">{step.nodeId}</span>
                                     </div>
 
                                     {/* Messages */}
                                     {step.messages && step.messages.length > 0 && (
-                                        <div className="bg-slate-50 p-2 rounded border border-slate-100">
-                                            <p className="text-slate-500 font-medium mb-1">Output:</p>
-                                            <p className="text-slate-700 whitespace-pre-wrap">{step.messages[0]}</p>
+                                        <div className="bg-muted/30 p-2 rounded border border-border">
+                                            <p className="text-muted-foreground font-medium mb-1">Output:</p>
+                                            <p className="text-foreground whitespace-pre-wrap">{step.messages[0]}</p>
                                         </div>
                                     )}
 
@@ -79,7 +78,7 @@ export function TracePanel({ reasoning }: TracePanelProps) {
                                                 } catch (e) { /* keep as string */ }
 
                                                 return (
-                                                    <div key={tIndex} className="bg-amber-50 p-2 rounded border border-amber-100">
+                                                    <div key={tIndex} className="bg-amber-500/10 p-2 rounded border border-amber-500/20">
                                                         <div className="flex items-center text-amber-700 mb-1">
                                                             <Terminal className="h-3 w-3 mr-1" />
                                                             <span className="font-medium">Tool: {tool.tool}</span>
@@ -87,13 +86,13 @@ export function TracePanel({ reasoning }: TracePanelProps) {
                                                         <div className="grid grid-cols-1 gap-2">
                                                             <div>
                                                                 <span className="text-amber-600 font-medium">Input:</span>
-                                                                <pre className="text-[10px] bg-white p-1 rounded border border-amber-100 overflow-x-auto whitespace-pre-wrap">
+                                                                <pre className="text-[10px] bg-card p-1 rounded border border-border overflow-x-auto whitespace-pre-wrap text-foreground">
                                                                     {inputDisplay}
                                                                 </pre>
                                                             </div>
                                                             <div>
                                                                 <span className="text-amber-600 font-medium">Output:</span>
-                                                                <pre className="text-[10px] bg-white p-1 rounded border border-amber-100 overflow-x-auto whitespace-pre-wrap">
+                                                                <pre className="text-[10px] bg-card p-1 rounded border border-border overflow-x-auto whitespace-pre-wrap text-foreground">
                                                                     {outputDisplay}
                                                                 </pre>
                                                             </div>
@@ -106,12 +105,12 @@ export function TracePanel({ reasoning }: TracePanelProps) {
 
                                     {/* State */}
                                     {step.state && Object.keys(step.state).length > 0 && (
-                                        <div className="bg-blue-50 p-2 rounded border border-blue-100">
-                                            <div className="flex items-center text-blue-700 mb-1">
+                                        <div className="bg-primary/10 p-2 rounded border border-primary/20">
+                                            <div className="flex items-center text-primary mb-1">
                                                 <Database className="h-3 w-3 mr-1" />
                                                 <span className="font-medium">State Update</span>
                                             </div>
-                                            <pre className="text-[10px] bg-white p-1 rounded border border-blue-100 overflow-x-auto">
+                                            <pre className="text-[10px] bg-card p-1 rounded border border-border overflow-x-auto text-foreground">
                                                 {JSON.stringify(step.state, null, 2)}
                                             </pre>
                                         </div>

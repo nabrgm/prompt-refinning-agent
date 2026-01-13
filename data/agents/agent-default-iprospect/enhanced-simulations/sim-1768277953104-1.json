@@ -1,0 +1,397 @@
+{
+  "id": "sim-1768277953104-1",
+  "batchId": "batch-1768277953100",
+  "simulationNumber": 2,
+  "metadata": {
+    "name": "Elizabeth Brown",
+    "persona": {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    "intent": {
+      "id": "intent-1768251229674-4",
+      "name": "Technical Support for Outage/Intermittent Connection",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer reports service issues and needs support guidance.",
+      "goal": "Acknowledge the issue and route them to the official support portal.",
+      "initialMessage": "Our internet keeps dropping every 10 minutes—how do I get tech support?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-2",
+      "name": "Trusting",
+      "description": "Shares details willingly (address, timeline), asks for recommendations, and follows instructions without much pushback."
+    },
+    "outcome": "Customer given specific billing channels and documentation steps for invoice review/credit."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Our internet keeps dropping every 10 minutes—how do I get tech support?"
+    },
+    {
+      "role": "assistant",
+      "content": "I know how frustrating constant drops can be, especially when you need reliable service. For immediate help, go to https://business.comcast.com/support/home/ or call our 24/7 line.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "technical support"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I know how frustrating constant drops can be, especially when you need reliable service. For immediate help, go to https://business.comcast.com/support/home/ or call our 24/7 line."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks. I’m Jamal Carter, and I’m the accounting contact for our manufacturing office, so I’m trying to document this properly.  \n\nCan you tell me specifically which option I should choose on the 24/7 phone line menu for intermittent connection issues, and what info I should have ready before I call (account number, modem MAC, etc.)? Also, do you know typical resolution times for this kind of problem?"
+    },
+    {
+      "role": "assistant",
+      "content": "Jamal, when you call the 24/7 line choose the option for internet connectivity issues (usually the first technical support menu). Have your account number, service address, modem MAC and a brief description of the drop pattern ready. Most issues are resolved in a few hours, and if a technician is needed they’ll schedule a visit within 24‑48 hours.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "technical support"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "Jamal, when you call the 24/7 line choose the option for internet connectivity issues (usually the first technical support menu). Have your account number, service address, modem MAC and a brief description of the drop pattern ready. Most issues are resolved in a few hours, and if a technician is needed they’ll schedule a visit within 24‑48 hours."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That helps, thanks. Since I’m also handling billing, I need to note potential credits if this keeps impacting production—how do service credits work for repeated outages, and who do I talk to about that: tech support on the same line, or a separate billing department/number?"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you need info on service credits for outages.  \n\nCredits are reviewed case‑by‑case and applied when we verify the issue impacted your service.  \n\nFor credit requests, call the 24/7 line and choose the billing/account option, or visit https://business.comcast.com/support/home/.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I understand you need info on service credits for outages.  \n\nCredits are reviewed case‑by‑case and applied when we verify the issue impacted your service.  \n\nFor credit requests, call the 24/7 line and choose the billing/account option, or visit https://business.comcast.com/support/home/."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Thanks, that’s helpful.  \n\nOn the billing side, can you be a bit more specific so I can document the process?  \n1) On the 24/7 line, what is the exact menu path I should follow to reach billing for a credit request (e.g., “press 2 for billing, then 1 for credits”)?  \n2) Is there a particular timeframe I should wait after an outage before calling to request a credit, so you have the logs on your side?"
+    },
+    {
+      "role": "assistant",
+      "content": "On the 24/7 line, select the billing option (often press 2) and then follow the prompts for account adjustments or credits.  \nWait at least 24 hours after the outage so the logs are complete before you request a credit.  \nIf you need more help, start a chat at https://business.comcast.com/support/home/.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "billing credit inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "On the 24/7 line, select the billing option (often press 2) and then follow the prompts for account adjustments or credits.  \nWait at least 24 hours after the outage so the logs are complete before you request a credit.  \nIf you need more help, start a chat at https://business.comcast.com/support/home/."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Got it, that’s clear.  \n\nTwo more things so I can wrap this up on my side:  \n1) Our last invoice jumped from $420 to $515 without any changes we requested—what’s the best way to have someone review that specific bill: same billing menu path by phone, or is there an online form/portal section for invoice disputes?  \n2) If I use the chat instead of calling, is there a particular category I should select so it routes directly to billing/invoice review rather than technical support?"
+    },
+    {
+      "role": "assistant",
+      "content": "I see the invoice increase and understand you want it reviewed. Use the 24/7 line billing menu (press 2 then follow prompts for invoice disputes) or log in to your account portal and submit a dispute under Billing → Invoice Help, or visit https://business.comcast.com/support/home/. In chat choose the “Billing – Invoice/Account Review” category to be routed directly to billing.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I see the invoice increase and understand you want it reviewed. Use the 24/7 line billing menu (press 2 then follow prompts for invoice disputes) or log in to your account portal and submit a dispute under Billing → Invoice Help, or visit https://business.comcast.com/support/home/. In chat choose the “Billing – Invoice/Account Review” category to be routed directly to billing."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Perfect, that’s exactly what I needed.  \n\nJust to confirm my notes: for the invoice jump from $420 to $515, I can either (1) call, press 2 for billing, then follow the prompts for invoice disputes, or (2) log into the portal and go to Billing → Invoice Help to submit a dispute, or (3) start a chat and pick “Billing – Invoice/Account Review,” and any of those will reach the right team to review that specific bill, correct?  \n\nAlso, is there usually a standard turnaround time for invoice dispute reviews (e.g., 3–5 business days)?"
+    },
+    {
+      "role": "assistant",
+      "content": "I hear you—yes, calling billing (press 2), the portal’s Billing → Invoice Help, or chat’s “Billing – Invoice/Account Review” all reach the same team.  \nInvoice disputes are typically reviewed within 3‑5 business days.  \nIf you need anything else, just let me know.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "invoice dispute"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear you—yes, calling billing (press 2), the portal’s Billing → Invoice Help, or chat’s “Billing – Invoice/Account Review” all reach the same team.  \nInvoice disputes are typically reviewed within 3‑5 business days.  \nIf you need anything else, just let me know."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That lines up with what I needed, thanks.  \n\nLast thing: when I submit the invoice dispute, should I attach the specific invoice (we’re looking at Invoice #784233, dated 01/05/2026, for $515) and a short explanation of the previous recurring amount, or is there a particular format/details you recommend including so billing can process it smoothly?"
+    },
+    {
+      "role": "assistant",
+      "content": "Attach Invoice #784233, date, amount, and note prior $420 recurring charge; include account #, service address, and brief reason for discrepancy.  \n\nA short paragraph explaining the change and any supporting docs helps billing process it quickly.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "invoice dispute"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "Attach Invoice #784233, date, amount, and note prior $420 recurring charge; include account #, service address, and brief reason for discrepancy.  \n\nA short paragraph explaining the change and any supporting docs helps billing process it quickly."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Perfect, that gives me exactly what I need to document and submit this properly. I’ll attach Invoice #784233 with the details, note the prior $420 recurring amount, and include our account number, service address, and a brief explanation.\n\nThanks for walking through both the tech and billing sides so clearly."
+    }
+  ],
+  "createdAt": "2026-01-13T04:19:13.104Z",
+  "status": "completed",
+  "chatId": "75073bb8-a4c1-4451-ab83-4d4209c6f2b4",
+  "completedAt": "2026-01-13T04:20:18.144Z"
+}

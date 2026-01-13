@@ -265,41 +265,41 @@ export function AnalyzeRefineModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-            <DialogContent className="!max-w-[75vw] !w-[75vw] !max-h-[90vh] !h-[90vh]">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-xl">
-                        <Sparkles className="h-6 w-6 text-indigo-500" />
+            <DialogContent className="!max-w-[75vw] !w-[75vw] !max-h-[90vh] !h-[90vh] bg-card border-border flex flex-col">
+                <DialogHeader className="shrink-0">
+                    <DialogTitle className="flex items-center gap-2 text-xl text-foreground font-serif">
+                        <Sparkles className="h-5 w-5 text-primary" />
                         Analyze & Refine Prompts
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-muted-foreground">
                         Review your current configuration and describe what you want to change.
                         AI will analyze and suggest specific edits.
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="overflow-y-auto max-h-[calc(95vh-180px)] space-y-4 pr-2">
+                <div className="flex-1 overflow-y-auto space-y-4 pr-2">
                     {/* Current Configuration - Collapsed by default */}
                     <Collapsible
                         open={expandedSections.has('config')}
                         onOpenChange={() => toggleSection('config')}
                     >
-                        <CollapsibleTrigger className="flex items-center gap-2 w-full text-left p-3 border rounded-lg hover:bg-slate-50">
+                        <CollapsibleTrigger className="flex items-center gap-2 w-full text-left p-3 border border-border rounded-lg hover:bg-muted/30 transition-colors">
                             {expandedSections.has('config') ? (
-                                <ChevronDown className="h-4 w-4" />
+                                <ChevronDown className="h-4 w-4 text-muted-foreground" />
                             ) : (
-                                <ChevronRight className="h-4 w-4" />
+                                <ChevronRight className="h-4 w-4 text-muted-foreground" />
                             )}
-                            <Settings className="h-4 w-4 text-slate-500" />
-                            <span className="font-medium text-sm">Current Configuration</span>
-                            <Badge variant="secondary" className="ml-2 text-xs">
+                            <Settings className="h-4 w-4 text-muted-foreground" />
+                            <span className="font-medium text-sm text-foreground">Current Configuration</span>
+                            <Badge variant="secondary" className="ml-2 text-xs bg-muted text-muted-foreground">
                                 {REFINABLE_STATE_FIELDS.length} fields, {nodes.length} nodes
                             </Badge>
                         </CollapsibleTrigger>
-                        <CollapsibleContent className="mt-2 p-3 border rounded-lg bg-slate-50 space-y-2">
+                        <CollapsibleContent className="mt-2 p-3 border border-border rounded-lg bg-muted/20 space-y-2">
                             {REFINABLE_STATE_FIELDS.map((field) => (
                                 <div key={field.key} className="text-xs">
-                                    <span className="font-medium text-slate-600">{field.label}:</span>
-                                    <p className="text-slate-500 truncate">
+                                    <span className="font-medium text-muted-foreground">{field.label}:</span>
+                                    <p className="text-foreground/70 truncate">
                                         {getFieldPreview(stateOverrides[field.key] || '')}
                                     </p>
                                 </div>
@@ -308,22 +308,22 @@ export function AnalyzeRefineModal({
                     </Collapsible>
 
                     {/* Instruction Input */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium flex items-center gap-2">
-                            <Edit3 className="h-4 w-4 text-indigo-500" />
+                    <div className="space-y-3">
+                        <label className="text-sm font-medium flex items-center gap-2 text-foreground">
+                            <Edit3 className="h-4 w-4 text-primary" />
                             What do you want to change?
                         </label>
                         <Textarea
                             value={instruction}
                             onChange={(e) => setInstruction(e.target.value)}
                             placeholder="e.g., Add a rule that says when addressing doctors, always use 'Dr.' before their name..."
-                            className="min-h-[100px] resize-y text-sm"
+                            className="min-h-[100px] resize-y text-sm bg-muted/30 border-border text-foreground placeholder:text-muted-foreground focus:ring-primary/20"
                             disabled={isRefining}
                         />
                         <Button
                             onClick={handleRefine}
                             disabled={isRefining || !instruction.trim()}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700"
+                            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                         >
                             {isRefining ? (
                                 <>
@@ -341,37 +341,37 @@ export function AnalyzeRefineModal({
 
                     {/* Refinement Results */}
                     {refinementResults.length > 0 && (
-                        <div className="border-2 border-indigo-200 rounded-lg bg-white">
-                            <div className="bg-indigo-50 px-4 py-3 border-b border-indigo-200 flex items-center justify-between">
-                                <span className="font-semibold text-indigo-900">Suggested Changes</span>
-                                <Badge className="bg-indigo-600">
+                        <div className="border border-primary/30 rounded-lg bg-card overflow-hidden">
+                            <div className="bg-primary/10 px-4 py-3 border-b border-primary/20 flex items-center justify-between">
+                                <span className="font-semibold text-foreground">Suggested Changes</span>
+                                <Badge className="bg-primary text-primary-foreground">
                                     {acceptedChanges.size}/{refinementResults.length} accepted
                                 </Badge>
                             </div>
-                            <div className="p-4 space-y-6">
+                            <div className="p-4 space-y-4">
                                 {refinementResults.map((result) => (
                                     <div
                                         key={result.field}
-                                        className={`border-2 rounded-lg p-4 ${
+                                        className={`border rounded-lg p-4 transition-colors ${
                                             acceptedChanges.has(result.field)
-                                                ? 'border-emerald-300 bg-emerald-50'
-                                                : 'border-slate-200 bg-white'
+                                                ? 'border-primary/30 bg-primary/5'
+                                                : 'border-border bg-card'
                                         }`}
                                     >
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="flex items-center gap-2">
-                                                <Badge variant="secondary">
+                                                <Badge variant="outline" className="text-xs border-border text-muted-foreground">
                                                     {result.fieldType === 'state' ? 'State Field' : 'Node Prompt'}
                                                 </Badge>
-                                                <span className="font-semibold">{result.field}</span>
+                                                <span className="font-medium text-foreground">{result.field}</span>
                                             </div>
                                             <Button
                                                 variant={acceptedChanges.has(result.field) ? 'default' : 'outline'}
                                                 size="sm"
                                                 className={
                                                     acceptedChanges.has(result.field)
-                                                        ? 'bg-emerald-600 hover:bg-emerald-700'
-                                                        : ''
+                                                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                                                        : 'border-border text-muted-foreground hover:text-foreground'
                                                 }
                                                 onClick={() => toggleChange(result.field)}
                                             >
@@ -389,12 +389,12 @@ export function AnalyzeRefineModal({
                                             </Button>
                                         </div>
 
-                                        <p className="text-slate-700 mb-4 text-sm bg-slate-100 p-2 rounded">{result.explanation}</p>
+                                        <p className="text-muted-foreground mb-4 text-sm bg-muted/30 p-3 rounded-lg border border-border">{result.explanation}</p>
 
                                         {/* Diff view showing original vs current edit */}
                                         <div className="mb-4">
                                             <div className="flex items-center justify-between mb-2">
-                                                <span className="text-xs font-medium text-slate-500">Changes Preview</span>
+                                                <span className="text-xs font-medium text-muted-foreground">Changes Preview</span>
                                                 {editedRefinements[result.field] !== result.refined && (
                                                     <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">
                                                         Modified
@@ -408,9 +408,9 @@ export function AnalyzeRefineModal({
                                         </div>
 
                                         {/* Editable textarea for the refined content */}
-                                        <div className="border-t pt-4">
+                                        <div className="border-t border-border pt-4">
                                             <div className="flex items-center justify-between mb-2">
-                                                <label className="text-xs font-medium text-slate-600 flex items-center gap-1">
+                                                <label className="text-xs font-medium text-muted-foreground flex items-center gap-1">
                                                     <Edit3 className="h-3 w-3" />
                                                     Edit Refined Content
                                                 </label>
@@ -418,7 +418,7 @@ export function AnalyzeRefineModal({
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        className="h-6 text-xs text-slate-500 hover:text-slate-700"
+                                                        className="h-6 text-xs text-muted-foreground hover:text-foreground"
                                                         onClick={() => handleEditRefinement(result.field, result.refined)}
                                                     >
                                                         Reset to AI suggestion
@@ -428,7 +428,7 @@ export function AnalyzeRefineModal({
                                             <Textarea
                                                 value={editedRefinements[result.field] ?? result.refined}
                                                 onChange={(e) => handleEditRefinement(result.field, e.target.value)}
-                                                className="min-h-[150px] font-mono text-xs bg-white border-slate-200 focus:ring-indigo-500"
+                                                className="min-h-[150px] font-mono text-xs bg-muted/20 border-border text-foreground focus:ring-primary/20"
                                                 placeholder="Edit the refined content..."
                                             />
                                         </div>
@@ -440,10 +440,10 @@ export function AnalyzeRefineModal({
 
                     {/* Save Version Section */}
                     {showSaveVersion && (
-                        <div className="border rounded-lg p-4 bg-indigo-50 space-y-3">
+                        <div className="border border-primary/30 rounded-lg p-4 bg-primary/5 space-y-3">
                             <div className="flex items-center gap-2">
-                                <Save className="h-4 w-4 text-indigo-600" />
-                                <span className="font-medium text-sm">Save as New Version</span>
+                                <Save className="h-4 w-4 text-primary" />
+                                <span className="font-medium text-sm text-foreground">Save as New Version</span>
                             </div>
                             <div className="flex gap-2">
                                 <Input
@@ -451,11 +451,12 @@ export function AnalyzeRefineModal({
                                     onChange={(e) => setVersionName(e.target.value)}
                                     placeholder="e.g., v3 - Added Dr. protocol"
                                     disabled={isSaving}
+                                    className="bg-card border-border text-foreground"
                                 />
                                 <Button
                                     onClick={handleSaveVersion}
                                     disabled={isSaving || !versionName.trim()}
-                                    className="bg-indigo-600 hover:bg-indigo-700"
+                                    className="bg-primary text-primary-foreground hover:bg-primary/90"
                                 >
                                     {isSaving ? (
                                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -469,14 +470,14 @@ export function AnalyzeRefineModal({
                 </div>
 
                 {/* Footer Actions */}
-                <div className="flex justify-end gap-2 pt-4 border-t">
-                    <Button variant="outline" onClick={handleClose}>
+                <div className="flex justify-end gap-2 pt-4 border-t border-border shrink-0">
+                    <Button variant="outline" onClick={handleClose} className="border-border text-muted-foreground hover:text-foreground">
                         Cancel
                     </Button>
                     {refinementResults.length > 0 && acceptedChanges.size > 0 && !showSaveVersion && (
                         <Button
                             onClick={handleApply}
-                            className="bg-indigo-600 hover:bg-indigo-700"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90"
                         >
                             Apply {acceptedChanges.size} Change{acceptedChanges.size !== 1 ? 's' : ''}
                         </Button>

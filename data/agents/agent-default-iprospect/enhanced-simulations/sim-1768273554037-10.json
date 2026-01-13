@@ -1,0 +1,142 @@
+{
+  "id": "sim-1768273554037-10",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 11,
+  "metadata": {
+    "name": "Brian Garcia",
+    "persona": {
+      "id": "persona-1768251229674-6",
+      "name": "Elena Petrova",
+      "role": "Existing customer, restaurant manager",
+      "goal": "Get help with intermittent internet dropping and be routed to support resources",
+      "context": "Lunch rush is impacted; staff can’t process orders reliably; needs troubleshooting steps or correct support path",
+      "tone": "Frustrated, short messages, wants resolution quickly"
+    },
+    "intent": {
+      "id": "intent-1768251229674-8",
+      "name": "General Greeting / Start Conversation",
+      "flowType": "UNDETERMINED",
+      "description": "A customer opens with a greeting or minimal context, requiring a clarifying question to route.",
+      "goal": "Determine whether they are a new sales lead or an existing customer needing support.",
+      "initialMessage": "Hi there—can you help me?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-3",
+      "name": "Professional",
+      "description": "Brief, businesslike messages; focuses on requirements, timelines, and next steps; avoids small talk."
+    },
+    "outcome": "Received correct support path (24/7 phone + support site) and will contact them directly."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Hi there—can you help me?"
+    },
+    {
+      "role": "assistant",
+      "content": "Hi there! Thanks for reaching out to Comcast Business. What can I help you with today?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "undetermined",
+            "intent": "request assistance"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Undetermined"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Undetermined",
+          "messages": [
+            "Hi there! Thanks for reaching out to Comcast Business. What can I help you with today?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_5"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "My internet keeps dropping during our lunch rush and it’s killing order processing. I need this fixed or to get to the right support team quickly."
+    },
+    {
+      "role": "assistant",
+      "content": "I’m sorry you’re losing internet during lunch rush—it’s definitely not the experience we want you having. For fast help, go to https://business.comcast.com/support/home/ or call our 24/7 support line.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "technical support"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I’m sorry you’re losing internet during lunch rush—it’s definitely not the experience we want you having. For fast help, go to https://business.comcast.com/support/home/ or call our 24/7 support line."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks. I’ll call support so we can get this stabilized before tomorrow’s lunch rush."
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.037Z",
+  "status": "completed",
+  "chatId": "bd4cb5ef-a859-485d-95bd-69ae3952456e",
+  "completedAt": "2026-01-13T03:06:09.527Z"
+}

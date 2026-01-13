@@ -1,0 +1,192 @@
+{
+  "id": "sim-1768271547064-2",
+  "simulationNumber": 3,
+  "metadata": {
+    "name": "Donna Thomas",
+    "persona": {
+      "id": "persona-1768251229674-2",
+      "name": "Priya Desai",
+      "role": "IT Coordinator, multi-site dental practice (4 locations)",
+      "goal": "Explore Ethernet/dedicated connectivity options and confirm serviceability per address",
+      "context": "Responsible for network reliability across locations; wants redundancy; needs to verify addresses and get an appointment with a business specialist",
+      "tone": "Technical, concise, expects accurate routing"
+    },
+    "intent": {
+      "id": "intent-1768251229674-7",
+      "name": "Change of Address / Move Service",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer needs to move service to a new business location; should be qualified and scheduled for a callback.",
+      "goal": "Capture new address and timeline and schedule a callback to coordinate the move.",
+      "initialMessage": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-3",
+      "name": "Professional",
+      "description": "Brief, businesslike messages; focuses on requirements, timelines, and next steps; avoids small talk."
+    },
+    "outcome": "Callback set for Monday at 11 am ET with a business agent to review Ethernet/dedicated options and redundancy for the new site."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    {
+      "role": "assistant",
+      "content": "I can help get your service moved to the new office.  \nWe’ll need to set up an appointment for the transfer.  \nWhat date, time and time zone works best for you?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "service transfer"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I can help get your service moved to the new office.  \nWe’ll need to set up an appointment for the transfer.  \nWhat date, time and time zone works best for you?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "We don’t have the exact move date locked yet—I’m targeting the week of March 10th. Can we first confirm Ethernet/dedicated serviceability for the new site, then I’ll lock an appointment?  \n\nHere are the details to check:  \n- Current account name: BrightSmile Dental Group  \n- Current main office address: 1450 W Cypress Creek Rd, Suite 220, Fort Lauderdale, FL 33309  \n- New location address: 3100 NE 12th Ave, Suite 300, Fort Lauderdale, FL 33334  \n\nOnce you confirm serviceability and options, I’d prefer a callback next Monday between 10am–12pm Eastern to schedule the actual move order."
+    },
+    {
+      "role": "assistant",
+      "content": "Thanks for the details, BrightSmile Dental Group; could you share your first and last name so I can set up the call? I’ll schedule a callback for next Monday between 10 am–12 pm ET.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Thanks for the details, BrightSmile Dental Group; could you share your first and last name so I can set up the call? I’ll schedule a callback for next Monday between 10 am–12 pm ET."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Sure. My name is Priya Desai.  \n\nIf possible, please note that I’m specifically interested in Ethernet/dedicated access and redundancy options at the new site for the callback."
+    },
+    {
+      "role": "assistant",
+      "content": "Got it, Priya. I’ll have our Business Class agent confirm Ethernet/dedicated options and redundancy for the new address during the call. Which time works best for the Monday callback, 10 am or 11 am ET?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Priya",
+            "lastName": "Desai",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Got it, Priya. I’ll have our Business Class agent confirm Ethernet/dedicated options and redundancy for the new address during the call. Which time works best for the Monday callback, 10 am or 11 am ET?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Let’s do 11 am ET on Monday.  \n\nPlease have them call my direct line at 954-555-0183 and reference the move for BrightSmile Dental Group’s new Fort Lauderdale location."
+    }
+  ],
+  "createdAt": "2026-01-13T02:32:27.064Z",
+  "status": "completed",
+  "chatId": "6a3352da-4ef4-4e54-84cf-b660a21ce6c7",
+  "completedAt": "2026-01-13T02:32:54.899Z"
+}

@@ -1,0 +1,26 @@
+{
+  "agentId": "agent-default-iprospect",
+  "notes": [
+    {
+      "id": "note-1768264699110-4y18po",
+      "simulationId": "sim-1768252009559-0",
+      "turnIndex": 3,
+      "turnRole": "assistant",
+      "comment": "good",
+      "createdAt": "2026-01-13T00:38:19.111Z",
+      "resolved": true,
+      "resolvedAt": "2026-01-13T00:38:32.027Z",
+      "resolutionNote": "added info"
+    },
+    {
+      "id": "note-1768266303445-gsydis",
+      "simulationId": "sim-1768252009559-0",
+      "turnIndex": 0,
+      "turnRole": "user",
+      "comment": "test",
+      "createdAt": "2026-01-13T01:05:03.445Z",
+      "resolved": false
+    }
+  ],
+  "updatedAt": "2026-01-13T01:05:03.447Z"
+}

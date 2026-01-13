@@ -94,11 +94,11 @@ export function StateEditor({ agentId, stateMemory, onStateChange, currentOverri
         const saving = isSaving[field.key];
 
         return (
-            <div key={field.key} className="space-y-2 p-4 bg-white rounded-lg border border-slate-200">
+            <div key={field.key} className="space-y-2 p-4 bg-muted/10 rounded-lg border border-border">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                        <Label className="text-slate-700 font-medium">{formatFieldName(field.key)}</Label>
-                        {isDirty && <Badge variant="secondary" className="bg-amber-100 text-amber-700">Modified</Badge>}
+                        <Label className="text-foreground font-medium">{formatFieldName(field.key)}</Label>
+                        {isDirty && <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/20">Modified</Badge>}
                     </div>
                     <div className="flex items-center gap-2">
                         {isLarge && (
@@ -115,7 +115,7 @@ export function StateEditor({ agentId, stateMemory, onStateChange, currentOverri
                             onClick={() => handleSave(field.key)}
                             disabled={saving || !isDirty}
                             size="sm"
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90"
                         >
                             {saving ? <RefreshCw className="h-3 w-3 mr-1 animate-spin" /> : <Save className="h-3 w-3 mr-1" />}
                             Save
@@ -126,14 +126,14 @@ export function StateEditor({ agentId, stateMemory, onStateChange, currentOverri
                     <Textarea
                         value={localValues[field.key] || ''}
                         onChange={(e) => handleChange(field.key, e.target.value)}
-                        className="min-h-[200px] font-mono text-sm bg-slate-50 border-slate-200"
+                        className="min-h-[200px] font-mono text-sm bg-muted/30 border-border focus:ring-primary/20"
                         placeholder={`Enter ${formatFieldName(field.key)}...`}
                     />
                 ) : (
                     <Input
                         value={localValues[field.key] || ''}
                         onChange={(e) => handleChange(field.key, e.target.value)}
-                        className="bg-slate-50 border-slate-200"
+                        className="bg-muted/30 border-border focus:ring-primary/20"
                         placeholder={`Enter ${formatFieldName(field.key)}...`}
                     />
                 )}
@@ -142,18 +142,18 @@ export function StateEditor({ agentId, stateMemory, onStateChange, currentOverri
     };
 
     return (
-        <Card className="w-full bg-gradient-to-r from-slate-50 to-gray-50 border-slate-200">
-            <CardHeader className="pb-3">
+        <Card className="w-full bg-card border-border shadow-none">
+            <CardHeader className="pb-3 border-b border-border mb-4">
                 <div className="flex items-center gap-2">
-                    <Settings2 className="h-5 w-5 text-slate-600" />
-                    <CardTitle className="text-lg font-semibold text-slate-900">
+                    <Settings2 className="h-5 w-5 text-muted-foreground" />
+                    <CardTitle className="text-lg font-serif font-normal text-foreground">
                         Agent State Configuration
                     </CardTitle>
-                    <Badge variant="secondary" className="bg-slate-100 text-slate-700">
+                    <Badge variant="secondary" className="bg-muted text-muted-foreground">
                         {stateMemory.fields.length} fields
                     </Badge>
                 </div>
-                <CardDescription className="text-slate-600">
+                <CardDescription className="text-muted-foreground">
                     Configure agent behavior rules, brand settings, and system guidelines
                 </CardDescription>
             </CardHeader>

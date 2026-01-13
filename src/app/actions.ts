@@ -35,10 +35,47 @@ import {
     savePromptSetVersion,
     loadPromptSetVersions,
     loadPromptSetVersion,
-    deletePromptSetVersion
+    deletePromptSetVersion,
+    // Enhanced simulation persistence
+    saveOnboardingGuide as persistOnboardingGuide,
+    loadOnboardingGuide as retrieveOnboardingGuide,
+    onboardingGuideExists,
+    saveGeneratedSimulationOptions,
+    loadGeneratedSimulationOptions,
+    saveEnhancedSimulation,
+    loadEnhancedSimulation,
+    loadAllEnhancedSimulations,
+    clearAllEnhancedSimulations,
+    saveSimulationBatch,
+    loadSimulationBatch,
+    loadAllSimulationBatches,
+    updateSimulationBatch,
+    deleteSimulationBatch,
+    getNextBatchNumber,
+    loadSimulationsByBatch
 } from '@/lib/persistence';
-import { generatePersonas, generateUserResponse, generatePersonasFromContext, generateBehaviorTestPersonas, AgentContext } from '@/lib/openai';
-import { Persona } from '@/types/simulation';
+import {
+    generatePersonas,
+    generateUserResponse,
+    generatePersonasFromContext,
+    generateBehaviorTestPersonas,
+    generateFromOnboardingGuide,
+    generateEnhancedUserResponse,
+    generateRandomName,
+    generateRandomPhone,
+    generateRandomEmail,
+    AgentContext
+} from '@/lib/openai';
+import {
+    Persona,
+    EmotionDimension,
+    Intent,
+    SimulationTurn,
+    EnhancedSimulation,
+    SimulationConfig,
+    GeneratedSimulationOptions,
+    SimulationBatch
+} from '@/types/simulation';
 import {
     BehaviorTest,
     BehaviorExperiment,
@@ -1034,4 +1071,344 @@ IMPORTANT:
         console.error('[RefineAI] Failed to refine prompts:', error);
         throw error;
     }
+}
+
+// ============ ONBOARDING GUIDE ============
+
+export async function saveOnboardingGuide(agentId: string, guideText: string): Promise<void> {
+    await persistOnboardingGuide(agentId, guideText);
+}
+
+export async function loadOnboardingGuide(agentId: string): Promise<string | null> {
+    return await retrieveOnboardingGuide(agentId);
+}
+
+export async function hasOnboardingGuide(agentId: string): Promise<boolean> {
+    return await onboardingGuideExists(agentId);
+}
+
+// ============ ENHANCED SIMULATION ============
+
+export async function generateSimulationOptions(
+    agentId: string,
+    nodes: OverridableNode[]
+): Promise<GeneratedSimulationOptions> {
+    // Load onboarding guide
+    const guideText = await retrieveOnboardingGuide(agentId);
+    if (!guideText) {
+        throw new Error('No onboarding guide found. Please add an onboarding guide first.');
+    }
+
+    // Build agent context
+    const agentContext: AgentContext = {
+        nodePrompts: nodes.map(n => ({
+            nodeId: n.id,
+            label: n.label,
+            systemPrompt: n.systemMessagePrompt || ''
+        }))
+    };
+
+    // Generate options using AI
+    const options = await generateFromOnboardingGuide(guideText, agentContext);
+
+    // Save the generated options
+    await saveGeneratedSimulationOptions(agentId, options);
+
+    return options;
+}
+
+export async function fetchSimulationOptions(agentId: string): Promise<GeneratedSimulationOptions | null> {
+    return await loadGeneratedSimulationOptions(agentId);
+}
+
+export async function updateSimulationOptions(agentId: string, options: GeneratedSimulationOptions): Promise<void> {
+    await saveGeneratedSimulationOptions(agentId, options);
+}
+
+// Creates a new batch and starts simulations - returns immediately with batch info
+export async function startSimulationBatch(
+    agentId: string,
+    config: SimulationConfig,
+    nodes: OverridableNode[],
+    stateOverrides?: Record<string, string>
+): Promise<{ batch: SimulationBatch; simulations: EnhancedSimulation[] }> {
+    const { selectedPersonas, selectedEmotions, selectedIntents, simulationCount } = config;
+
+    if (selectedPersonas.length === 0 || selectedEmotions.length === 0 || selectedIntents.length === 0) {
+        throw new Error('Please select at least one persona, emotion, and intent.');
+    }
+
+    // Create a new batch
+    const batchNumber = await getNextBatchNumber(agentId);
+    const batchId = `batch-${Date.now()}`;
+    const batch: SimulationBatch = {
+        id: batchId,
+        name: `Round ${batchNumber}`,
+        createdAt: new Date().toISOString(),
+        status: 'running',
+        simulationCount: simulationCount,
+        completedCount: 0,
+        reviewedCount: 0,
+    };
+    await saveSimulationBatch(agentId, batch);
+
+    // Create simulation configs with random combinations
+    const simulations: EnhancedSimulation[] = [];
+
+    for (let i = 0; i < simulationCount; i++) {
+        const persona = selectedPersonas[Math.floor(Math.random() * selectedPersonas.length)];
+        const emotion = selectedEmotions[Math.floor(Math.random() * selectedEmotions.length)];
+        const intent = selectedIntents[Math.floor(Math.random() * selectedIntents.length)];
+        const customerName = generateRandomName();
+
+        const simulation: EnhancedSimulation = {
+            id: `sim-${Date.now()}-${i}`,
+            batchId: batchId,
+            simulationNumber: i + 1,
+            metadata: {
+                name: customerName,
+                persona,
+                intent,
+                emotion,
+            },
+            turns: [],
+            createdAt: new Date().toISOString(),
+            status: 'running',
+        };
+
+        simulations.push(simulation);
+        await saveEnhancedSimulation(agentId, simulation);
+    }
+
+    // Start running simulations in the background (don't await)
+    runSimulationsInBackground(agentId, batchId, simulations, nodes, stateOverrides);
+
+    // Return immediately with batch and initial simulations
+    return { batch, simulations };
+}
+
+// Runs simulations in the background and updates batch status
+async function runSimulationsInBackground(
+    agentId: string,
+    batchId: string,
+    simulations: EnhancedSimulation[],
+    nodes: OverridableNode[],
+    stateOverrides?: Record<string, string>
+): Promise<void> {
+    // Run all simulations in parallel
+    const runPromises = simulations.map(sim =>
+        runSingleEnhancedSimulation(agentId, batchId, sim, nodes, stateOverrides)
+    );
+
+    await Promise.all(runPromises);
+
+    // Update batch status when all complete
+    const updatedSimulations = await loadSimulationsByBatch(agentId, batchId);
+    const completedCount = updatedSimulations.filter(s => s.status === 'completed').length;
+    const failedCount = updatedSimulations.filter(s => s.status === 'failed').length;
+
+    await updateSimulationBatch(agentId, batchId, {
+        status: failedCount > 0 ? 'partial' : 'completed',
+        completedAt: new Date().toISOString(),
+        completedCount: completedCount + failedCount,
+    });
+}
+
+// Legacy function for backward compatibility
+export async function runEnhancedSimulationBatch(
+    agentId: string,
+    config: SimulationConfig,
+    nodes: OverridableNode[],
+    stateOverrides?: Record<string, string>
+): Promise<EnhancedSimulation[]> {
+    const result = await startSimulationBatch(agentId, config, nodes, stateOverrides);
+
+    // Wait for all to complete (legacy behavior)
+    await new Promise<void>(resolve => {
+        const checkComplete = async () => {
+            const sims = await loadSimulationsByBatch(agentId, result.batch.id);
+            const allDone = sims.every(s => s.status !== 'running');
+            if (allDone) {
+                resolve();
+            } else {
+                setTimeout(checkComplete, 1000);
+            }
+        };
+        checkComplete();
+    });
+
+    return await loadSimulationsByBatch(agentId, result.batch.id);
+}
+
+async function runSingleEnhancedSimulation(
+    agentId: string,
+    batchId: string,
+    simulation: EnhancedSimulation,
+    nodes: OverridableNode[],
+    stateOverrides?: Record<string, string>
+): Promise<void> {
+    const { metadata } = simulation;
+    const { persona, emotion, intent, name: customerName } = metadata;
+    const customerPhone = generateRandomPhone();
+    const customerEmail = generateRandomEmail(customerName);
+
+    const MAX_TURNS = 20;
+    let chatId: string | undefined;
+    const history: { role: string; content: string }[] = [];
+    const turns: SimulationTurn[] = [];
+
+    try {
+        for (let turn = 0; turn < MAX_TURNS; turn++) {
+            // Generate user message
+            const userResponse = await generateEnhancedUserResponse(
+                persona,
+                emotion,
+                intent,
+                history,
+                customerName,
+                customerPhone,
+                customerEmail
+            );
+
+            // Add user turn
+            const userTurn: SimulationTurn = {
+                role: 'user',
+                content: userResponse.message,
+            };
+            turns.push(userTurn);
+            history.push({ role: 'user', content: userResponse.message });
+
+            // Save progress
+            simulation.turns = [...turns];
+            await saveEnhancedSimulation(agentId, simulation);
+
+            // Check if simulation should end
+            if (userResponse.isComplete) {
+                simulation.metadata.outcome = userResponse.outcome || 'Conversation completed';
+                break;
+            }
+
+            // Send to agent API
+            const agentResponse = await sendChat(agentId, userResponse.message, chatId, nodes, stateOverrides);
+            chatId = agentResponse.chatId;
+
+            // Add agent turn
+            const agentTurn: SimulationTurn = {
+                role: 'assistant',
+                content: agentResponse.text,
+                traceData: agentResponse.agentReasoning,
+            };
+            turns.push(agentTurn);
+            history.push({ role: 'assistant', content: agentResponse.text });
+
+            // Save progress
+            simulation.turns = [...turns];
+            simulation.chatId = chatId;
+            await saveEnhancedSimulation(agentId, simulation);
+
+            // Small delay to avoid rate limits
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        // Mark as completed
+        simulation.status = 'completed';
+        simulation.completedAt = new Date().toISOString();
+        if (!simulation.metadata.outcome) {
+            simulation.metadata.outcome = 'Maximum turns reached';
+        }
+    } catch (error) {
+        console.error(`[Simulation ${simulation.simulationNumber}] Error:`, error);
+        simulation.status = 'failed';
+        simulation.metadata.outcome = `Error: ${error instanceof Error ? error.message : 'Unknown error'}`;
+    }
+
+    await saveEnhancedSimulation(agentId, simulation);
+}
+
+export async function fetchEnhancedSimulations(agentId: string): Promise<EnhancedSimulation[]> {
+    return await loadAllEnhancedSimulations(agentId);
+}
+
+export async function clearEnhancedSimulations(agentId: string): Promise<void> {
+    await clearAllEnhancedSimulations(agentId);
+}
+
+// ============ SIMULATION BATCHES ============
+
+export async function fetchSimulationBatches(agentId: string): Promise<SimulationBatch[]> {
+    return await loadAllSimulationBatches(agentId);
+}
+
+export async function fetchBatchSimulations(agentId: string, batchId: string): Promise<EnhancedSimulation[]> {
+    return await loadSimulationsByBatch(agentId, batchId);
+}
+
+export async function fetchBatchWithSimulations(
+    agentId: string,
+    batchId: string
+): Promise<{ batch: SimulationBatch | null; simulations: EnhancedSimulation[] }> {
+    const batch = await loadSimulationBatch(agentId, batchId);
+    const simulations = await loadSimulationsByBatch(agentId, batchId);
+    return { batch, simulations };
+}
+
+export async function removeBatch(agentId: string, batchId: string): Promise<void> {
+    await deleteSimulationBatch(agentId, batchId);
+}
+
+// ============ SIMULATION NOTES ============
+
+import { SimulationNote } from '@/types/simulation';
+import {
+    loadSimulationNotes as loadNotes,
+    saveSimulationNote as saveNote,
+    updateNoteResolved as updateResolved,
+    deleteSimulationNote as deleteNote,
+    clearSimulationNotes as clearNotes,
+    updateSimulationReviewed
+} from '@/lib/persistence';
+
+export async function fetchSimulationNotes(agentId: string): Promise<SimulationNote[]> {
+    return await loadNotes(agentId);
+}
+
+export async function addSimulationNote(
+    agentId: string,
+    simulationId: string,
+    turnIndex: number,
+    turnRole: 'user' | 'assistant',
+    comment: string
+): Promise<SimulationNote[]> {
+    const note: SimulationNote = {
+        id: `note-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
+        simulationId,
+        turnIndex,
+        turnRole,
+        comment,
+        createdAt: new Date().toISOString(),
+        resolved: false
+    };
+    return await saveNote(agentId, note);
+}
+
+export async function toggleNoteResolved(agentId: string, noteId: string, resolved: boolean, resolutionNote?: string): Promise<SimulationNote[]> {
+    return await updateResolved(agentId, noteId, resolved, resolutionNote);
+}
+
+export async function removeSimulationNote(agentId: string, noteId: string): Promise<SimulationNote[]> {
+    return await deleteNote(agentId, noteId);
+}
+
+export async function clearAllSimulationNotes(agentId: string): Promise<void> {
+    await clearNotes(agentId);
+}
+
+// ============ SIMULATION REVIEWED STATUS ============
+
+export async function toggleSimulationReviewed(
+    agentId: string,
+    simulationId: string,
+    reviewed: boolean
+): Promise<EnhancedSimulation | null> {
+    return await updateSimulationReviewed(agentId, simulationId, reviewed);
 }

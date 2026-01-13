@@ -1,0 +1,141 @@
+{
+  "id": "sim-1768271547079-15",
+  "simulationNumber": 16,
+  "metadata": {
+    "name": "Richard Martinez",
+    "persona": {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    "intent": {
+      "id": "intent-1768251229674-0",
+      "name": "Request Business Internet Quote & Callback",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new business prospect wants pricing/plan info for business internet and to talk to sales.",
+      "goal": "Share business details and schedule a callback appointment with a sales agent.",
+      "initialMessage": "Hi, I’m setting up internet for my shop—can someone call me with pricing and options?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-7",
+      "name": "Skeptical",
+      "description": "Challenges claims, asks for proof or confirmation, references past bad experiences, and questions pricing or reliability."
+    },
+    "outcome": "Received specific direction request for billing support channel and required info."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "Hi, I’m setting up internet for my shop—can someone call me with pricing and options?"
+    },
+    {
+      "role": "assistant",
+      "content": "Sure thing, I can help you get pricing details. Could you tell me your name and confirm this is for your business location? Once I have that, I can set up a call with a Business Class agent.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "Sure thing, I can help you get pricing details. Could you tell me your name and confirm this is for your business location? Once I have that, I can set up a call with a Business Class agent."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yeah, it’s for our business location.  \nName: Jamal Carter  \nBusiness: Carter Precision Manufacturing, Inc.  \n\nBefore we set up a call, I’ll be clear: I’m actually an existing customer, and my main issue is a billing discrepancy on our latest invoice—the amount jumped without any notice. I’m not looking for new services; I need the right billing support channel and some explanation in writing of what changed."
+    },
+    {
+      "role": "assistant",
+      "content": "I’m sorry you’re seeing an unexpected charge. For billing help and a written explanation, please visit https://business.comcast.com/support/home/. Let me know if there’s anything else I can assist with.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "new_sales_lead",
+            "intent": "schedule appointment"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "I’m sorry you’re seeing an unexpected charge. For billing help and a written explanation, please visit https://business.comcast.com/support/home/. Let me know if there’s anything else I can assist with."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That link just dumps me on a generic support page—where exactly on there do I go for billing disputes and a written breakdown of the charges (chat, form, specific phone number)?  \n\nAlso, is there a direct Business billing number you can give me, and what info do I need ready when I contact them (account number, invoice number, etc.)?"
+    }
+  ],
+  "createdAt": "2026-01-13T02:32:27.079Z",
+  "status": "completed",
+  "chatId": "018ecee7-1cfe-467f-9e13-ac1b9b19a9dd",
+  "completedAt": "2026-01-13T02:32:50.134Z"
+}

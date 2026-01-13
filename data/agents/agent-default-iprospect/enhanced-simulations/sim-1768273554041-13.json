@@ -1,0 +1,142 @@
+{
+  "id": "sim-1768273554041-13",
+  "batchId": "batch-1768273554026",
+  "simulationNumber": 14,
+  "metadata": {
+    "name": "Jennifer Harris",
+    "persona": {
+      "id": "persona-1768251229674-3",
+      "name": "Marcus Green",
+      "role": "General Manager, mid-size hotel (80 rooms)",
+      "goal": "Bundle business internet + TV for guest rooms; understand options and schedule a callback",
+      "context": "Renovation complete; upgrading guest experience; needs coordinated install and minimal downtime",
+      "tone": "Collaborative, asks about timeline and setup"
+    },
+    "intent": {
+      "id": "intent-1768251229674-5",
+      "name": "Billing Question / Dispute",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer has a billing concern and needs the right billing support path.",
+      "goal": "Direct them to the support portal for billing and set expectations for resolution steps.",
+      "initialMessage": "My bill is higher this month and I don’t recognize one of the charges—who can fix this?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-0",
+      "name": "Curious",
+      "description": "Asks exploratory questions, requests options and comparisons, uses phrases like “what are my options?” or “can you tell me more?”"
+    },
+    "outcome": "Callback window requested with Business Class agent for billing and bundle discussion."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "My bill is higher this month and I don’t recognize one of the charges—who can fix this?"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand the surprise of an unexpected charge. Our support team can review your bill and fix any errors. Please go to https://business.comcast.com/support/home/ or call our 24/7 line for assistance.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I understand the surprise of an unexpected charge. Our support team can review your bill and fix any errors. Please go to https://business.comcast.com/support/home/ or call our 24/7 line for assistance."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Got it, thanks for that.  \n\nSince I’m already on with you, can you tell me which option on that support page is best if I need to talk to someone about both a billing question and possibly changing my plan to a business internet + TV bundle for my hotel?"
+    },
+    {
+      "role": "assistant",
+      "content": "I hear you. Our Business Class agent can handle billing and bundle options. Can you share a preferred date, time, and timezone for a call?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear you. Our Business Class agent can handle billing and bundle options. Can you share a preferred date, time, and timezone for a call?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Sure, that works.  \n\nI’m Marcus Green, and the best time for me would be next Monday morning between 9–11am Eastern. If they need a specific time, let’s say 9:30am Eastern."
+    }
+  ],
+  "createdAt": "2026-01-13T03:05:54.041Z",
+  "status": "completed",
+  "chatId": "916e63b4-3632-4c22-98c1-48f83e844f21",
+  "completedAt": "2026-01-13T03:06:09.383Z"
+}

@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { Persona } from '@/types/simulation';
+import { Persona, EmotionDimension, Intent, GeneratedSimulationOptions, EnhancedSimulation, SimulationNote, SimulationNotesData, SimulationBatch } from '@/types/simulation';
 import { BehaviorTest, BehaviorExperiment } from '@/types/behavior-test';
 import { PromptSetVersion, OverridableNode, AgentConfig } from '@/types/polaris';
 
@@ -560,4 +560,296 @@ export async function updateNodePromptVersion(
     } catch {
         return null;
     }
+}
+
+// ============ ONBOARDING GUIDE (Agent-scoped) ============
+
+export async function saveOnboardingGuide(agentId: string, guideText: string): Promise<void> {
+    await ensureAgentDirectories(agentId);
+    const filePath = path.join(getAgentDir(agentId), 'onboarding-guide.txt');
+    await fs.writeFile(filePath, guideText, 'utf-8');
+}
+
+export async function loadOnboardingGuide(agentId: string): Promise<string | null> {
+    try {
+        const filePath = path.join(getAgentDir(agentId), 'onboarding-guide.txt');
+        const content = await fs.readFile(filePath, 'utf-8');
+        return content;
+    } catch {
+        return null;
+    }
+}
+
+export async function onboardingGuideExists(agentId: string): Promise<boolean> {
+    try {
+        const filePath = path.join(getAgentDir(agentId), 'onboarding-guide.txt');
+        await fs.access(filePath);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+// ============ GENERATED SIMULATION OPTIONS (Agent-scoped) ============
+
+export async function saveGeneratedSimulationOptions(
+    agentId: string,
+    options: GeneratedSimulationOptions
+): Promise<void> {
+    await ensureAgentDirectories(agentId);
+    const filePath = path.join(getAgentDir(agentId), 'simulation-options.json');
+    await fs.writeFile(filePath, JSON.stringify(options, null, 2));
+}
+
+export async function loadGeneratedSimulationOptions(agentId: string): Promise<GeneratedSimulationOptions | null> {
+    try {
+        const filePath = path.join(getAgentDir(agentId), 'simulation-options.json');
+        const content = await fs.readFile(filePath, 'utf-8');
+        return JSON.parse(content);
+    } catch {
+        return null;
+    }
+}
+
+// ============ ENHANCED SIMULATIONS (Agent-scoped) ============
+
+export async function saveEnhancedSimulation(agentId: string, simulation: EnhancedSimulation): Promise<void> {
+    await ensureAgentDirectories(agentId);
+    const simulationsDir = path.join(getAgentDir(agentId), 'enhanced-simulations');
+    await fs.mkdir(simulationsDir, { recursive: true });
+    const filePath = path.join(simulationsDir, `${simulation.id}.json`);
+    await fs.writeFile(filePath, JSON.stringify(simulation, null, 2));
+}
+
+export async function loadEnhancedSimulation(agentId: string, simulationId: string): Promise<EnhancedSimulation | null> {
+    try {
+        const filePath = path.join(getAgentDir(agentId), 'enhanced-simulations', `${simulationId}.json`);
+        const content = await fs.readFile(filePath, 'utf-8');
+        return JSON.parse(content);
+    } catch {
+        return null;
+    }
+}
+
+export async function loadAllEnhancedSimulations(agentId: string): Promise<EnhancedSimulation[]> {
+    const simulationsDir = path.join(getAgentDir(agentId), 'enhanced-simulations');
+    try {
+        const files = await fs.readdir(simulationsDir);
+        const simulations = await Promise.all(
+            files
+                .filter(f => f.endsWith('.json'))
+                .map(async f => {
+                    const content = await fs.readFile(path.join(simulationsDir, f), 'utf-8');
+                    return JSON.parse(content) as EnhancedSimulation;
+                })
+        );
+        return simulations.sort((a, b) => a.simulationNumber - b.simulationNumber);
+    } catch {
+        return [];
+    }
+}
+
+export async function clearAllEnhancedSimulations(agentId: string): Promise<void> {
+    const simulationsDir = path.join(getAgentDir(agentId), 'enhanced-simulations');
+    try {
+        const files = await fs.readdir(simulationsDir);
+        await Promise.all(
+            files.filter(f => f.endsWith('.json')).map(f =>
+                fs.unlink(path.join(simulationsDir, f))
+            )
+        );
+    } catch {
+        // Directory might not exist
+    }
+}
+
+export async function updateSimulationReviewed(
+    agentId: string,
+    simulationId: string,
+    reviewed: boolean
+): Promise<EnhancedSimulation | null> {
+    const simulation = await loadEnhancedSimulation(agentId, simulationId);
+    if (!simulation) return null;
+
+    simulation.reviewed = reviewed;
+    simulation.reviewedAt = reviewed ? new Date().toISOString() : undefined;
+
+    await saveEnhancedSimulation(agentId, simulation);
+    return simulation;
+}
+
+export async function loadSimulationsByBatch(agentId: string, batchId: string): Promise<EnhancedSimulation[]> {
+    const allSimulations = await loadAllEnhancedSimulations(agentId);
+    return allSimulations
+        .filter(s => s.batchId === batchId)
+        .sort((a, b) => a.simulationNumber - b.simulationNumber);
+}
+
+// ============ SIMULATION BATCHES (Agent-scoped) ============
+
+export async function saveSimulationBatch(agentId: string, batch: SimulationBatch): Promise<void> {
+    await ensureAgentDirectories(agentId);
+    const batchesDir = path.join(getAgentDir(agentId), 'simulation-batches');
+    await fs.mkdir(batchesDir, { recursive: true });
+    const filePath = path.join(batchesDir, `${batch.id}.json`);
+    await fs.writeFile(filePath, JSON.stringify(batch, null, 2));
+}
+
+export async function loadSimulationBatch(agentId: string, batchId: string): Promise<SimulationBatch | null> {
+    try {
+        const filePath = path.join(getAgentDir(agentId), 'simulation-batches', `${batchId}.json`);
+        const content = await fs.readFile(filePath, 'utf-8');
+        return JSON.parse(content);
+    } catch {
+        return null;
+    }
+}
+
+export async function loadAllSimulationBatches(agentId: string): Promise<SimulationBatch[]> {
+    const batchesDir = path.join(getAgentDir(agentId), 'simulation-batches');
+    try {
+        const files = await fs.readdir(batchesDir);
+        const batches = await Promise.all(
+            files
+                .filter(f => f.endsWith('.json'))
+                .map(async f => {
+                    const content = await fs.readFile(path.join(batchesDir, f), 'utf-8');
+                    return JSON.parse(content) as SimulationBatch;
+                })
+        );
+        // Sort by creation date, newest first
+        return batches.sort((a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+    } catch {
+        return [];
+    }
+}
+
+export async function updateSimulationBatch(
+    agentId: string,
+    batchId: string,
+    updates: Partial<SimulationBatch>
+): Promise<SimulationBatch | null> {
+    const batch = await loadSimulationBatch(agentId, batchId);
+    if (!batch) return null;
+
+    const updatedBatch = { ...batch, ...updates };
+    await saveSimulationBatch(agentId, updatedBatch);
+    return updatedBatch;
+}
+
+export async function deleteSimulationBatch(agentId: string, batchId: string): Promise<void> {
+    // Delete batch file
+    const batchFilePath = path.join(getAgentDir(agentId), 'simulation-batches', `${batchId}.json`);
+    try {
+        await fs.unlink(batchFilePath);
+    } catch {
+        // File might not exist
+    }
+
+    // Delete all simulations in this batch
+    const simulations = await loadSimulationsByBatch(agentId, batchId);
+    const simulationsDir = path.join(getAgentDir(agentId), 'enhanced-simulations');
+    await Promise.all(
+        simulations.map(s =>
+            fs.unlink(path.join(simulationsDir, `${s.id}.json`)).catch(() => {})
+        )
+    );
+}
+
+export async function getNextBatchNumber(agentId: string): Promise<number> {
+    const batches = await loadAllSimulationBatches(agentId);
+    if (batches.length === 0) return 1;
+
+    // Extract numbers from batch names like "Round 1", "Round 2"
+    const numbers = batches.map(b => {
+        const match = b.name.match(/Round (\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+    });
+    return Math.max(...numbers) + 1;
+}
+
+// ============ SIMULATION NOTES (Agent-scoped) ============
+
+export async function loadSimulationNotes(agentId: string): Promise<SimulationNote[]> {
+    try {
+        const filePath = path.join(getAgentDir(agentId), 'simulation-notes.json');
+        const content = await fs.readFile(filePath, 'utf-8');
+        const data: SimulationNotesData = JSON.parse(content);
+        return data.notes;
+    } catch {
+        return [];
+    }
+}
+
+export async function saveSimulationNote(agentId: string, note: SimulationNote): Promise<SimulationNote[]> {
+    await ensureAgentDirectories(agentId);
+    const notes = await loadSimulationNotes(agentId);
+
+    // Check if note already exists (update) or add new
+    const existingIndex = notes.findIndex(n => n.id === note.id);
+    if (existingIndex >= 0) {
+        notes[existingIndex] = note;
+    } else {
+        notes.push(note);
+    }
+
+    const data: SimulationNotesData = {
+        agentId,
+        notes,
+        updatedAt: new Date().toISOString()
+    };
+
+    const filePath = path.join(getAgentDir(agentId), 'simulation-notes.json');
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+    return notes;
+}
+
+export async function updateNoteResolved(agentId: string, noteId: string, resolved: boolean, resolutionNote?: string): Promise<SimulationNote[]> {
+    const notes = await loadSimulationNotes(agentId);
+    const noteIndex = notes.findIndex(n => n.id === noteId);
+
+    if (noteIndex >= 0) {
+        notes[noteIndex].resolved = resolved;
+        notes[noteIndex].resolvedAt = resolved ? new Date().toISOString() : undefined;
+        notes[noteIndex].resolutionNote = resolved ? resolutionNote : undefined;
+
+        const data: SimulationNotesData = {
+            agentId,
+            notes,
+            updatedAt: new Date().toISOString()
+        };
+
+        const filePath = path.join(getAgentDir(agentId), 'simulation-notes.json');
+        await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+    }
+
+    return notes;
+}
+
+export async function deleteSimulationNote(agentId: string, noteId: string): Promise<SimulationNote[]> {
+    const notes = await loadSimulationNotes(agentId);
+    const updated = notes.filter(n => n.id !== noteId);
+
+    const data: SimulationNotesData = {
+        agentId,
+        notes: updated,
+        updatedAt: new Date().toISOString()
+    };
+
+    const filePath = path.join(getAgentDir(agentId), 'simulation-notes.json');
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+    return updated;
+}
+
+export async function clearSimulationNotes(agentId: string): Promise<void> {
+    await ensureAgentDirectories(agentId);
+    const data: SimulationNotesData = {
+        agentId,
+        notes: [],
+        updatedAt: new Date().toISOString()
+    };
+    const filePath = path.join(getAgentDir(agentId), 'simulation-notes.json');
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }

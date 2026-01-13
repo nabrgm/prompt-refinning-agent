@@ -71,7 +71,7 @@ export function PromptOptimizer({ currentPrompt, type, nodeLabel, onRefined, all
             else setIsOpen(true);
         }}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="text-indigo-600 border-indigo-200 hover:bg-indigo-50">
+                <Button variant="outline" size="sm" className="text-primary border-primary/30 hover:bg-primary/10 hover:text-primary">
                     <Sparkles className="mr-2 h-3 w-3" />
                     Refine with AI
                 </Button>
@@ -82,7 +82,7 @@ export function PromptOptimizer({ currentPrompt, type, nodeLabel, onRefined, all
                     <>
                         <DialogHeader>
                             <DialogTitle className="flex items-center">
-                                <Wand2 className="mr-2 h-5 w-5 text-indigo-600" />
+                                <Wand2 className="mr-2 h-5 w-5 text-primary" />
                                 Refine {nodeLabel || 'Prompt'}
                             </DialogTitle>
                             <DialogDescription>
@@ -104,7 +104,7 @@ export function PromptOptimizer({ currentPrompt, type, nodeLabel, onRefined, all
                             <Button
                                 onClick={handleOptimize}
                                 disabled={isOptimizing || !instructions.trim()}
-                                className="bg-indigo-600 hover:bg-indigo-700"
+                                className="bg-primary hover:bg-primary/90 text-primary-foreground"
                             >
                                 {isOptimizing ? (
                                     <>
@@ -134,11 +134,11 @@ export function PromptOptimizer({ currentPrompt, type, nodeLabel, onRefined, all
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700">Your Instructions:</label>
-                                <p className="text-sm text-slate-600 bg-slate-100 p-2 rounded">{instructions}</p>
+                                <label className="text-sm font-medium text-foreground">Your Instructions:</label>
+                                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">{instructions}</p>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700">Refined Result:</label>
+                                <label className="text-sm font-medium text-foreground">Refined Result:</label>
                                 <ScrollArea className="h-[300px] border rounded-md">
                                     <div className="p-3 font-mono text-sm whitespace-pre-wrap bg-green-50">
                                         {refinedResult}

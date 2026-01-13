@@ -8,13 +8,14 @@ import { SimulationManager } from '@/components/simulation-manager';
 import { StateEditor } from '@/components/state-editor';
 import { BehaviorTestRunner } from '@/components/behavior-test-runner';
 import { AnalyzeRefineModal } from '@/components/analyze-refine-modal';
+import { OnboardingGuideModal } from '@/components/onboarding-guide-modal';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { ChatMessage } from '@/lib/api';
 import { Persona } from '@/types/simulation';
 import { PromptSetVersion } from '@/types/polaris';
-import { fetchStateMemory, fetchPromptVersions, getVersionConfig, createPromptVersion, fetchMasterVersion, updateMasterVersion } from '@/app/actions';
-import { Sparkles, History, Save, Loader2, Cloud, CloudOff, Check } from 'lucide-react';
+import { fetchStateMemory, fetchPromptVersions, getVersionConfig, createPromptVersion, fetchMasterVersion, updateMasterVersion, saveOnboardingGuide, loadOnboardingGuide } from '@/app/actions';
+import { Sparkles, History, Save, Loader2, Cloud, CloudOff, BookOpen, FileText, MessageSquare, Play, FlaskConical } from 'lucide-react';
 import {
     Select,
     SelectContent,
@@ -61,6 +62,10 @@ export function Dashboard({ agentId, initialNodes, initialStateMemory }: Dashboa
 
     // Analyze & Refine Modal
     const [showRefineModal, setShowRefineModal] = useState(false);
+
+    // Onboarding Guide Modal
+    const [showOnboardingGuideModal, setShowOnboardingGuideModal] = useState(false);
+    const [onboardingGuide, setOnboardingGuide] = useState<string | null>(null);
 
     // Prompt Set Versions
     const [promptVersions, setPromptVersions] = useState<PromptSetVersion[]>([]);
@@ -149,6 +154,25 @@ export function Dashboard({ agentId, initialNodes, initialStateMemory }: Dashboa
     useEffect(() => {
         loadPromptVersions();
     }, []);
+
+    // Load onboarding guide on mount
+    useEffect(() => {
+        loadOnboardingGuideData();
+    }, [agentId]);
+
+    const loadOnboardingGuideData = async () => {
+        try {
+            const guide = await loadOnboardingGuide(agentId);
+            setOnboardingGuide(guide);
+        } catch (error) {
+            console.error('Failed to load onboarding guide:', error);
+        }
+    };
+
+    const handleSaveOnboardingGuide = async (guideText: string) => {
+        await saveOnboardingGuide(agentId, guideText);
+        setOnboardingGuide(guideText);
+    };
 
     const loadPromptVersions = async () => {
         try {
@@ -276,234 +300,267 @@ export function Dashboard({ agentId, initialNodes, initialStateMemory }: Dashboa
     };
 
     return (
-        <div className="grid grid-cols-1 gap-8">
-            {/* Header with Analyze & Refine button */}
-            <header className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
-                        Prompt Refinement & Eval Tool
-                    </h1>
-                    <p className="text-lg text-slate-600">
-                        Managing and refining agent prompts with AI-powered tools.
-                    </p>
-                </div>
-                <Button
-                    onClick={() => setShowRefineModal(true)}
-                    className="bg-slate-900 hover:bg-slate-800 text-white"
-                    size="lg"
-                >
-                    <Sparkles className="mr-2 h-5 w-5" />
-                    Analyze & Refine
-                </Button>
-            </header>
-
-            <div className="space-y-8">
-                <Tabs defaultValue="prompts" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4 mb-8">
-                        <TabsTrigger value="prompts">Prompt Editor</TabsTrigger>
-                        <TabsTrigger value="simulation">
-                            Simulation {personas.length > 0 && `(${personas.length})`}
-                        </TabsTrigger>
-                        <TabsTrigger value="chat">
-                            Chat & Debug {chatMessages.length > 0 && `(${chatMessages.length})`}
-                        </TabsTrigger>
-                        <TabsTrigger value="behavior-tests">
-                            Behavior Tests
-                        </TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="prompts" className="space-y-8">
-                        {/* Version Selector */}
-                        <Card className="bg-slate-50 border-slate-200">
-                            <CardContent className="py-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <div className="flex items-center gap-2">
-                                            <History className="h-4 w-4 text-slate-500" />
-                                            <span className="text-sm font-medium text-slate-700">Prompt Version</span>
-                                        </div>
-                                        <Select
-                                            value={selectedVersionId}
-                                            onValueChange={handleVersionSelect}
-                                            disabled={isLoadingVersion}
-                                        >
-                                            <SelectTrigger className="w-[280px] bg-white">
-                                                {isLoadingVersion ? (
-                                                    <div className="flex items-center gap-2">
-                                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                                        <span>Loading...</span>
-                                                    </div>
-                                                ) : (
-                                                    <SelectValue placeholder="Select version..." />
-                                                )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="current">
-                                                    <div className="flex items-center gap-2">
-                                                        <span>Master Version</span>
-                                                        <Badge variant="secondary" className="text-[10px] px-1.5 bg-emerald-100 text-emerald-700">Live</Badge>
-                                                    </div>
-                                                </SelectItem>
-                                                {promptVersions.map((v) => (
-                                                    <SelectItem key={v.id} value={v.id}>
-                                                        <div className="flex items-center justify-between w-full gap-4">
-                                                            <span>{v.name}</span>
-                                                            <span className="text-xs text-slate-400">
-                                                                {new Date(v.createdAt).toLocaleDateString()}
-                                                            </span>
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        {promptVersions.length === 0 && (
-                                            <span className="text-xs text-slate-400">No saved versions yet</span>
-                                        )}
-
-                                        {/* Master sync status indicator */}
-                                        <div className="flex items-center gap-1.5 ml-2 px-2 py-1 rounded-md bg-slate-100">
-                                            {isSyncingMaster ? (
-                                                <>
-                                                    <Loader2 className="h-3 w-3 animate-spin text-slate-500" />
-                                                    <span className="text-xs text-slate-500">Syncing...</span>
-                                                </>
-                                            ) : isMasterLoaded ? (
-                                                <>
-                                                    <Cloud className="h-3 w-3 text-emerald-500" />
-                                                    <span className="text-xs text-emerald-600">Synced</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <CloudOff className="h-3 w-3 text-slate-400" />
-                                                    <span className="text-xs text-slate-400">Loading...</span>
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <Dialog open={isSaveVersionDialogOpen} onOpenChange={setIsSaveVersionDialogOpen}>
-                                        <DialogTrigger asChild>
-                                            <Button variant="outline" size="sm">
-                                                <Save className="h-4 w-4 mr-2" />
-                                                Save as Version
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Save Prompt Version</DialogTitle>
-                                                <DialogDescription>
-                                                    Save the current prompts and state configuration as a named version.
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <div className="grid gap-4 py-4">
-                                                <div className="grid grid-cols-4 items-center gap-4">
-                                                    <Label htmlFor="version-name" className="text-right">
-                                                        Name
-                                                    </Label>
-                                                    <Input
-                                                        id="version-name"
-                                                        value={newVersionName}
-                                                        onChange={(e) => setNewVersionName(e.target.value)}
-                                                        placeholder="e.g. v1.0 - Improved greeting"
-                                                        className="col-span-3"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <DialogFooter>
-                                                <Button
-                                                    onClick={handleSaveVersion}
-                                                    disabled={!newVersionName.trim() || isSavingVersion}
-                                                >
-                                                    {isSavingVersion ? (
-                                                        <>
-                                                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                                            Saving...
-                                                        </>
-                                                    ) : (
-                                                        'Save Version'
-                                                    )}
-                                                </Button>
-                                            </DialogFooter>
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        {/* State Editor for brand_system_base and other state fields */}
-                        {stateMemory && (
-                            <StateEditor
-                                agentId={agentId}
-                                stateMemory={stateMemory}
-                                onStateChange={handleStateChange}
-                                currentOverrides={stateOverrides}
-                                allNodes={nodes}
-                            />
-                        )}
-
-                        {/* Prompt Editors */}
-                        {nodes.map((node) => (
-                            <div key={node.id} id={node.id} className="scroll-mt-24">
-                                <PromptEditor
-                                    agentId={agentId}
-                                    node={node}
-                                    onUpdate={(type, content) => handleUpdateNode(node.id, type, content)}
-                                    allNodes={nodes}
-                                    stateFields={stateOverrides}
-                                />
+        <div className="h-screen bg-background overflow-hidden relative font-sans text-foreground flex flex-col p-3">
+            <div className="flex-1 flex flex-col overflow-hidden rounded-2xl border border-sidebar-border bg-card/50 backdrop-blur-sm shadow-lg relative z-10 w-full max-w-[1920px] mx-auto">
+                {/* Header / Top Bar */}
+                <header className="flex-shrink-0 h-14 border-b border-sidebar-border flex items-center justify-between px-6 bg-transparent z-20">
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-3">
+                            <h1 className="font-serif text-xl font-normal tracking-tight text-foreground">
+                                Agent Studio
+                            </h1>
+                        </div>
+                        <div className="h-6 w-px bg-border" />
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <History className="h-4 w-4" />
+                                <span className="text-sm font-medium">Version</span>
                             </div>
-                        ))}
-                    </TabsContent>
+                            <Select
+                                value={selectedVersionId}
+                                onValueChange={handleVersionSelect}
+                                disabled={isLoadingVersion}
+                            >
+                                <SelectTrigger className="w-[200px] h-8 text-sm bg-muted/30 border-border">
+                                    {isLoadingVersion ? (
+                                        <div className="flex items-center gap-2">
+                                            <Loader2 className="h-3 w-3 animate-spin" />
+                                            <span>Loading...</span>
+                                        </div>
+                                    ) : (
+                                        <SelectValue placeholder="Select version..." />
+                                    )}
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="current">
+                                        <div className="flex items-center gap-2">
+                                            <span>Master</span>
+                                            <Badge variant="success" className="text-[10px] h-4 px-1.5">Live</Badge>
+                                        </div>
+                                    </SelectItem>
+                                    {promptVersions.map((v) => (
+                                        <SelectItem key={v.id} value={v.id}>
+                                            <div className="flex items-center justify-between w-full gap-4">
+                                                <span>{v.name}</span>
+                                                <span className="text-xs text-muted-foreground tabular-nums">
+                                                    {new Date(v.createdAt).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
 
-                    <TabsContent value="simulation">
-                        <SimulationManager
-                            agentId={agentId}
-                            nodes={nodes}
-                            personas={personas}
-                            setPersonas={setPersonas}
-                            simulationResults={simulationResults}
-                            setSimulationResults={setSimulationResults}
-                            onNewSimulation={handleNewSimulation}
-                            stateOverrides={stateOverrides}
-                        />
-                    </TabsContent>
+                            {/* Sync status */}
+                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/30 border border-border/50">
+                                {isSyncingMaster ? (
+                                    <>
+                                        <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+                                        <span className="text-xs text-muted-foreground">Syncing</span>
+                                    </>
+                                ) : isMasterLoaded ? (
+                                    <>
+                                        <Cloud className="h-3 w-3 text-primary" />
+                                        <span className="text-xs text-primary">Synced</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <CloudOff className="h-3 w-3 text-muted-foreground" />
+                                        <span className="text-xs text-muted-foreground">Offline</span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
 
-                    <TabsContent value="chat">
-                        <ChatInterface
-                            agentId={agentId}
-                            nodes={nodes}
-                            messages={chatMessages}
-                            setMessages={setChatMessages}
-                            chatId={chatId}
-                            setChatId={setChatId}
-                            messagesRight={chatMessagesRight}
-                            setMessagesRight={setChatMessagesRight}
-                            chatIdRight={chatIdRight}
-                            setChatIdRight={setChatIdRight}
-                            onNewChat={handleNewChat}
-                            stateOverrides={stateOverrides}
-                        />
-                    </TabsContent>
+                    <div className="flex items-center gap-3">
+                        <Dialog open={isSaveVersionDialogOpen} onOpenChange={setIsSaveVersionDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="outline" size="sm" className="h-8 border-border text-foreground hover:bg-muted hover:text-foreground">
+                                    <Save className="h-3.5 w-3.5 mr-2" />
+                                    Save Version
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Save Version</DialogTitle>
+                                    <DialogDescription>
+                                        Create a snapshot of your current prompts and configuration
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="py-4">
+                                    <Label htmlFor="version-name">Version Name</Label>
+                                    <Input
+                                        id="version-name"
+                                        value={newVersionName}
+                                        onChange={(e) => setNewVersionName(e.target.value)}
+                                        placeholder="e.g., v1.0 - Improved greeting"
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <DialogFooter>
+                                    <Button
+                                        onClick={handleSaveVersion}
+                                        disabled={!newVersionName.trim() || isSavingVersion}
+                                    >
+                                        {isSavingVersion ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                Saving...
+                                            </>
+                                        ) : (
+                                            'Save Version'
+                                        )}
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+                </header>
 
-                    <TabsContent value="behavior-tests">
-                        <BehaviorTestRunner
-                            agentId={agentId}
-                            nodes={nodes}
-                            stateOverrides={stateOverrides}
-                            onApplySnapshot={(snapshotNodes, snapshotState) => {
-                                // Apply snapshot nodes
-                                setNodes(snapshotNodes.map(sn => {
-                                    const existing = nodes.find(n => n.id === sn.id);
-                                    return {
-                                        ...sn,
-                                        type: existing?.type || 'Agent',
-                                    };
-                                }));
-                                // Apply snapshot state
-                                setStateOverrides(snapshotState);
-                            }}
-                        />
-                    </TabsContent>
+                <Tabs defaultValue="prompts" orientation="vertical" className="flex-1 w-full overflow-hidden">
+                    <div className="flex h-full">
+                        {/* Left Sidebar */}
+                        <aside className="w-56 flex-shrink-0 flex flex-col border-r border-sidebar-border bg-transparent z-20">
+                            <div className="flex-1 px-4 py-4 overflow-y-auto">
+                                <TabsList className="flex flex-col h-auto bg-transparent space-y-1 p-0">
+                                    <TabsTrigger
+                                        value="prompts"
+                                        className="w-full justify-start px-3 py-2 h-9 text-sm font-medium text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-primary/10 data-[state=active]:shadow-none transition-all rounded-md hover:text-foreground hover:bg-muted/50 ring-0 focus-visible:ring-0 outline-none"
+                                    >
+                                        <FileText className="h-4 w-4 mr-2" />
+                                        <span>Prompts</span>
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="simulation"
+                                        className="w-full justify-start px-3 py-2 h-9 text-sm font-medium text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-primary/10 data-[state=active]:shadow-none transition-all rounded-md hover:text-foreground hover:bg-muted/50 ring-0 focus-visible:ring-0 outline-none"
+                                    >
+                                        <Play className="h-4 w-4 mr-2" />
+                                        <span>Simulation</span>
+                                        {personas.length > 0 && (
+                                            <Badge variant="secondary" className="ml-auto h-5 px-1.5 bg-muted text-muted-foreground">{personas.length}</Badge>
+                                        )}
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="chat"
+                                        className="w-full justify-start px-3 py-2 h-9 text-sm font-medium text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-primary/10 data-[state=active]:shadow-none transition-all rounded-md hover:text-foreground hover:bg-muted/50 ring-0 focus-visible:ring-0 outline-none"
+                                    >
+                                        <MessageSquare className="h-4 w-4 mr-2" />
+                                        <span>Chat</span>
+                                        {chatMessages.length > 0 && (
+                                            <Badge variant="secondary" className="ml-auto h-5 px-1.5 bg-muted text-muted-foreground">{chatMessages.length}</Badge>
+                                        )}
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="behavior-tests"
+                                        className="w-full justify-start px-3 py-2 h-9 text-sm font-medium text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-primary/10 data-[state=active]:shadow-none transition-all rounded-md hover:text-foreground hover:bg-muted/50 ring-0 focus-visible:ring-0 outline-none"
+                                    >
+                                        <FlaskConical className="h-4 w-4 mr-2" />
+                                        <span>Tests</span>
+                                    </TabsTrigger>
+                                </TabsList>
+                            </div>
+
+                            <div className="p-1 border-t border-sidebar-border space-y-2">
+                                <Button
+                                    onClick={() => setShowOnboardingGuideModal(true)}
+                                    variant="ghost"
+                                    className="w-full justify-start text-muted-foreground hover:text-foreground h-9 px-3"
+                                >
+                                    <BookOpen className="h-4 w-4 mr-2" />
+                                    Onboarding Guide
+                                    {onboardingGuide && (
+                                        <span className="ml-2 h-1.5 w-1.5 bg-primary rounded-full" />
+                                    )}
+                                </Button>
+                                <Button
+                                    onClick={() => setShowRefineModal(true)}
+                                    size="sm"
+                                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-none"
+                                >
+                                    <Sparkles className="h-4 w-4 mr-2" />
+                                    Analyze & Refine
+                                </Button>
+                            </div>
+                        </aside>
+
+                        {/* Main Content */}
+                        <main className="flex-1 flex flex-col h-full overflow-hidden relative z-10 bg-transparent">
+                            {/* Prompts Tab - Scrollable */}
+                            <TabsContent value="prompts" className="flex-1 overflow-y-auto p-4 space-y-4 m-0 focus-visible:ring-0 outline-none">
+                                {stateMemory && (
+                                    <StateEditor
+                                        agentId={agentId}
+                                        stateMemory={stateMemory}
+                                        onStateChange={handleStateChange}
+                                        currentOverrides={stateOverrides}
+                                        allNodes={nodes}
+                                    />
+                                )}
+                                <div className="space-y-4">
+                                    {nodes.map((node) => (
+                                        <div key={node.id} id={node.id} className="scroll-mt-24">
+                                            <PromptEditor
+                                                agentId={agentId}
+                                                node={node}
+                                                onUpdate={(type, content) => handleUpdateNode(node.id, type, content)}
+                                                allNodes={nodes}
+                                                stateFields={stateOverrides}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </TabsContent>
+
+                            {/* Simulation Tab - Full Height */}
+                            <TabsContent value="simulation" className="flex-1 overflow-hidden p-4 m-0 focus-visible:ring-0 outline-none">
+                                <SimulationManager
+                                    agentId={agentId}
+                                    nodes={nodes}
+                                    personas={personas}
+                                    setPersonas={setPersonas}
+                                    simulationResults={simulationResults}
+                                    setSimulationResults={setSimulationResults}
+                                    onNewSimulation={handleNewSimulation}
+                                    stateOverrides={stateOverrides}
+                                />
+                            </TabsContent>
+
+                            {/* Chat Tab - Full Height */}
+                            <TabsContent value="chat" className="flex-1 overflow-hidden p-4 m-0 focus-visible:ring-0 outline-none">
+                                <ChatInterface
+                                    agentId={agentId}
+                                    nodes={nodes}
+                                    messages={chatMessages}
+                                    setMessages={setChatMessages}
+                                    chatId={chatId}
+                                    setChatId={setChatId}
+                                    messagesRight={chatMessagesRight}
+                                    setMessagesRight={setChatMessagesRight}
+                                    chatIdRight={chatIdRight}
+                                    setChatIdRight={setChatIdRight}
+                                    onNewChat={handleNewChat}
+                                    stateOverrides={stateOverrides}
+                                />
+                            </TabsContent>
+
+                            {/* Tests Tab - Full Height */}
+                            <TabsContent value="behavior-tests" className="flex-1 overflow-hidden p-4 m-0 focus-visible:ring-0 outline-none">
+                                <BehaviorTestRunner
+                                    agentId={agentId}
+                                    nodes={nodes}
+                                    stateOverrides={stateOverrides}
+                                    onApplySnapshot={(snapshotNodes, snapshotState) => {
+                                        setNodes(snapshotNodes.map(sn => {
+                                            const existing = nodes.find(n => n.id === sn.id);
+                                            return { ...sn, type: existing?.type || 'Agent' };
+                                        }));
+                                        setStateOverrides(snapshotState);
+                                    }}
+                                />
+                            </TabsContent>
+                        </main>
+                    </div>
                 </Tabs>
             </div>
 
@@ -517,6 +574,15 @@ export function Dashboard({ agentId, initialNodes, initialStateMemory }: Dashboa
                 stateMemory={stateMemory}
                 onApply={handleApplyRefinement}
             />
-        </div>
+
+            {/* Onboarding Guide Modal */}
+            <OnboardingGuideModal
+                agentId={agentId}
+                isOpen={showOnboardingGuideModal}
+                onClose={() => setShowOnboardingGuideModal(false)}
+                initialGuide={onboardingGuide}
+                onSave={handleSaveOnboardingGuide}
+            />
+        </div >
     );
 }

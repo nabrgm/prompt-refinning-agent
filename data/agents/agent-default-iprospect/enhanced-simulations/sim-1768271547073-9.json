@@ -1,0 +1,141 @@
+{
+  "id": "sim-1768271547073-9",
+  "simulationNumber": 10,
+  "metadata": {
+    "name": "Betty White",
+    "persona": {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    "intent": {
+      "id": "intent-1768251229674-3",
+      "name": "Explore Ethernet/Dedicated Connectivity",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new lead asks about Ethernet or higher-reliability connectivity options for business use.",
+      "goal": "Capture contact and location details and schedule a specialized sales callback.",
+      "initialMessage": "We need something more reliable than regular broadband—do you offer business ethernet?"
+    },
+    "emotion": {
+      "id": "emotion-1768251229674-6",
+      "name": "Frustrated",
+      "description": "Mentions prior failed attempts or recurring issues; may use all caps or exclamation points; wants acknowledgment and fast resolution."
+    },
+    "outcome": "Received correct billing support channel information."
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "We need something more reliable than regular broadband—do you offer business ethernet?"
+    },
+    {
+      "role": "assistant",
+      "content": "We offer Ethernet Dedicated Internet for businesses. To give you the right options, could you share your name and confirm this is for a business?",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "null",
+            "lastName": "null",
+            "customerType": "new_sales_lead",
+            "intent": "service inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Prospects"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Prospects",
+          "messages": [
+            "We offer Ethernet Dedicated Internet for businesses. To give you the right options, could you share your name and confirm this is for a business?"
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_3"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Yeah, it’s for a business. I’m Jamal Carter, accounting contact for Carter Precision Manufacturing.  \n\nBefore we go too far on new services, I actually need help with a billing issue—our last invoice jumped by about $140 with no explanation, and I’m tired of getting bounced around. Can you point me to the right billing support channel or help me figure out who actually fixes this?"
+    },
+    {
+      "role": "assistant",
+      "content": "I hear you—bills jumping like that is frustrating.  \nFor billing help, our support team can access your account; go to https://business.comcast.com/support/home/ or call the 24/7 line.  \nLet me know if you need anything else.",
+      "traceData": [
+        {
+          "agentName": "Metadata Identifier",
+          "messages": [],
+          "usedTools": [],
+          "sourceDocuments": [],
+          "artifacts": [],
+          "state": {
+            "firstName": "Jamal",
+            "lastName": "Carter",
+            "customerType": "existing_customer",
+            "intent": "billing inquiry"
+          },
+          "nodeName": "seqLLMNode",
+          "nodeId": ""
+        },
+        {
+          "agentName": "Router",
+          "messages": [
+            "Existing Customers"
+          ],
+          "nodeName": "seqCondition",
+          "nodeId": "seqCondition_0"
+        },
+        {
+          "agentName": "Existing Customers",
+          "messages": [
+            "I hear you—bills jumping like that is frustrating.  \nFor billing help, our support team can access your account; go to https://business.comcast.com/support/home/ or call the 24/7 line.  \nLet me know if you need anything else."
+          ],
+          "usedTools": [
+            null
+          ],
+          "sourceDocuments": [
+            null
+          ],
+          "artifacts": [
+            null
+          ],
+          "state": {},
+          "nodeName": "seqAgent",
+          "nodeId": "seqAgent_4"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "That’s exactly what I needed, thanks. I’ll try the 24/7 line so I can get someone to actually look at this invoice."
+    }
+  ],
+  "createdAt": "2026-01-13T02:32:27.073Z",
+  "status": "completed",
+  "chatId": "f7b0a6e6-bab3-4025-b842-31cca3d9d847",
+  "completedAt": "2026-01-13T02:32:42.448Z"
+}

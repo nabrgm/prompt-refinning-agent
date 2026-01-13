@@ -1,0 +1,219 @@
+{
+  "personas": [
+    {
+      "id": "persona-1768251229674-0",
+      "name": "Angela Martinez",
+      "role": "Owner, neighborhood bakery (single location)",
+      "goal": "Get fast business internet with a reliable install date and a callback appointment",
+      "context": "Opening a new storefront in 2 weeks; needs internet for POS terminals and guest WiFi; comparing providers after a bad experience with outages",
+      "tone": "Busy, straightforward, wants clear next steps"
+    },
+    {
+      "id": "persona-1768251229674-1",
+      "name": "Derrick Holmes",
+      "role": "Office Manager, small law firm (15 employees)",
+      "goal": "Upgrade internet speed and add business voice lines; schedule a sales callback",
+      "context": "Currently has slow internet impacting video calls; has authority to shortlist options but needs partner approval for final signature",
+      "tone": "Professional, detail-oriented, asks practical questions"
+    },
+    {
+      "id": "persona-1768251229674-2",
+      "name": "Priya Desai",
+      "role": "IT Coordinator, multi-site dental practice (4 locations)",
+      "goal": "Explore Ethernet/dedicated connectivity options and confirm serviceability per address",
+      "context": "Responsible for network reliability across locations; wants redundancy; needs to verify addresses and get an appointment with a business specialist",
+      "tone": "Technical, concise, expects accurate routing"
+    },
+    {
+      "id": "persona-1768251229674-3",
+      "name": "Marcus Green",
+      "role": "General Manager, mid-size hotel (80 rooms)",
+      "goal": "Bundle business internet + TV for guest rooms; understand options and schedule a callback",
+      "context": "Renovation complete; upgrading guest experience; needs coordinated install and minimal downtime",
+      "tone": "Collaborative, asks about timeline and setup"
+    },
+    {
+      "id": "persona-1768251229674-4",
+      "name": "Sofia Nguyen",
+      "role": "Operations Lead, e-commerce warehouse (30 staff, high uptime needs)",
+      "goal": "Add a backup connection and confirm best-fit business internet plan; schedule a callback",
+      "context": "Shipping scanners and cloud systems fail during outages; experienced a recent downtime event and needs a solution quickly",
+      "tone": "Urgent, decisive, expects fast scheduling"
+    },
+    {
+      "id": "persona-1768251229674-5",
+      "name": "Robert King",
+      "role": "Existing customer, franchise gym owner (2 locations)",
+      "goal": "Renew/renegotiate service terms and schedule a callback with sales",
+      "context": "Current contract nearing renewal; wants to avoid price increases; can approve purchase but wants options laid out",
+      "tone": "Firm but polite, negotiating mindset"
+    },
+    {
+      "id": "persona-1768251229674-6",
+      "name": "Elena Petrova",
+      "role": "Existing customer, restaurant manager",
+      "goal": "Get help with intermittent internet dropping and be routed to support resources",
+      "context": "Lunch rush is impacted; staff can’t process orders reliably; needs troubleshooting steps or correct support path",
+      "tone": "Frustrated, short messages, wants resolution quickly"
+    },
+    {
+      "id": "persona-1768251229674-7",
+      "name": "Jamal Carter",
+      "role": "Existing customer, accounting contact for a manufacturing office",
+      "goal": "Resolve a billing discrepancy and find the right billing support channel",
+      "context": "Invoice amount changed unexpectedly; needs clarification and potential adjustment; not looking for new services",
+      "tone": "Matter-of-fact, documentation-focused"
+    },
+    {
+      "id": "persona-1768251229674-8",
+      "name": "Hannah Lee",
+      "role": "Existing customer, moving coordinator for a nonprofit (change of address)",
+      "goal": "Move service to a new business address and schedule a callback appointment",
+      "context": "Office relocation next month; needs continuity of phone/internet; wants to confirm new address coverage",
+      "tone": "Organized, deadline-driven, cooperative"
+    },
+    {
+      "id": "persona-1768251229674-9",
+      "name": "Kevin O'Brien",
+      "role": "Prospective customer, real estate broker (home office; uncertain if business-eligible)",
+      "goal": "Figure out whether to use residential portal or business service and get pointed to the right place",
+      "context": "Works from home, needs reliable internet for video tours; unsure whether to buy business-class or residential; starts with a vague inquiry",
+      "tone": "Casual, exploratory, not sure what to ask"
+    }
+  ],
+  "emotions": [
+    {
+      "id": "emotion-1768251229674-0",
+      "name": "Curious",
+      "description": "Asks exploratory questions, requests options and comparisons, uses phrases like “what are my options?” or “can you tell me more?”"
+    },
+    {
+      "id": "emotion-1768251229674-1",
+      "name": "Excited",
+      "description": "Upbeat language, quick replies, eager to schedule; uses positive framing like “ready to get this set up” or “can’t wait to switch.”"
+    },
+    {
+      "id": "emotion-1768251229674-2",
+      "name": "Trusting",
+      "description": "Shares details willingly (address, timeline), asks for recommendations, and follows instructions without much pushback."
+    },
+    {
+      "id": "emotion-1768251229674-3",
+      "name": "Professional",
+      "description": "Brief, businesslike messages; focuses on requirements, timelines, and next steps; avoids small talk."
+    },
+    {
+      "id": "emotion-1768251229674-4",
+      "name": "Matter-of-fact",
+      "description": "States the issue plainly, provides specifics (invoice date, outage time), expects direct routing and minimal back-and-forth."
+    },
+    {
+      "id": "emotion-1768251229674-5",
+      "name": "Impatient",
+      "description": "Short, clipped messages; repeats questions; emphasizes urgency with “ASAP,” “now,” or “need this today.”"
+    },
+    {
+      "id": "emotion-1768251229674-6",
+      "name": "Frustrated",
+      "description": "Mentions prior failed attempts or recurring issues; may use all caps or exclamation points; wants acknowledgment and fast resolution."
+    },
+    {
+      "id": "emotion-1768251229674-7",
+      "name": "Skeptical",
+      "description": "Challenges claims, asks for proof or confirmation, references past bad experiences, and questions pricing or reliability."
+    },
+    {
+      "id": "emotion-1768251229674-8",
+      "name": "Anxious",
+      "description": "Worried about downtime or deadlines; asks repeated reassurance questions about install dates, service continuity, or disruptions."
+    },
+    {
+      "id": "emotion-1768251229674-9",
+      "name": "Confused",
+      "description": "Unclear terminology, mixed requests (billing + new service), or vague descriptions; asks “who do I talk to?” or “what am I supposed to do?”"
+    }
+  ],
+  "intents": [
+    {
+      "id": "intent-1768251229674-0",
+      "name": "Request Business Internet Quote & Callback",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new business prospect wants pricing/plan info for business internet and to talk to sales.",
+      "goal": "Share business details and schedule a callback appointment with a sales agent.",
+      "initialMessage": "Hi, I’m setting up internet for my shop—can someone call me with pricing and options?"
+    },
+    {
+      "id": "intent-1768251229674-1",
+      "name": "Bundle Internet + TV + Voice for Business",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new lead wants a bundle across multiple services (internet, TV, voice).",
+      "goal": "Confirm services needed, provide high-level guidance, and schedule a sales callback.",
+      "initialMessage": "Do you have business bundles for internet, TV, and phone? I want to get this installed soon."
+    },
+    {
+      "id": "intent-1768251229674-2",
+      "name": "Check Availability at a Business Address",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new prospect wants to confirm serviceability for a specific business location before proceeding.",
+      "goal": "Provide the next step to verify address and schedule a callback to complete qualification.",
+      "initialMessage": "Can you tell me if service is available at 2450 W Main St, Suite 110?"
+    },
+    {
+      "id": "intent-1768251229674-3",
+      "name": "Explore Ethernet/Dedicated Connectivity",
+      "flowType": "NEW_SALES_LEAD",
+      "description": "A new lead asks about Ethernet or higher-reliability connectivity options for business use.",
+      "goal": "Capture contact and location details and schedule a specialized sales callback.",
+      "initialMessage": "We need something more reliable than regular broadband—do you offer business ethernet?"
+    },
+    {
+      "id": "intent-1768251229674-4",
+      "name": "Technical Support for Outage/Intermittent Connection",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer reports service issues and needs support guidance.",
+      "goal": "Acknowledge the issue and route them to the official support portal.",
+      "initialMessage": "Our internet keeps dropping every 10 minutes—how do I get tech support?"
+    },
+    {
+      "id": "intent-1768251229674-5",
+      "name": "Billing Question / Dispute",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer has a billing concern and needs the right billing support path.",
+      "goal": "Direct them to the support portal for billing and set expectations for resolution steps.",
+      "initialMessage": "My bill is higher this month and I don’t recognize one of the charges—who can fix this?"
+    },
+    {
+      "id": "intent-1768251229674-6",
+      "name": "Renewal / Contract Review Callback",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer wants to renew or review their plan, which should be routed to a scheduled sales callback.",
+      "goal": "Confirm renewal intent, capture details, and schedule a callback appointment.",
+      "initialMessage": "Our contract is up soon—can someone call me to go over renewal options?"
+    },
+    {
+      "id": "intent-1768251229674-7",
+      "name": "Change of Address / Move Service",
+      "flowType": "EXISTING_CUSTOMER",
+      "description": "An existing customer needs to move service to a new business location; should be qualified and scheduled for a callback.",
+      "goal": "Capture new address and timeline and schedule a callback to coordinate the move.",
+      "initialMessage": "We’re moving offices next month—how do I transfer our service to the new address?"
+    },
+    {
+      "id": "intent-1768251229674-8",
+      "name": "General Greeting / Start Conversation",
+      "flowType": "UNDETERMINED",
+      "description": "A customer opens with a greeting or minimal context, requiring a clarifying question to route.",
+      "goal": "Determine whether they are a new sales lead or an existing customer needing support.",
+      "initialMessage": "Hi there—can you help me?"
+    },
+    {
+      "id": "intent-1768251229674-9",
+      "name": "Vague Request About Internet Without Business Context",
+      "flowType": "UNDETERMINED",
+      "description": "The customer asks about internet but doesn’t specify business vs residential or whether they’re an existing customer.",
+      "goal": "Clarify customer type and route to sales appointment or appropriate support/portal.",
+      "initialMessage": "How much is internet and what do I need to sign up?"
+    }
+  ],
+  "generatedAt": "2026-01-12T20:53:49.674Z"
+}
